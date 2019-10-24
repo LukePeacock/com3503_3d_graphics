@@ -16,19 +16,28 @@
 		A3044A35236208EB00D262F0 /* default_shader.vs in CopyFiles */ = {isa = PBXBuildFile; fileRef = A30447282362034A00D262F0 /* default_shader.vs */; };
 		A3044A36236208ED00D262F0 /* default_shader.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = A30447292362035500D262F0 /* default_shader.frag */; };
 		A3044A3923620BF500D262F0 /* stb_image_implementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A3823620BF500D262F0 /* stb_image_implementation.cpp */; };
-		A3044A4023620D2300D262F0 /* container.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3044A3F23620D1E00D262F0 /* container.png */; };
+		A3044A43236219A100D262F0 /* container.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3044A3F23620D1E00D262F0 /* container.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		A304470F2361FEE000D262F0 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
-			dstPath = "";
+			dstPath = shaders;
 			dstSubfolderSpec = 7;
 			files = (
-				A3044A4023620D2300D262F0 /* container.png in CopyFiles */,
 				A3044A36236208ED00D262F0 /* default_shader.frag in CopyFiles */,
 				A3044A35236208EB00D262F0 /* default_shader.vs in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3044A41236218EA00D262F0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = assets;
+			dstSubfolderSpec = 7;
+			files = (
+				A3044A43236219A100D262F0 /* container.png in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -945,6 +954,7 @@
 				A304470D2361FEE000D262F0 /* Sources */,
 				A304470E2361FEE000D262F0 /* Frameworks */,
 				A304470F2361FEE000D262F0 /* CopyFiles */,
+				A3044A41236218EA00D262F0 /* CopyFiles */,
 			);
 			buildRules = (
 			);

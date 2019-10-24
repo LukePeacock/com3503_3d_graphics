@@ -9,7 +9,9 @@
 #include <GLFW/glfw3.h>
 #include <shader.h>
 #include <stb_image.h>
-
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
 //Function protos
@@ -21,6 +23,8 @@ unsigned int loadTexture(char const * path);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+const float NEAR_PLANE = 1.0f;
+const float FAR_PLANE = 100.0f;
 
 static unsigned char wireframe;         // Allows scene to be rendered in wireframe
 
@@ -58,47 +62,109 @@ int main()
         return -1;
     }
 
-
-    Shader defaultShader("default_shader.vs", "default_shader.frag");
+    // configure global opengl state
+    // -----------------------------
+    glEnable(GL_DEPTH_TEST);
+    
+    Shader defaultShader("shaders/default_shader.vs", "shaders/default_shader.frag");
     
     // Bind the key listener for input
     // Prevents multiple actions from one key press
     glfwSetKeyCallback(window, key_callback);
-    
     // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
-    float vertices[] = {
-        //coords            /color              /tex
-         0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  1.0f, 1.0f, // top right
-         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  1.0f, 0.0f,// bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,  0.0f, 0.0f, // bottom left
-        -0.5f,  0.5f, 0.0f, 0.5f, 0.5f, 0.5f,  0.0f, 1.0f // top left
-    };
-    unsigned int indices[] = {  // note that we start from 0!
-        0, 1, 3,  // first Triangle
-        1, 2, 3   // second Triangle
-    }; 
-    unsigned int VBO, VAO, EBO;
+       // ------------------------------------------------------------------
+       float vertices[] = {
+           -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+           -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+           -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+           -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+           -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+           -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+           -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+           -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+           -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+           -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+           -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+           -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+           -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+           -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+           -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+           -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+           -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+           -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+       };
+//    // set up vertex data (and buffer(s)) and configure vertex attributes
+//    // ------------------------------------------------------------------
+//    float vertices[] = {
+//        //coords                //tex
+//        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,   //left bottom back          0
+//         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,   //right bottom back         1
+//         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,   //right top back            2
+//        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,   //left top back             3
+//
+//        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,   //left bottom front         4
+//         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,   //right bottom front        5
+//         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,   //right top front           6
+//        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,   //left top front            7
+//    };
+//    unsigned int indices[] = {  // note that we start from 0!
+//        0, 1, 2,    // back 1
+//        2, 3, 0,    // back 2
+//        4, 5, 6,    // front 1
+//        6, 7, 4,    // front 2
+//        7, 3, 0,    // left 1
+//        0, 4, 7,    // left 2
+//        6, 2, 1,    // Right 1
+//        1, 5, 6,    // Right 2
+//        0, 1, 5,    // Bottom 1
+//        5, 4, 0,    // Bottom 2
+//        3, 2, 6,  // Top 1
+//        6, 7, 3   // Top 2
+//    };
+    unsigned int VBO, VAO;//, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+   // glGenBuffers(1, &EBO);
     // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+//    // color attribute
+//    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+//    glEnableVertexAttribArray(1);
     // Tex attribute
-       glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-       glEnableVertexAttribArray(2);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     // load and create a texture
     // -------------------------
@@ -118,7 +184,7 @@ int main()
         // render
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear colour and depth buffer bits
 
         
         // draw our first triangle
@@ -128,7 +194,19 @@ int main()
         glBindTexture(GL_TEXTURE_2D, containerTex);
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         //glDrawArrays(GL_TRIANGLES, 0, 6);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        
+        glm::mat4 model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+        glm::mat4 view          = glm::mat4(1.0f);
+        glm::mat4 projection    = glm::mat4(1.0f);
+        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+        view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, NEAR_PLANE, FAR_PLANE);
+        defaultShader.setMat4("Model", model);
+        defaultShader.setMat4("view", view);
+        defaultShader.setMat4("projection", projection);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+       // glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
         // glBindVertexArray(0); // no need to unbind it every time
  
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -141,7 +219,7 @@ int main()
     // ------------------------------------------------------------------------
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+   // glDeleteBuffers(1, &EBO);
 
     // Terminate GLFW, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
