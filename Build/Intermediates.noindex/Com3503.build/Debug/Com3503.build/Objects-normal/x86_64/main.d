@@ -144,4 +144,5 @@ dependencies: \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/matrix.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/vector_relational.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/integer.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/detail/func_integer.inl
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/detail/func_integer.inl \
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/stb_image.h

@@ -13,10 +13,10 @@
 		A30447212361FF5300D262F0 /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A30447202361FF5300D262F0 /* libglfw.3.3.dylib */; };
 		A3044A2D2362050300D262F0 /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A30449702362050200D262F0 /* glm.cpp */; };
 		A3044A32236205F800D262F0 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = A3044A31236205F800D262F0 /* glad.c */; };
-		A3044A332362079100D262F0 /* default_shader.vs in Resources */ = {isa = PBXBuildFile; fileRef = A30447282362034A00D262F0 /* default_shader.vs */; };
-		A3044A342362079400D262F0 /* default_shader.frag in Resources */ = {isa = PBXBuildFile; fileRef = A30447292362035500D262F0 /* default_shader.frag */; };
 		A3044A35236208EB00D262F0 /* default_shader.vs in CopyFiles */ = {isa = PBXBuildFile; fileRef = A30447282362034A00D262F0 /* default_shader.vs */; };
 		A3044A36236208ED00D262F0 /* default_shader.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = A30447292362035500D262F0 /* default_shader.frag */; };
+		A3044A3923620BF500D262F0 /* stb_image_implementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A3823620BF500D262F0 /* stb_image_implementation.cpp */; };
+		A3044A4023620D2300D262F0 /* container.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3044A3F23620D1E00D262F0 /* container.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,6 +26,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				A3044A4023620D2300D262F0 /* container.png in CopyFiles */,
 				A3044A36236208ED00D262F0 /* default_shader.frag in CopyFiles */,
 				A3044A35236208EB00D262F0 /* default_shader.vs in CopyFiles */,
 			);
@@ -422,6 +423,9 @@
 		A3044A2B2362050300D262F0 /* projection.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = projection.inl; sourceTree = "<group>"; };
 		A3044A2C2362050300D262F0 /* type_aligned.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = type_aligned.hpp; sourceTree = "<group>"; };
 		A3044A31236205F800D262F0 /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
+		A3044A3723620BDD00D262F0 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
+		A3044A3823620BF500D262F0 /* stb_image_implementation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stb_image_implementation.cpp; sourceTree = "<group>"; };
+		A3044A3F23620D1E00D262F0 /* container.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = container.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -458,6 +462,8 @@
 		A30447132361FEE000D262F0 /* source */ = {
 			isa = PBXGroup;
 			children = (
+				A3044A3E23620D1E00D262F0 /* assets */,
+				A3044A3823620BF500D262F0 /* stb_image_implementation.cpp */,
 				A3044A31236205F800D262F0 /* glad.c */,
 				A30447272362032900D262F0 /* shaders */,
 				A3044725236202F500D262F0 /* headers */,
@@ -479,6 +485,7 @@
 		A3044725236202F500D262F0 /* headers */ = {
 			isa = PBXGroup;
 			children = (
+				A3044A3723620BDD00D262F0 /* stb_image.h */,
 				A30448AC2362050200D262F0 /* glm */,
 				A3044726236202FF00D262F0 /* shader.h */,
 			);
@@ -920,6 +927,14 @@
 			path = gtx;
 			sourceTree = "<group>";
 		};
+		A3044A3E23620D1E00D262F0 /* assets */ = {
+			isa = PBXGroup;
+			children = (
+				A3044A3F23620D1E00D262F0 /* container.png */,
+			);
+			path = assets;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -930,7 +945,6 @@
 				A304470D2361FEE000D262F0 /* Sources */,
 				A304470E2361FEE000D262F0 /* Frameworks */,
 				A304470F2361FEE000D262F0 /* CopyFiles */,
-				A3044A2E2362053A00D262F0 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -973,24 +987,13 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		A3044A2E2362053A00D262F0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A3044A342362079400D262F0 /* default_shader.frag in Resources */,
-				A3044A332362079100D262F0 /* default_shader.vs in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		A304470D2361FEE000D262F0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				A3044A2D2362050300D262F0 /* glm.cpp in Sources */,
+				A3044A3923620BF500D262F0 /* stb_image_implementation.cpp in Sources */,
 				A30447152361FEE000D262F0 /* main.cpp in Sources */,
 				A3044A32236205F800D262F0 /* glad.c in Sources */,
 			);
