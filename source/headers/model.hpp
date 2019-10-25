@@ -25,13 +25,9 @@ public:
     void dispose();
 private:
     Mesh mesh;
-   // Material material;
+    Material material;
     Shader shader;
     glm::mat4 modelMatrix;
     unsigned int diffusemap;
-    glm::vec3 ambient;
-    glm::vec3 diffuse;
-    glm::vec3 specular;
-    float shininess;
 };
 #endif /* model_hpp */

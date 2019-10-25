@@ -12,11 +12,12 @@
 Model::Model(Shader shader,glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess,glm::mat4 modelMatrix, Mesh mesh, unsigned int diffusemap) : shader("shaders/default_shader.vs", "shaders/default_shader.frag"), mesh(){
     this->shader = shader;
     this->mesh = mesh;
+    this->material = Material(ambient, diffuse, specular, shininess);
     this->modelMatrix = modelMatrix;
-    this->diffuse = diffuse;
-    this->ambient = ambient;
-    this->specular = specular;
-    this->shininess = shininess;
+//    this->diffuse = diffuse;
+//    this->ambient = ambient;
+//    this->specular = specular;
+//    this->shininess = shininess;
     this->diffusemap = diffusemap;
 }
 void Model::setModelMatrix(glm::mat4 m) {
@@ -32,10 +33,10 @@ void Model::render(glm::mat4 modelMatrix) {
     modelMatrix = glm::rotate(modelMatrix, glm::radians(90.0f), glm::vec3(1.0f, 1.0f, 1.0f));
     shader.setMat4("model", modelMatrix);
     
-    shader.setVec3("material.ambient", ambient);
-    shader.setVec3("material.diffuse", diffuse);
-    shader.setVec3("material.specular", specular);
-    shader.setFloat("material.shininess", shininess);
+    shader.setVec3("material.ambient", material.getAmbient());
+    shader.setVec3("material.diffuse", material.getDiffuse());
+    shader.setVec3("material.specular", material.getSpecular());
+    shader.setFloat("material.shininess", material.getShininess());
     mesh.render();
 }
 

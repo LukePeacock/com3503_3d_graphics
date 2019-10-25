@@ -28,6 +28,8 @@ Material::Material(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, flo
   this->specular = specular;
   emission = glm::vec3(DEFAULT_EMISSION);
   this->shininess = shininess;
+    
+    
 }
 
 void Material::setAmbient(float red, float green, float blue) {
