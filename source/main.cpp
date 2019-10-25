@@ -2,9 +2,13 @@
 //  main.cpp
 //  COM3503
 //
-//  Created by Luke on 24/10/2019.
+//  Created by Luke Peacock on 24/10/2019.
+//  Some code based on Dr Steve Maddock's Tutorial
+//  Based tutorials by Joey De Vries': https://learnopengl.com
+//
 //  Copyright © 2019 Luke Peacock. All rights reserved.
 //
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <shader.h>
@@ -28,16 +32,17 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 unsigned int loadTexture(char const * path);
 
-// settings
+
+// global settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 const float NEAR_PLANE = 1.0f;
 const float FAR_PLANE = 100.0f;
 
 static unsigned char wireframe;         // Allows scene to be rendered in wireframe
-static bool userCam = false;
+static bool userCam = false;            // Gives user control of camera
 
-// camera
+// camera settings
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
@@ -45,10 +50,10 @@ bool firstMouse = true;
 
 // timing
 float deltaTime = 0.0f;    // time between current frame and last frame
-float lastFrame = 0.0f;
+float lastFrame = 0.0f;    // Timing ensures consistent framerate independent of hardware
 
 
-// Self-explanatoiy
+// Self-explanatory
 int main()
 {
     // initialize and configure GLFW
@@ -59,7 +64,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     #ifdef __APPLE__
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // this statement to fixes compilation on OS X
     #endif
 
     // Create GLFW window and make it the current context
@@ -97,6 +102,7 @@ int main()
     // load and create a texture
     // -------------------------
     unsigned int containerTex = loadTexture("assets/container.png");
+    
     defaultShader.use(); // don't forget to activate/use the shader before setting uniforms!
     // either set it manually like so:
     defaultShader.setInt("diffuse", 0);
@@ -130,35 +136,32 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear colour and depth buffer bits
 
-        
-       
-        // bind textures on corresponding texture units
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, containerTex);
-        // draw our first triangle
+        // Set Projection and View Matrices in Shader
+        //-------------------------------------------
         defaultShader.use();
-        // pass projection matrix to shader (note that in this case it could change every frame)
+        // Projection
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, NEAR_PLANE, FAR_PLANE);
         defaultShader.setMat4("projection", projection);
-
         // camera/view transformation
         glm::mat4 view = camera.GetViewMatrix();
         defaultShader.setMat4("view", view);
         
  
+        // Render Objects
+        // ---------------
         test2.render();
+        
+        
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    // de-allocate all resources now they've outlived their purpose:
-    // ------------------------------------------------------------------------
+    // Dipose of resources now they're no longer needed:
+    // -------------------------------------------------------------
     test2.dispose();
     
-   // glDeleteBuffers(1, &EBO);
-
     // Terminate GLFW, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();
@@ -166,6 +169,7 @@ int main()
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+// Can Cause issues with keys begin registered multiple times, hence the additional `key_callback` function
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window)
 {
@@ -185,8 +189,8 @@ void processInput(GLFWwindow *window)
     }
 }
 
-// glfw: key callback function, causes event once per press.
-// ---------------------------------------------------------
+// glfw: key callback function, causes event once per press of a key
+// -----------------------------------------------------------------
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_F && action == GLFW_PRESS) // render wireframe with F
@@ -198,7 +202,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 }
 
 // glfw: whenever the mouse moves, this callback is called
-// -------------------------------------------------------
+// If user is in control of camera, allows camera direction change
+// ---------------------------------------------------------------
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
     if (userCam)
@@ -220,6 +225,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
+// If user is in control of camera, allows user to zoom view using scroll
 // ----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
@@ -237,6 +243,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 // utility function for loading a 2D texture from file
+
 // ---------------------------------------------------
 unsigned int loadTexture(char const * path)
 {
