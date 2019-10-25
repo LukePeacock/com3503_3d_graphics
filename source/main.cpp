@@ -113,8 +113,9 @@ int main()
     std::cout << "V: " << cubeData.GetVertices() << std::endl;
     
     unsigned int containerTex2 = loadTexture("assets/container_specular.png");
+    Material mat = Material(glm::vec3(0.2f), glm::vec3(0.8f), glm::vec3(0.5f),32.0f);
     Mesh m = Mesh(cubeData.GetVertices(), cubeData.GetIndices(), cubeData.GetVerticesCount(), cubeData.GetIndicesCount(), cubeData.GetVertexSize(), cubeData.GetIndicesSize());
-    Model test2 = Model(defaultShader, glm::vec3(0.2f), glm::vec3(0.8f), glm::vec3(0.5f),32.0f,  glm::mat4(1.0f), m, containerTex2);
+    Model test2 = Model(defaultShader, mat,  glm::mat4(1.0f), m, containerTex2);
 
     
     // render loop

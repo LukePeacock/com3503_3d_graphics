@@ -9,10 +9,10 @@
 #include "model.hpp"
 #include <glm/gtx/string_cast.hpp>
 
-Model::Model(Shader shader,glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess,glm::mat4 modelMatrix, Mesh mesh, unsigned int diffusemap) : shader("shaders/default_shader.vs", "shaders/default_shader.frag"), mesh(){
+Model::Model(Shader shader,Material mat,glm::mat4 modelMatrix, Mesh mesh, unsigned int diffusemap) : shader("shaders/default_shader.vs", "shaders/default_shader.frag"), mesh(){
     this->shader = shader;
     this->mesh = mesh;
-    this->material = Material(ambient, diffuse, specular, shininess);
+    this->material = mat;
     this->modelMatrix = modelMatrix;
 //    this->diffuse = diffuse;
 //    this->ambient = ambient;

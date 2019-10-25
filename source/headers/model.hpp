@@ -18,7 +18,7 @@
 class Model {
    
 public:
-    Model(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess, glm::mat4 modelMatrix, Mesh mesh, unsigned int diffusemap);
+    Model(Shader shader, Material mat, glm::mat4 modelMatrix, Mesh mesh, unsigned int diffusemap);
     void render(glm::mat4 modelMatrix);
     void setModelMatrix(glm::mat4 m);
     void render();
