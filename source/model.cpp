@@ -29,8 +29,6 @@ void Model::render(glm::mat4 modelMatrix) {
     shader.use();
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, diffusemap);
-
-    modelMatrix = glm::rotate(modelMatrix, glm::radians(90.0f), glm::vec3(1.0f, 1.0f, 1.0f));
     shader.setMat4("model", modelMatrix);
     
     shader.setVec3("material.ambient", material.getAmbient());

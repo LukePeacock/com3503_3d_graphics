@@ -22,6 +22,7 @@
 #include <mesh.hpp>
 #include <material.hpp>
 #include <model.hpp>
+#include <light.hpp>
 #include <glm/gtx/string_cast.hpp>
 
 //Function protos
@@ -52,6 +53,8 @@ bool firstMouse = true;
 float deltaTime = 0.0f;    // time between current frame and last frame
 float lastFrame = 0.0f;    // Timing ensures consistent framerate independent of hardware
 
+// global light
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 // Self-explanatory
 int main()
@@ -115,9 +118,11 @@ int main()
     unsigned int containerTex2 = loadTexture("assets/container_specular.png");
     Material mat = Material(glm::vec3(0.2f), glm::vec3(0.8f), glm::vec3(0.5f),32.0f);
     Mesh m = Mesh(cubeData.GetVertices(), cubeData.GetIndices(), cubeData.GetVerticesCount(), cubeData.GetIndicesCount(), cubeData.GetVertexSize(), cubeData.GetIndicesSize());
-    Model test2 = Model(defaultShader, mat,  glm::mat4(1.0f), m, containerTex2);
-
+    Model testCube = Model(defaultShader, mat,  glm::mat4(1.0f), m, containerTex2);
+    Model testCube2 = Model(defaultShader, mat, glm::mat4(1.0f), m, containerTex);
     
+    Light light = Light();
+    light.setPosition(glm::vec3(0.7f,  0.2f,  0.5f));
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -151,9 +156,12 @@ int main()
  
         // Render Objects
         // ---------------
-        test2.render();
+        testCube.render();
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(1.0f, 1.0f, -1.0f));
+        testCube2.render(model);
         
-        
+        light.render(view, projection);
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -162,8 +170,8 @@ int main()
 
     // Dipose of resources now they're no longer needed:
     // -------------------------------------------------------------
-    test2.dispose();
-    
+    testCube.dispose();
+    testCube2.dispose();
     // Terminate GLFW, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();

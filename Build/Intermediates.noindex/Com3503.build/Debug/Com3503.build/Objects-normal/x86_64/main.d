@@ -248,6 +248,7 @@ dependencies: \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/mesh.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/material.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/model.hpp \
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/light.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/string_cast.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/../glm.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/../gtc/type_precision.hpp \

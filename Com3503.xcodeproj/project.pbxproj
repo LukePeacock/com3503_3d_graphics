@@ -23,6 +23,9 @@
 		A3044A522362FF5500D262F0 /* model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A502362FF5500D262F0 /* model.cpp */; };
 		A3044A5C2363092300D262F0 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A5B2363092300D262F0 /* camera.cpp */; };
 		A3044A5E2363381200D262F0 /* container_specular.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3044A5D2363380F00D262F0 /* container_specular.png */; };
+		A3F0F749236343DB001B49E9 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3F0F747236343DB001B49E9 /* light.cpp */; };
+		A3F0F74C23634892001B49E9 /* light_shader.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3F0F74A2363458F001B49E9 /* light_shader.frag */; };
+		A3F0F74D23634894001B49E9 /* light_shader.vs in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3F0F74B236345A6001B49E9 /* light_shader.vs */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +35,8 @@
 			dstPath = shaders;
 			dstSubfolderSpec = 7;
 			files = (
+				A3F0F74D23634894001B49E9 /* light_shader.vs in CopyFiles */,
+				A3F0F74C23634892001B49E9 /* light_shader.frag in CopyFiles */,
 				A3044A36236208ED00D262F0 /* default_shader.frag in CopyFiles */,
 				A3044A35236208EB00D262F0 /* default_shader.vs in CopyFiles */,
 			);
@@ -453,6 +458,10 @@
 		A3044A59236308D200D262F0 /* camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = camera.hpp; sourceTree = "<group>"; };
 		A3044A5B2363092300D262F0 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
 		A3044A5D2363380F00D262F0 /* container_specular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = container_specular.png; sourceTree = "<group>"; };
+		A3F0F747236343DB001B49E9 /* light.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = light.cpp; sourceTree = "<group>"; };
+		A3F0F748236343DB001B49E9 /* light.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = light.hpp; sourceTree = "<group>"; };
+		A3F0F74A2363458F001B49E9 /* light_shader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = light_shader.frag; sourceTree = "<group>"; };
+		A3F0F74B236345A6001B49E9 /* light_shader.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = light_shader.vs; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -500,6 +509,7 @@
 				A3044A4D2362F97500D262F0 /* material.cpp */,
 				A3044A502362FF5500D262F0 /* model.cpp */,
 				A3044A5B2363092300D262F0 /* camera.cpp */,
+				A3F0F747236343DB001B49E9 /* light.cpp */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -517,6 +527,7 @@
 		A3044725236202F500D262F0 /* headers */ = {
 			isa = PBXGroup;
 			children = (
+				A3F0F748236343DB001B49E9 /* light.hpp */,
 				A3044A59236308D200D262F0 /* camera.hpp */,
 				A3044A512362FF5500D262F0 /* model.hpp */,
 				A3044A4E2362F97500D262F0 /* material.hpp */,
@@ -534,6 +545,8 @@
 			children = (
 				A30447282362034A00D262F0 /* default_shader.vs */,
 				A30447292362035500D262F0 /* default_shader.frag */,
+				A3F0F74A2363458F001B49E9 /* light_shader.frag */,
+				A3F0F74B236345A6001B49E9 /* light_shader.vs */,
 			);
 			path = shaders;
 			sourceTree = "<group>";
@@ -1039,6 +1052,7 @@
 				A3044A4C2362F26A00D262F0 /* mesh.cpp in Sources */,
 				A30447152361FEE000D262F0 /* main.cpp in Sources */,
 				A3044A492362EF0A00D262F0 /* cube.cpp in Sources */,
+				A3F0F749236343DB001B49E9 /* light.cpp in Sources */,
 				A3044A32236205F800D262F0 /* glad.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
