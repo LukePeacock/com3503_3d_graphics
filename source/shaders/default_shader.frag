@@ -3,6 +3,7 @@ out vec4 FragColor;
 
 //in vec3 ourColor;
 in vec2 TexCoord;
+in vec3 Normal;
 
 // texture samplers
 uniform sampler2D diffuse;

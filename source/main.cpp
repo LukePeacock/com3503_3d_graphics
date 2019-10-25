@@ -87,30 +87,47 @@ int main()
 //    // set up vertex data (and buffer(s)) and configure vertex attributes
 //    // ------------------------------------------------------------------
     float vertices[] = {
-        //coords                //tex
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,   //left bottom back          0
-         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,   //right bottom back         1
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,   //right top back            2
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,   //left top back             3
+        //Coords                Normals     Tex
+        -0.5f, -0.5f, -0.5f,  -1, 0, 0,  0.0f, 0.0f,  // 0      //left bottom back
+        -0.5f, -0.5f,  0.5f,  -1, 0, 0,  1.0f, 0.0f,  // 1      //left bottom front
+        -0.5f,  0.5f, -0.5f,  -1, 0, 0,  0.0f, 1.0f,  // 2      //left top back
+        -0.5f,  0.5f,  0.5f,  -1, 0, 0,  1.0f, 1.0f,  // 3      //left top front
+         0.5f, -0.5f, -0.5f,   1, 0, 0,  1.0f, 0.0f,  // 4      //right bottom back
+         0.5f, -0.5f,  0.5f,   1, 0, 0,  0.0f, 0.0f,  // 5      //right bottom front
+         0.5f,  0.5f, -0.5f,   1, 0, 0,  1.0f, 1.0f,  // 6      //right top back
+         0.5f,  0.5f,  0.5f,   1, 0, 0,  0.0f, 1.0f,  // 7      //right top front
 
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,   //left bottom front         4
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,   //right bottom front        5
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,   //right top front           6
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,   //left top front            7
+        -0.5f, -0.5f, -0.5f,  0,0,-1,  1.0f, 0.0f,  // 8        //left bottom back
+        -0.5f, -0.5f,  0.5f,  0,0,1,   0.0f, 0.0f,  // 9        //left bottom front
+        -0.5f,  0.5f, -0.5f,  0,0,-1,  1.0f, 1.0f,  // 10       //left top back
+        -0.5f,  0.5f,  0.5f,  0,0,1,   0.0f, 1.0f,  // 11       //left top front
+         0.5f, -0.5f, -0.5f,  0,0,-1,  0.0f, 0.0f,  // 12       //right bottom back
+         0.5f, -0.5f,  0.5f,  0,0,1,   1.0f, 0.0f,  // 13       //right bottom front
+         0.5f,  0.5f, -0.5f,  0,0,-1,  0.0f, 1.0f,  // 14       //right top back
+         0.5f,  0.5f,  0.5f,  0,0,1,   1.0f, 1.0f,  // 15       //right top front
+
+        -0.5f, -0.5f, -0.5f,  0,-1,0,  0.0f, 0.0f,  // 16       //left bottom back
+        -0.5f, -0.5f,  0.5f,  0,-1,0,  0.0f, 1.0f,  // 17       //left bottom front
+        -0.5f,  0.5f, -0.5f,  0,1,0,   0.0f, 1.0f,  // 18       //left top back
+        -0.5f,  0.5f,  0.5f,  0,1,0,   0.0f, 0.0f,  // 19       //left top front
+         0.5f, -0.5f, -0.5f,  0,-1,0,  1.0f, 0.0f,  // 20       //right bottom back
+         0.5f, -0.5f,  0.5f,  0,-1,0,  1.0f, 1.0f,  // 21       //right bottom front
+         0.5f,  0.5f, -0.5f,  0,1,0,   1.0f, 1.0f,  // 22       //right top back
+         0.5f,  0.5f,  0.5f,  0,1,0,   1.0f, 0.0f   // 23       //right top front
     };
     unsigned int indices[] = {  // note that we start from 0!
-        0, 1, 2,    // back 1
-        2, 3, 0,    // back 2
-        4, 5, 6,    // front 1
-        6, 7, 4,    // front 2
-        7, 3, 0,    // left 1
-        0, 4, 7,    // left 2
-        6, 2, 1,    // Right 1
-        1, 5, 6,    // Right 2
-        0, 1, 5,    // Bottom 1
-        5, 4, 0,    // Bottom 2
-        3, 2, 6,  // Top 1
-        6, 7, 3   // Top 2
+        0,1,3, // x -ve
+        3,2,0, // x -ve
+        4,6,7, // x +ve
+        7,5,4, // x +ve
+        9,13,15, // z +ve
+        15,11,9, // z +ve
+        8,10,14, // z -ve
+        14,12,8, // z -ve
+        16,20,21, // y -ve
+        21,17,16, // y -ve
+        23,22,18, // y +ve
+        18,19,23  // y +ve
     };
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -124,15 +141,15 @@ int main()
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    //Coords
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-//    // color attribute
-//    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-//    glEnableVertexAttribArray(1);
-    // Tex attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+   // Normals attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    // Tex attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     // load and create a texture
     // -------------------------
