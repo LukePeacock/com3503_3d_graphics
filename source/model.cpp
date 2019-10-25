@@ -9,13 +9,14 @@
 #include "model.hpp"
 #include <glm/gtx/string_cast.hpp>
 
-Model::Model(glm::mat4 modelMatrix, float *vertices, unsigned int *indices, int verticesCount, int indicesCount, int verticesSize, int indicesSize, unsigned int diffuse){
+Model::Model(Shader shader,glm::mat4 modelMatrix, float *vertices, unsigned int *indices, int verticesCount, int indicesCount, int verticesSize, int indicesSize, unsigned int diffuse) : shader("shaders/default_shader.vs", "shaders/default_shader.frag"){
    // this->mesh = mesh;
    // this->material = material;
     std::cout << "VC: " << verticesCount;
     std::cout << " VS: " << verticesSize;
     std::cout << " IC: " << indicesCount;
     std::cout << " IS: " << indicesSize << std::endl;
+    this->shader = shader;
     this->verticesCount = verticesCount;
     this->indicesCount = indicesCount;
     this->verticesSize = verticesSize;
@@ -31,7 +32,7 @@ void Model::setModelMatrix(glm::mat4 m) {
     modelMatrix = m;
 }
 
-void Model::render(glm::mat4 modelMatrix, Shader shader) {
+void Model::render(glm::mat4 modelMatrix) {
     shader.use();
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, diffuse);
@@ -50,8 +51,8 @@ void Model::render(glm::mat4 modelMatrix, Shader shader) {
     //mesh.render(indicesLength);
 }
 
-void Model::render(Shader shader) {
-    render(modelMatrix, shader);
+void Model::render() {
+    render(modelMatrix);
 }
 
 void Model::dispose() {

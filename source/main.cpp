@@ -146,7 +146,7 @@ int main()
     std::cout << "V: " << cubeData.GetVertices() << std::endl;
     
     unsigned int containerTex2 = loadTexture("assets/container_specular.png");
-    Model test2 = Model(glm::mat4(1.0f), cubeData.GetVertices(), cubeData.GetIndices(), cubeData.GetVerticesCount(), cubeData.GetIndicesCount(), cubeData.GetVertexSize(), cubeData.GetIndicesSize(), containerTex2);
+    Model test2 = Model(defaultShader, glm::mat4(1.0f), cubeData.GetVertices(), cubeData.GetIndices(), cubeData.GetVerticesCount(), cubeData.GetIndicesCount(), cubeData.GetVertexSize(), cubeData.GetIndicesSize(), containerTex2);
 
     
     // render loop
@@ -191,7 +191,7 @@ int main()
         glDrawElements(GL_TRIANGLES, cubeData.GetIndicesCount(), GL_UNSIGNED_INT, 0);
         // glBindVertexArray(0); // no need to unbind it every time
  
-        test2.render(defaultShader);
+        test2.render();
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
