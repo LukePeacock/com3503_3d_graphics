@@ -28,22 +28,6 @@ private:
    // Material material;
     Shader shader;
     glm::mat4 modelMatrix;
-//    float * vertices;
-//    unsigned int * indices;
-//    int verticesCount;
-//    int indicesCount;
-//    int verticesSize;
-//    int indicesSize;
-//    void fillBuffers();
-//    unsigned int VBO;
-//    unsigned int VAO;
-//    unsigned int EBO;
     unsigned int diffuse;
-    
-//    int vertexStride = 8;
-//    int vertexXYZFloats = 3;
-//    int vertexNormalFloats = 3;
-//    int vertexTexFloats = 2;
-    
 };
 #endif /* model_hpp */

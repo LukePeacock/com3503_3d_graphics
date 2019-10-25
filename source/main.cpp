@@ -73,9 +73,9 @@ int main()
     }
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetCursorPosCallback(window, mouse_callback);
-    glfwSetScrollCallback(window, scroll_callback);
-    
+    glfwSetCursorPosCallback(window, mouse_callback);   //Mouse to move camera
+    glfwSetScrollCallback(window, scroll_callback);     //Scroll Mouse to zoom
+    glfwSetKeyCallback(window, key_callback);   // Prevents multiple actions from one key press
     // tell GLFW to capture our mouse
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -93,46 +93,7 @@ int main()
     
     Shader defaultShader("shaders/default_shader.vs", "shaders/default_shader.frag");
     
-    // Bind the key listener for input
-    // Prevents multiple actions from one key press
-    glfwSetKeyCallback(window, key_callback);
-   // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
-//    float vertices[] = {
-//        // positions          // texture coords
-//         0.5f,  0.5f, 0.0f,   1.0f, 1.0f, // top right
-//         0.5f, -0.5f, 0.0f,   1.0f, 0.0f, // bottom right
-//        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // bottom left
-//        -0.5f,  0.5f, 0.0f,   0.0f, 1.0f  // top left
-//    };
-//    unsigned int indices[] = {
-//        0, 1, 3, // first triangle
-//        1, 2, 3  // second triangle
-//    };
-
     Cube cubeData;
-    unsigned int VBO, VAO, EBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, cubeData.GetVertexSize(), cubeData.GetVertices(), GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, cubeData.GetIndicesSize(), cubeData.GetIndices(), GL_STATIC_DRAW);
-    //Coords
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-   // Normals attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    // Tex attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-
-    
     // load and create a texture
     // -------------------------
     unsigned int containerTex = loadTexture("assets/container.png");
@@ -184,12 +145,6 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         defaultShader.setMat4("view", view);
         
-        glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-        defaultShader.setMat4("model", model);
-        glBindVertexArray(VAO);
-        //glDrawArrays(GL_TRIANGLES, 0, 36);
-        glDrawElements(GL_TRIANGLES, cubeData.GetIndicesCount(), GL_UNSIGNED_INT, 0);
-        // glBindVertexArray(0); // no need to unbind it every time
  
         test2.render();
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -201,8 +156,7 @@ int main()
     // de-allocate all resources now they've outlived their purpose:
     // ------------------------------------------------------------------------
     test2.dispose();
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
+    
    // glDeleteBuffers(1, &EBO);
 
     // Terminate GLFW, clearing all previously allocated GLFW resources.
