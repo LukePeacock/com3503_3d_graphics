@@ -54,7 +54,7 @@ void Mesh::fillBuffers() {
       
       //coords
       int offset = 0;
-      glVertexAttribPointer(0, vertexXYZFloats, GL_FLOAT, GL_FALSE, vertexStride*sizeof(float), (void*)offset);
+      glVertexAttribPointer(0, vertexXYZFloats, GL_FLOAT, GL_FALSE, vertexStride*sizeof(float), (void*)(offset*sizeof(float)));
       glEnableVertexAttribArray(0);
       //normals
       offset = vertexXYZFloats;

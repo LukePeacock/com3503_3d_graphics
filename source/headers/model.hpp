@@ -18,7 +18,7 @@
 class Model {
    
 public:
-    Model(Shader shader, glm::mat4 modelMatrix, Mesh mesh, unsigned int diffuse);
+    Model(Shader shader, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess, glm::mat4 modelMatrix, Mesh mesh, unsigned int diffusemap);
     void render(glm::mat4 modelMatrix);
     void setModelMatrix(glm::mat4 m);
     void render();
@@ -28,6 +28,10 @@ private:
    // Material material;
     Shader shader;
     glm::mat4 modelMatrix;
-    unsigned int diffuse;
+    unsigned int diffusemap;
+    glm::vec3 ambient;
+    glm::vec3 diffuse;
+    glm::vec3 specular;
+    float shininess;
 };
 #endif /* model_hpp */
