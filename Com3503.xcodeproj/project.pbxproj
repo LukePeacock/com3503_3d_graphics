@@ -21,6 +21,7 @@
 		A3044A4C2362F26A00D262F0 /* mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A4A2362F26A00D262F0 /* mesh.cpp */; };
 		A3044A4F2362F97500D262F0 /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A4D2362F97500D262F0 /* material.cpp */; };
 		A3044A522362FF5500D262F0 /* model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A502362FF5500D262F0 /* model.cpp */; };
+		A3044A5C2363092300D262F0 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A5B2363092300D262F0 /* camera.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -447,6 +448,8 @@
 		A3044A4E2362F97500D262F0 /* material.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = material.hpp; sourceTree = "<group>"; };
 		A3044A502362FF5500D262F0 /* model.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = model.cpp; sourceTree = "<group>"; };
 		A3044A512362FF5500D262F0 /* model.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = model.hpp; sourceTree = "<group>"; };
+		A3044A59236308D200D262F0 /* camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = camera.hpp; sourceTree = "<group>"; };
+		A3044A5B2363092300D262F0 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -493,7 +496,7 @@
 				A3044A4A2362F26A00D262F0 /* mesh.cpp */,
 				A3044A4D2362F97500D262F0 /* material.cpp */,
 				A3044A502362FF5500D262F0 /* model.cpp */,
-				A3044A512362FF5500D262F0 /* model.hpp */,
+				A3044A5B2363092300D262F0 /* camera.cpp */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -511,6 +514,8 @@
 		A3044725236202F500D262F0 /* headers */ = {
 			isa = PBXGroup;
 			children = (
+				A3044A59236308D200D262F0 /* camera.hpp */,
+				A3044A512362FF5500D262F0 /* model.hpp */,
 				A3044A4E2362F97500D262F0 /* material.hpp */,
 				A3044A4B2362F26A00D262F0 /* mesh.hpp */,
 				A3044A452362EE9300D262F0 /* cube.hpp */,
@@ -1026,6 +1031,7 @@
 				A3044A3923620BF500D262F0 /* stb_image_implementation.cpp in Sources */,
 				A3044A4F2362F97500D262F0 /* material.cpp in Sources */,
 				A3044A522362FF5500D262F0 /* model.cpp in Sources */,
+				A3044A5C2363092300D262F0 /* camera.cpp in Sources */,
 				A3044A4C2362F26A00D262F0 /* mesh.cpp in Sources */,
 				A30447152361FEE000D262F0 /* main.cpp in Sources */,
 				A3044A492362EF0A00D262F0 /* cube.cpp in Sources */,
