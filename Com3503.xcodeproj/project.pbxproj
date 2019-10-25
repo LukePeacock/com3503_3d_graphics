@@ -17,6 +17,7 @@
 		A3044A36236208ED00D262F0 /* default_shader.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = A30447292362035500D262F0 /* default_shader.frag */; };
 		A3044A3923620BF500D262F0 /* stb_image_implementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A3823620BF500D262F0 /* stb_image_implementation.cpp */; };
 		A3044A43236219A100D262F0 /* container.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3044A3F23620D1E00D262F0 /* container.png */; };
+		A3044A492362EF0A00D262F0 /* cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A472362EF0A00D262F0 /* cube.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -435,6 +436,8 @@
 		A3044A3723620BDD00D262F0 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		A3044A3823620BF500D262F0 /* stb_image_implementation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stb_image_implementation.cpp; sourceTree = "<group>"; };
 		A3044A3F23620D1E00D262F0 /* container.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = container.png; sourceTree = "<group>"; };
+		A3044A452362EE9300D262F0 /* cube.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cube.hpp; sourceTree = "<group>"; };
+		A3044A472362EF0A00D262F0 /* cube.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cube.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -477,6 +480,7 @@
 				A30447272362032900D262F0 /* shaders */,
 				A3044725236202F500D262F0 /* headers */,
 				A30447142361FEE000D262F0 /* main.cpp */,
+				A3044A472362EF0A00D262F0 /* cube.cpp */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -494,6 +498,7 @@
 		A3044725236202F500D262F0 /* headers */ = {
 			isa = PBXGroup;
 			children = (
+				A3044A452362EE9300D262F0 /* cube.hpp */,
 				A3044A3723620BDD00D262F0 /* stb_image.h */,
 				A30448AC2362050200D262F0 /* glm */,
 				A3044726236202FF00D262F0 /* shader.h */,
@@ -1005,6 +1010,7 @@
 				A3044A2D2362050300D262F0 /* glm.cpp in Sources */,
 				A3044A3923620BF500D262F0 /* stb_image_implementation.cpp in Sources */,
 				A30447152361FEE000D262F0 /* main.cpp in Sources */,
+				A3044A492362EF0A00D262F0 /* cube.cpp in Sources */,
 				A3044A32236205F800D262F0 /* glad.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1124,6 +1130,7 @@
 		A30447192361FEE000D262F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				HEADER_SEARCH_PATHS = (
 					/users/luke/documents/rendering/glad/include,
@@ -1139,6 +1146,7 @@
 		A304471A2361FEE000D262F0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				HEADER_SEARCH_PATHS = (
 					/users/luke/documents/rendering/glad/include,

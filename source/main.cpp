@@ -13,6 +13,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+#include <cube.hpp>
+
 
 //Function protos
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -84,51 +86,8 @@ int main()
 //        0, 1, 3, // first triangle
 //        1, 2, 3  // second triangle
 //    };
-//    // set up vertex data (and buffer(s)) and configure vertex attributes
-//    // ------------------------------------------------------------------
-    float vertices[] = {
-        //Coords                Normals     Tex
-        -0.5f, -0.5f, -0.5f,  -1, 0, 0,  0.0f, 0.0f,  // 0      //left bottom back
-        -0.5f, -0.5f,  0.5f,  -1, 0, 0,  1.0f, 0.0f,  // 1      //left bottom front
-        -0.5f,  0.5f, -0.5f,  -1, 0, 0,  0.0f, 1.0f,  // 2      //left top back
-        -0.5f,  0.5f,  0.5f,  -1, 0, 0,  1.0f, 1.0f,  // 3      //left top front
-         0.5f, -0.5f, -0.5f,   1, 0, 0,  1.0f, 0.0f,  // 4      //right bottom back
-         0.5f, -0.5f,  0.5f,   1, 0, 0,  0.0f, 0.0f,  // 5      //right bottom front
-         0.5f,  0.5f, -0.5f,   1, 0, 0,  1.0f, 1.0f,  // 6      //right top back
-         0.5f,  0.5f,  0.5f,   1, 0, 0,  0.0f, 1.0f,  // 7      //right top front
 
-        -0.5f, -0.5f, -0.5f,  0,0,-1,  1.0f, 0.0f,  // 8        //left bottom back
-        -0.5f, -0.5f,  0.5f,  0,0,1,   0.0f, 0.0f,  // 9        //left bottom front
-        -0.5f,  0.5f, -0.5f,  0,0,-1,  1.0f, 1.0f,  // 10       //left top back
-        -0.5f,  0.5f,  0.5f,  0,0,1,   0.0f, 1.0f,  // 11       //left top front
-         0.5f, -0.5f, -0.5f,  0,0,-1,  0.0f, 0.0f,  // 12       //right bottom back
-         0.5f, -0.5f,  0.5f,  0,0,1,   1.0f, 0.0f,  // 13       //right bottom front
-         0.5f,  0.5f, -0.5f,  0,0,-1,  0.0f, 1.0f,  // 14       //right top back
-         0.5f,  0.5f,  0.5f,  0,0,1,   1.0f, 1.0f,  // 15       //right top front
-
-        -0.5f, -0.5f, -0.5f,  0,-1,0,  0.0f, 0.0f,  // 16       //left bottom back
-        -0.5f, -0.5f,  0.5f,  0,-1,0,  0.0f, 1.0f,  // 17       //left bottom front
-        -0.5f,  0.5f, -0.5f,  0,1,0,   0.0f, 1.0f,  // 18       //left top back
-        -0.5f,  0.5f,  0.5f,  0,1,0,   0.0f, 0.0f,  // 19       //left top front
-         0.5f, -0.5f, -0.5f,  0,-1,0,  1.0f, 0.0f,  // 20       //right bottom back
-         0.5f, -0.5f,  0.5f,  0,-1,0,  1.0f, 1.0f,  // 21       //right bottom front
-         0.5f,  0.5f, -0.5f,  0,1,0,   1.0f, 1.0f,  // 22       //right top back
-         0.5f,  0.5f,  0.5f,  0,1,0,   1.0f, 0.0f   // 23       //right top front
-    };
-    unsigned int indices[] = {  // note that we start from 0!
-        0,1,3, // x -ve
-        3,2,0, // x -ve
-        4,6,7, // x +ve
-        7,5,4, // x +ve
-        9,13,15, // z +ve
-        15,11,9, // z +ve
-        8,10,14, // z -ve
-        14,12,8, // z -ve
-        16,20,21, // y -ve
-        21,17,16, // y -ve
-        23,22,18, // y +ve
-        18,19,23  // y +ve
-    };
+    Cube testCube;
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -137,10 +96,10 @@ int main()
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, testCube.GetVertexSize(), testCube.GetVertices(), GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, testCube.GetIndicesSize(), testCube.GetIndices(), GL_STATIC_DRAW);
     //Coords
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -190,7 +149,7 @@ int main()
         defaultShader.setMat4("projection", projection);
         glBindVertexArray(VAO);
         //glDrawArrays(GL_TRIANGLES, 0, 36);
-        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, testCube.GetIndicesCount(), GL_UNSIGNED_INT, 0);
         // glBindVertexArray(0); // no need to unbind it every time
  
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
