@@ -18,17 +18,27 @@
 class Model {
    
 public:
-    Model(Shader shader, Material material, glm::mat4 modelMatrix, Mesh mesh, int indicesLength);
-    void render(glm::mat4 modelMatrix);
+    Model(glm::mat4 modelMatrix, float *vertices, unsigned int *indices, int verticesCount, int indicesCount, int verticesSize, int indicesSize, unsigned int diffuse);
+    void render(glm::mat4 modelMatrix, Shader shader, glm::mat4 projection, glm::mat4 view);
     void setModelMatrix(glm::mat4 m);
-    void render();
+    void render(Shader shader, glm::mat4 projection, glm::mat4 view);
     void dispose();
 private:
-    Mesh mesh;
-    Material material;
-    Shader shader;
+   // Mesh mesh;
+   // Material material;
+   // Shader shader;
     glm::mat4 modelMatrix;
-    int indicesLength;
+    float * vertices;
+    unsigned int * indices;
+    int verticesCount;
+    int indicesCount;
+    int verticesSize;
+    int indicesSize;
+    void fillBuffers();
+    unsigned int VBO;
+    unsigned int VAO;
+    unsigned int EBO;
+    unsigned int diffuse;
     
 };
 #endif /* model_hpp */

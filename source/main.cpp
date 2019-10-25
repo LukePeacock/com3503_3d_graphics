@@ -18,6 +18,7 @@
 #include <mesh.hpp>
 #include <material.hpp>
 #include <model.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 //Function protos
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -109,19 +110,18 @@ int main()
 //        1, 2, 3  // second triangle
 //    };
 
-    Cube testCube;
+    Cube cubeData;
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
     // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
     glBindVertexArray(VAO);
-
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, testCube.GetVertexSize(), testCube.GetVertices(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, cubeData.GetVertexSize(), cubeData.GetVertices(), GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, testCube.GetIndicesSize(), testCube.GetIndices(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, cubeData.GetIndicesSize(), cubeData.GetIndices(), GL_STATIC_DRAW);
     //Coords
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -132,13 +132,20 @@ int main()
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
+    
     // load and create a texture
     // -------------------------
     unsigned int containerTex = loadTexture("assets/container.png");
     defaultShader.use(); // don't forget to activate/use the shader before setting uniforms!
     // either set it manually like so:
     defaultShader.setInt("diffuse", 0);
-    
+    std::cout << "VC: " << cubeData.GetVerticesCount();
+    std::cout << " VS: " << cubeData.GetVertexSize();
+    std::cout << " IC: " << cubeData.GetIndicesCount();
+    std::cout << " IS: " << cubeData.GetIndicesSize() << std::endl;
+    std::cout << "V: " << cubeData.GetVertices() << std::endl;
+    Model test2 = Model(glm::mat4(1.0f), cubeData.GetVertices(), cubeData.GetIndices(), cubeData.GetVerticesCount(), cubeData.GetIndicesCount(), cubeData.GetVertexSize(), cubeData.GetIndicesSize(), containerTex);
+
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -174,14 +181,14 @@ int main()
         glm::mat4 view = camera.GetViewMatrix();
         defaultShader.setMat4("view", view);
         
-        glm::mat4 model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-        projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, NEAR_PLANE, FAR_PLANE);
+        glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
         defaultShader.setMat4("model", model);
         glBindVertexArray(VAO);
         //glDrawArrays(GL_TRIANGLES, 0, 36);
-        glDrawElements(GL_TRIANGLES, testCube.GetIndicesCount(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, cubeData.GetIndicesCount(), GL_UNSIGNED_INT, 0);
         // glBindVertexArray(0); // no need to unbind it every time
  
+        test2.render(defaultShader, projection, view);
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -190,6 +197,7 @@ int main()
 
     // de-allocate all resources now they've outlived their purpose:
     // ------------------------------------------------------------------------
+    test2.dispose();
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
    // glDeleteBuffers(1, &EBO);
