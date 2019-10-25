@@ -15,9 +15,9 @@ class Mesh{
     
 public:
     Mesh();
-    Mesh(float &vertices, int &indices, int verticesCount, int indicesCount, int verticesSize, int indicesSize);
+    Mesh(float *vertices, int *indices, int verticesCount, int indicesCount, int verticesSize, int indicesSize);
     void render(int indicesLength);
-    void fillBuffers(float &vertices, int verticesSize, int &indices, int indicesSize);
+    void fillBuffers(float *vertices, int verticesSize, int *indices, int indicesSize);
     void dispose();
 private:
     int vertexStride = 8;

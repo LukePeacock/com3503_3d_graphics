@@ -14,7 +14,7 @@
 
 Mesh::Mesh(){
 }
-Mesh::Mesh(float &vertices, int &indices, int verticesCount, int indicesCount, int verticesSize, int indicesSize) {
+Mesh::Mesh(float *vertices, int *indices, int verticesCount, int indicesCount, int verticesSize, int indicesSize) {
    // this->vertices.resize(verticesCount);
    // this->indices.resize(indicesCount);
     this->vertices.assign(vertices, vertices + verticesCount);
@@ -28,7 +28,7 @@ void Mesh::render(int indicesLength) {
     glBindVertexArray(0);
 }
 
-void Mesh::fillBuffers(float &vertices, int verticesSize, int &indices, int indicesSize) {
+void Mesh::fillBuffers(float *vertices, int verticesSize, int *indices, int indicesSize) {
     glGenVertexArrays(1, &vertexArrayId);
     glBindVertexArray(vertexArrayId);
     glGenBuffers(1, &vertexBufferId);
