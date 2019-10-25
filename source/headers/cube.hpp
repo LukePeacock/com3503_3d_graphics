@@ -64,6 +64,7 @@ public:
     int GetVertexSize();
     int GetIndicesSize();
     int GetIndicesCount();
+    int GetVerticesCount();
 };
 
 

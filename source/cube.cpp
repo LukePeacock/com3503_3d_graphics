@@ -27,3 +27,7 @@ int Cube::GetIndicesSize(){
 int Cube::GetIndicesCount(){
     return sizeof(indices)/sizeof(indices[0]);
 }
+
+int Cube::GetVerticesCount(){
+    return sizeof(vertices)/sizeof(vertices[0]);
+}
