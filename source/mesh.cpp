@@ -11,61 +11,64 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 
 Mesh::Mesh(){
 }
-Mesh::Mesh(float *vertices, int *indices, int verticesCount, int indicesCount, int verticesSize, int indicesSize) {
+Mesh::Mesh(float *vertices, unsigned int *indices, int verticesCount, int indicesCount, int verticesSize, int indicesSize) {
    // this->vertices.resize(verticesCount);
    // this->indices.resize(indicesCount);
-    this->vertices.assign(vertices, vertices + verticesCount);
-    this->indices.assign(indices, indices + indicesCount);
-    fillBuffers(vertices, verticesSize, indices, indicesSize);
+    this->verticesCount = verticesCount;
+    this->indicesCount = indicesCount;
+    this->verticesSize = verticesSize;
+    this->indicesSize = indicesSize;
+    this->vertices = vertices;
+    this->indices = indices;
+    fillBuffers();
 }
 
-void Mesh::render(int indicesLength) {
-    glBindVertexArray(vertexArrayId);
-    glDrawElements(GL_TRIANGLES, indicesLength, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+void Mesh::render() {
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, 0);
 }
 
-void Mesh::fillBuffers(float *vertices, int verticesSize, int *indices, int indicesSize) {
-    glGenVertexArrays(1, &vertexArrayId);
-    glBindVertexArray(vertexArrayId);
-    glGenBuffers(1, &vertexBufferId);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
+void Mesh::fillBuffers() {
+    std::cout << "fillBuffers()" << std::endl;
+      std::cout << "VC: " << verticesCount;
+      std::cout << " VS: " << verticesSize;
+      std::cout << " IC: " << indicesCount;
+      std::cout << " IS: " << indicesSize << std::endl;
+      
+      std::cout << "V: " << vertices << std::endl;
+      glGenVertexArrays(1, &VAO);
+      glGenBuffers(1, &VBO);
+      glGenBuffers(1, &EBO);
+      
+      glBindVertexArray(VAO);
+      
+      glBindBuffer(GL_ARRAY_BUFFER, VBO);
+      glBufferData(GL_ARRAY_BUFFER, verticesSize, vertices, GL_STATIC_DRAW);
     
-    glBufferData(GL_ARRAY_BUFFER, verticesSize, &vertices, GL_STATIC_DRAW);
-  
-    int stride = vertexStride;
-    int numXYZFloats = vertexXYZFloats;
-    int offset = 0;
-    glVertexAttribPointer(0, numXYZFloats, GL_FLOAT, GL_FALSE, stride*sizeof(float), (void*)offset);
-    glEnableVertexAttribArray(0);
-
-    int numNormalFloats = vertexNormalFloats; // x,y,z for each vertex
-    offset = numXYZFloats*sizeof(float);  // the normal values are three floats after the three x,y,z values
-                                  // so change the offset value
-    glVertexAttribPointer(1, numNormalFloats, GL_FLOAT, GL_FALSE, stride*sizeof(float), (void*)offset);
-                                  // the vertex shader uses location 1 (sometimes called index 1)
-                                  // for the normal information
-                                  // location, size, type, normalize, stride, offset
-                                  // offset is relative to the start of the array of data
-    glEnableVertexAttribArray(1);// Enable the vertex attribute array at location 1
-
-    // now do the texture coordinates  in vertex attribute 2
-    int numTexFloats = vertexTexFloats;
-    offset = (numXYZFloats+numNormalFloats)*sizeof(float);
-    glVertexAttribPointer(2, numTexFloats, GL_FLOAT, GL_FALSE, stride*sizeof(float), (void*)offset);
-    glEnableVertexAttribArray(2);
-  
-    glGenBuffers(1, &elementBufferId);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferId);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,indicesSize, &indices, GL_STATIC_DRAW);
-    glBindVertexArray(0);
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER,indicesSize, indices, GL_STATIC_DRAW);
+      
+      //coords
+      int offset = 0;
+      glVertexAttribPointer(0, vertexXYZFloats, GL_FLOAT, GL_FALSE, vertexStride*sizeof(float), (void*)offset);
+      glEnableVertexAttribArray(0);
+      //normals
+      offset = vertexXYZFloats;
+      glVertexAttribPointer(1, vertexNormalFloats, GL_FLOAT, GL_FALSE, vertexStride*sizeof(float), (void*)(offset*sizeof(float)));
+      glEnableVertexAttribArray(1);
+      //textures
+      offset += vertexNormalFloats;
+      glVertexAttribPointer(2, vertexTexFloats, GL_FLOAT, GL_FALSE, vertexStride*sizeof(float), (void*)(offset*sizeof(float)));
+      glEnableVertexAttribArray(2);
+    
 }
 
 void Mesh::dispose() {
-  glDeleteBuffers(1, &vertexBufferId);
-  glDeleteVertexArrays(1, &vertexArrayId);
-  glDeleteBuffers(1, &elementBufferId);
+  glDeleteBuffers(1, &VBO);
+  glDeleteVertexArrays(1, &VAO);
+  glDeleteBuffers(1, &EBO);
 }
