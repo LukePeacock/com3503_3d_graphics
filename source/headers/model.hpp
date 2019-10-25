@@ -19,9 +19,9 @@ class Model {
    
 public:
     Model(glm::mat4 modelMatrix, float *vertices, unsigned int *indices, int verticesCount, int indicesCount, int verticesSize, int indicesSize, unsigned int diffuse);
-    void render(glm::mat4 modelMatrix, Shader shader, glm::mat4 projection, glm::mat4 view);
+    void render(glm::mat4 modelMatrix, Shader shader);
     void setModelMatrix(glm::mat4 m);
-    void render(Shader shader, glm::mat4 projection, glm::mat4 view);
+    void render(Shader shader);
     void dispose();
 private:
    // Mesh mesh;

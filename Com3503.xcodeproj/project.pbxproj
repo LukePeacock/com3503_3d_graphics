@@ -22,6 +22,7 @@
 		A3044A4F2362F97500D262F0 /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A4D2362F97500D262F0 /* material.cpp */; };
 		A3044A522362FF5500D262F0 /* model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A502362FF5500D262F0 /* model.cpp */; };
 		A3044A5C2363092300D262F0 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A5B2363092300D262F0 /* camera.cpp */; };
+		A3044A5E2363381200D262F0 /* container_specular.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3044A5D2363380F00D262F0 /* container_specular.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,6 +43,7 @@
 			dstPath = assets;
 			dstSubfolderSpec = 7;
 			files = (
+				A3044A5E2363381200D262F0 /* container_specular.png in CopyFiles */,
 				A3044A43236219A100D262F0 /* container.png in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -450,6 +452,7 @@
 		A3044A512362FF5500D262F0 /* model.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = model.hpp; sourceTree = "<group>"; };
 		A3044A59236308D200D262F0 /* camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = camera.hpp; sourceTree = "<group>"; };
 		A3044A5B2363092300D262F0 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
+		A3044A5D2363380F00D262F0 /* container_specular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = container_specular.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -964,6 +967,7 @@
 		A3044A3E23620D1E00D262F0 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				A3044A5D2363380F00D262F0 /* container_specular.png */,
 				A3044A3F23620D1E00D262F0 /* container.png */,
 			);
 			path = assets;

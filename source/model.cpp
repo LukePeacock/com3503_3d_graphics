@@ -31,11 +31,8 @@ void Model::setModelMatrix(glm::mat4 m) {
     modelMatrix = m;
 }
 
-void Model::render(glm::mat4 modelMatrix, Shader shader, glm::mat4 projection, glm::mat4 view) {
+void Model::render(glm::mat4 modelMatrix, Shader shader) {
     shader.use();
-    shader.setMat4("projection", projection);
-    shader.setMat4("view", view);
-    shader.setInt("diffuse", 0);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, diffuse);
     
@@ -53,8 +50,8 @@ void Model::render(glm::mat4 modelMatrix, Shader shader, glm::mat4 projection, g
     //mesh.render(indicesLength);
 }
 
-void Model::render(Shader shader, glm::mat4 projection, glm::mat4 view) {
-    render(modelMatrix, shader, projection, view);
+void Model::render(Shader shader) {
+    render(modelMatrix, shader);
 }
 
 void Model::dispose() {
