@@ -32,7 +32,7 @@ const float NEAR_PLANE = 1.0f;
 const float FAR_PLANE = 100.0f;
 
 static unsigned char wireframe;         // Allows scene to be rendered in wireframe
-
+static bool userCam = false;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -202,18 +202,20 @@ int main()
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window)
 {
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(RIGHT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        camera.ProcessKeyboard(DOWN, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        camera.ProcessKeyboard(UP, deltaTime);
+    if (userCam) {
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+            camera.ProcessKeyboard(FORWARD, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+            camera.ProcessKeyboard(BACKWARD, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+            camera.ProcessKeyboard(LEFT, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+            camera.ProcessKeyboard(RIGHT, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+            camera.ProcessKeyboard(DOWN, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+            camera.ProcessKeyboard(UP, deltaTime);
+    }
 }
 
 // glfw: key callback function, causes event once per press.
@@ -222,6 +224,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
     if (key == GLFW_KEY_F && action == GLFW_PRESS) // render wireframe with F
         glPolygonMode(GL_FRONT_AND_BACK, (wireframe = 1 - wireframe) ? GL_LINE : GL_FILL);
+    if (key == GLFW_KEY_Q && action == GLFW_PRESS) // render wireframe with F
+        userCam = !userCam;
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) // Exit program with escape
         glfwSetWindowShouldClose(window, true);
 }
@@ -230,26 +234,30 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 // -------------------------------------------------------
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
-    if (firstMouse)
+    if (userCam)
     {
+        if (firstMouse)
+        {
+            lastX = xpos;
+            lastY = ypos;
+            firstMouse = false;
+        }
+
+        float xoffset = xpos - lastX;
+        float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
         lastX = xpos;
         lastY = ypos;
-        firstMouse = false;
+
+        camera.ProcessMouseMovement(xoffset, yoffset);
     }
-
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-    lastX = xpos;
-    lastY = ypos;
-
-    camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    camera.ProcessMouseScroll(yoffset);
+    if (userCam)
+        camera.ProcessMouseScroll(yoffset);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
