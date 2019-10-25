@@ -9,9 +9,9 @@
 #include "model.hpp"
 #include <glm/gtx/string_cast.hpp>
 
-Model::Model(Shader shader,glm::mat4 modelMatrix, float *vertices, unsigned int *indices, int verticesCount, int indicesCount, int verticesSize, int indicesSize, unsigned int diffuse) : shader("shaders/default_shader.vs", "shaders/default_shader.frag"){
+Model::Model(Shader shader,glm::mat4 modelMatrix, Mesh mesh, unsigned int diffuse) : shader("shaders/default_shader.vs", "shaders/default_shader.frag"), mesh(){
     this->shader = shader;
-    this->mesh = Mesh(vertices, indices, verticesCount, indicesCount, verticesSize, indicesSize);
+    this->mesh = mesh;
     this->modelMatrix = modelMatrix;
     this->diffuse = diffuse;
 }
