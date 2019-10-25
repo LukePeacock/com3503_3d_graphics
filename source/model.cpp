@@ -84,13 +84,16 @@ void Model::fillBuffers() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,indicesSize, indices, GL_STATIC_DRAW);
     
     //coords
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)0);
+    int offset = 0;
+    glVertexAttribPointer(0, vertexXYZFloats, GL_FLOAT, GL_FALSE, vertexStride*sizeof(float), (void*)offset);
     glEnableVertexAttribArray(0);
     //normals
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(3*sizeof(float)));
+    offset = vertexXYZFloats;
+    glVertexAttribPointer(1, vertexNormalFloats, GL_FLOAT, GL_FALSE, vertexStride*sizeof(float), (void*)(offset*sizeof(float)));
     glEnableVertexAttribArray(1);
     //textures
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(6*sizeof(float)));
+    offset += vertexNormalFloats;
+    glVertexAttribPointer(2, vertexTexFloats, GL_FLOAT, GL_FALSE, vertexStride*sizeof(float), (void*)(offset*sizeof(float)));
     glEnableVertexAttribArray(2);
   
     

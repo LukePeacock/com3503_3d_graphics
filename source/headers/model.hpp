@@ -40,5 +40,10 @@ private:
     unsigned int EBO;
     unsigned int diffuse;
     
+    int vertexStride = 8;
+    int vertexXYZFloats = 3;
+    int vertexNormalFloats = 3;
+    int vertexTexFloats = 2;
+    
 };
 #endif /* model_hpp */
