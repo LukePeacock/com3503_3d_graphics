@@ -33,25 +33,18 @@ void Mesh::render() {
 }
 
 void Mesh::fillBuffers() {
-    std::cout << "fillBuffers()" << std::endl;
-      std::cout << "VC: " << verticesCount;
-      std::cout << " VS: " << verticesSize;
-      std::cout << " IC: " << indicesCount;
-      std::cout << " IS: " << indicesSize << std::endl;
-      
-      std::cout << "V: " << vertices << std::endl;
       glGenVertexArrays(1, &VAO);
       glGenBuffers(1, &VBO);
       glGenBuffers(1, &EBO);
       
       glBindVertexArray(VAO);
-      
+    
       glBindBuffer(GL_ARRAY_BUFFER, VBO);
       glBufferData(GL_ARRAY_BUFFER, verticesSize, vertices, GL_STATIC_DRAW);
     
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
       glBufferData(GL_ELEMENT_ARRAY_BUFFER,indicesSize, indices, GL_STATIC_DRAW);
-      
+    
       //coords
       int offset = 0;
       glVertexAttribPointer(0, vertexXYZFloats, GL_FLOAT, GL_FALSE, vertexStride*sizeof(float), (void*)(offset*sizeof(float)));

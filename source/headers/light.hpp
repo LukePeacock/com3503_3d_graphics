@@ -29,13 +29,13 @@ private:
     void fillBuffers();
     
 public:
-    Light();
+    Light(Shader shader);
     void setPosition(glm::vec3 pos);
     void setPosition(float x, float y, float z);
     glm::vec3 getPosition();
     void setMaterial(Material m);
     Material getMaterial();
-    void render(glm::mat4 view, glm::mat4 projection);
+    void render();
     void dispose();
 };
 

@@ -100,7 +100,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
     
     Shader defaultShader("shaders/default_shader.vs", "shaders/default_shader.frag");
-    
+    Shader lightShader("shaders/light_shader.vs", "shaders/light_shader.frag");
     Cube cubeData;
     // load and create a texture
     // -------------------------
@@ -109,11 +109,6 @@ int main()
     defaultShader.use(); // don't forget to activate/use the shader before setting uniforms!
     // either set it manually like so:
     defaultShader.setInt("diffuse", 0);
-    std::cout << "VC: " << cubeData.GetVerticesCount();
-    std::cout << " VS: " << cubeData.GetVertexSize();
-    std::cout << " IC: " << cubeData.GetIndicesCount();
-    std::cout << " IS: " << cubeData.GetIndicesSize() << std::endl;
-    std::cout << "V: " << cubeData.GetVertices() << std::endl;
     
     unsigned int containerTex2 = loadTexture("assets/container_specular.png");
     Material mat = Material(glm::vec3(0.2f), glm::vec3(0.8f), glm::vec3(0.5f),32.0f);
@@ -121,8 +116,8 @@ int main()
     Model testCube = Model(defaultShader, mat,  glm::mat4(1.0f), m, containerTex2);
     Model testCube2 = Model(defaultShader, mat, glm::mat4(1.0f), m, containerTex);
     
-    Light light = Light();
-    light.setPosition(glm::vec3(0.7f,  0.2f,  0.5f));
+    Light light = Light(lightShader);
+    light.setPosition(glm::vec3(2.7f,  2.2f,  0.5f));
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -149,10 +144,11 @@ int main()
         // Projection
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, NEAR_PLANE, FAR_PLANE);
         defaultShader.setMat4("projection", projection);
+        lightShader.setMat4("projection", projection);
         // camera/view transformation
         glm::mat4 view = camera.GetViewMatrix();
         defaultShader.setMat4("view", view);
-        
+        lightShader.setMat4("view", view);
  
         // Render Objects
         // ---------------
@@ -161,7 +157,7 @@ int main()
         model = glm::translate(model, glm::vec3(1.0f, 1.0f, -1.0f));
         testCube2.render(model);
         
-        light.render(view, projection);
+        light.render();
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -172,6 +168,7 @@ int main()
     // -------------------------------------------------------------
     testCube.dispose();
     testCube2.dispose();
+    light.dispose();
     // Terminate GLFW, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();

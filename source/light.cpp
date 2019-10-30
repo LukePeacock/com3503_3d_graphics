@@ -7,7 +7,7 @@
 //
 
 #include "light.hpp"
-
+#include <glm/gtx/string_cast.hpp>
 float vertices[] = {  // x,y,z
     -0.5f, -0.5f, -0.5f,  // 0
     -0.5f, -0.5f,  0.5f,  // 1
@@ -34,8 +34,9 @@ int indices[] =  {
     7,6,2  // y +ve
   };
 
-Light::Light(): shader("shaders/light_shader.vs", "shaders/light_shader.frag"){
+Light::Light(Shader shader) : shader("shaders/light_shader.vs", "shaders/light_shader.frag"){
   this->material = Material();
+  this->shader = shader;
   material.setAmbient(0.5f, 0.5f, 0.5f);
   material.setDiffuse(0.8f, 0.8f, 0.8f);
   material.setSpecular(0.8f, 0.8f, 0.8f);
@@ -68,19 +69,23 @@ Material Light::getMaterial() {
   return material;
 }
 
-void Light::render(glm::mat4 view, glm::mat4 projection) {
+void Light::render() {
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::scale(model, glm::vec3(0.3f,0.3f,0.3f));
+   // model = glm::scale(model, glm::vec3(0.3f,0.3f,0.3f));
+
     model = glm::translate(model, position);
-  
-  
+    
+    
+    
     shader.use();
-    shader.setMat4("view",view);
-    shader.setMat4("projection", projection);
+    std::cout << "use" << glGetError() << std::endl;
     shader.setMat4("model", model);
     glBindVertexArray(VAO);
+    std::cout << "vao" << glGetError() << std::endl;
     int indexcount =sizeof(indices)/sizeof(indices[0]);
+    std::cout << "indexc" << glGetError() << std::endl;
     glDrawElements(GL_TRIANGLES, indexcount, GL_UNSIGNED_INT, 0);
+    std::cout << glGetError() << std::endl;
 }
 
 void Light::dispose() {
@@ -103,9 +108,7 @@ void Light::fillBuffers() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    
-    int offset = 0;
-    glVertexAttribPointer(0, vertexXYZFloats, GL_FLOAT, false, vertexStride*sizeof(float), (void*)(offset*sizeof(float)));
+    glVertexAttribPointer(0, vertexXYZFloats, GL_FLOAT, GL_FALSE, vertexStride*sizeof(float), (void*)(0*sizeof(float)));
     glEnableVertexAttribArray(0);
    
   
