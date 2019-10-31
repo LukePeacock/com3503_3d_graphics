@@ -19,6 +19,7 @@
 #include <iostream>
 #include <cube.hpp>
 #include <sphere.hpp>
+#include <twoTriangles.hpp>
 #include <camera.hpp>
 #include <mesh.hpp>
 #include <material.hpp>
@@ -105,6 +106,7 @@ int main()
     
     Cube cubeData;
     Sphere sphereData;
+    TwoTriangles planeData;
     // load and create a texture
     // -------------------------
     unsigned int containerTex = loadTexture("assets/container.png");
@@ -115,6 +117,7 @@ int main()
     
     unsigned int containerTex2 = loadTexture("assets/container_specular.png");
     Material mat = Material(glm::vec3(0.2f), glm::vec3(0.8f), glm::vec3(0.5f),32.0f);
+    
     Mesh m = Mesh(cubeData.GetVertices(), cubeData.GetIndices(), cubeData.GetVerticesCount(), cubeData.GetIndicesCount(), cubeData.GetVertexSize(), cubeData.GetIndicesSize());
     Model testCube = Model(defaultShader, mat,  glm::mat4(1.0f), m, containerTex2);
     Model testCube2 = Model(defaultShader, mat, glm::mat4(1.0f), m, containerTex);
@@ -122,6 +125,8 @@ int main()
     Mesh s = Mesh(sphereData.GetVertices(), sphereData.GetIndices(), 0, sphereData.getIndicesCount(), sphereData.getVertexSize(), sphereData.getIndicesSize());
     Model sphere = Model(defaultShader, mat, glm::mat4(1.0f), s, containerTex);
     
+    Mesh t = Mesh(planeData.getVertices(), planeData.getIndices(), 0, planeData.getIndicesCount(), planeData.getVertexSize(), planeData.getIndicesSize());
+    Model floor = Model(defaultShader, mat, glm::mat4(1.0f), t, containerTex2);
     
     Light light = Light(lightShader);
     light.setPosition(glm::vec3(2.7f,  2.2f,  0.5f));
@@ -168,6 +173,11 @@ int main()
         light.render();
         model = glm::translate(model, glm::vec3(-2.0f, 0.0f, 0.0f));
         sphere.render(model);
+        
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(10.0f, 0.0f, 10.0f));
+        floor.render(model);
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);

@@ -24,6 +24,7 @@
 		A3044A5C2363092300D262F0 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A5B2363092300D262F0 /* camera.cpp */; };
 		A3044A5E2363381200D262F0 /* container_specular.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3044A5D2363380F00D262F0 /* container_specular.png */; };
 		A340B0B3236B071B006AD26C /* sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0B1236B071B006AD26C /* sphere.cpp */; };
+		A340B0B6236B0BA5006AD26C /* twoTriangles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0B4236B0BA5006AD26C /* twoTriangles.cpp */; };
 		A3F0F749236343DB001B49E9 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3F0F747236343DB001B49E9 /* light.cpp */; };
 		A3F0F74C23634892001B49E9 /* light_shader.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3F0F74A2363458F001B49E9 /* light_shader.frag */; };
 		A3F0F74D23634894001B49E9 /* light_shader.vs in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3F0F74B236345A6001B49E9 /* light_shader.vs */; };
@@ -461,6 +462,8 @@
 		A3044A5D2363380F00D262F0 /* container_specular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = container_specular.png; sourceTree = "<group>"; };
 		A340B0B1236B071B006AD26C /* sphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sphere.cpp; sourceTree = "<group>"; };
 		A340B0B2236B071B006AD26C /* sphere.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sphere.hpp; sourceTree = "<group>"; };
+		A340B0B4236B0BA5006AD26C /* twoTriangles.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = twoTriangles.cpp; sourceTree = "<group>"; };
+		A340B0B5236B0BA5006AD26C /* twoTriangles.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = twoTriangles.hpp; sourceTree = "<group>"; };
 		A3F0F747236343DB001B49E9 /* light.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = light.cpp; sourceTree = "<group>"; };
 		A3F0F748236343DB001B49E9 /* light.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = light.hpp; sourceTree = "<group>"; };
 		A3F0F74A2363458F001B49E9 /* light_shader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = light_shader.frag; sourceTree = "<group>"; };
@@ -514,6 +517,7 @@
 				A3044A5B2363092300D262F0 /* camera.cpp */,
 				A3F0F747236343DB001B49E9 /* light.cpp */,
 				A340B0B1236B071B006AD26C /* sphere.cpp */,
+				A340B0B4236B0BA5006AD26C /* twoTriangles.cpp */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -531,6 +535,7 @@
 		A3044725236202F500D262F0 /* headers */ = {
 			isa = PBXGroup;
 			children = (
+				A340B0B5236B0BA5006AD26C /* twoTriangles.hpp */,
 				A340B0B2236B071B006AD26C /* sphere.hpp */,
 				A3F0F748236343DB001B49E9 /* light.hpp */,
 				A3044A59236308D200D262F0 /* camera.hpp */,
@@ -1057,6 +1062,7 @@
 				A3044A5C2363092300D262F0 /* camera.cpp in Sources */,
 				A3044A4C2362F26A00D262F0 /* mesh.cpp in Sources */,
 				A30447152361FEE000D262F0 /* main.cpp in Sources */,
+				A340B0B6236B0BA5006AD26C /* twoTriangles.cpp in Sources */,
 				A3044A492362EF0A00D262F0 /* cube.cpp in Sources */,
 				A3F0F749236343DB001B49E9 /* light.cpp in Sources */,
 				A3044A32236205F800D262F0 /* glad.c in Sources */,

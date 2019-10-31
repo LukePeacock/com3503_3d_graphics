@@ -245,6 +245,7 @@ dependencies: \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/type_ptr.inl \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/cube.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/sphere.hpp \
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/twoTriangles.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/camera.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/mesh.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/material.hpp \
