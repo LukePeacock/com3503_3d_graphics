@@ -101,6 +101,7 @@ int main()
     
     Shader defaultShader("shaders/default_shader.vs", "shaders/default_shader.frag");
     Shader lightShader("shaders/light_shader.vs", "shaders/light_shader.frag");
+    
     Cube cubeData;
     // load and create a texture
     // -------------------------
@@ -138,25 +139,26 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear colour and depth buffer bits
 
-        // Set Projection and View Matrices in Shader
+        // Set Projection and View Matrices in Shaders
         //-------------------------------------------
-        defaultShader.use();
-        // Projection
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, NEAR_PLANE, FAR_PLANE);
-        defaultShader.setMat4("projection", projection);
-        lightShader.setMat4("projection", projection);
         // camera/view transformation
         glm::mat4 view = camera.GetViewMatrix();
+        // Projection
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, NEAR_PLANE, FAR_PLANE);
+        
+        defaultShader.use();
+        defaultShader.setMat4("projection", projection);
         defaultShader.setMat4("view", view);
+        
+        lightShader.use();
+        lightShader.setMat4("projection", projection);
         lightShader.setMat4("view", view);
- 
         // Render Objects
         // ---------------
-        testCube.render();
+        //testCube.render();
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(1.0f, 1.0f, -1.0f));
         testCube2.render(model);
-        
         light.render();
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------

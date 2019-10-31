@@ -41,7 +41,7 @@ Light::Light(Shader shader) : shader("shaders/light_shader.vs", "shaders/light_s
   material.setDiffuse(0.8f, 0.8f, 0.8f);
   material.setSpecular(0.8f, 0.8f, 0.8f);
   position = glm::vec3(3.0f,2.0f,1.0f);
-  model = glm::mat4(1);
+  this->model = glm::mat4(1.0f);
   fillBuffers();
 }
 
@@ -70,22 +70,14 @@ Material Light::getMaterial() {
 }
 
 void Light::render() {
-    glm::mat4 model = glm::mat4(1.0f);
-   // model = glm::scale(model, glm::vec3(0.3f,0.3f,0.3f));
-
-    model = glm::translate(model, position);
-    
-    
+    glm::mat4 nmodel = glm::scale(model, glm::vec3(0.3f,0.3f,0.3f));
+    nmodel = glm::translate(nmodel, position);
     
     shader.use();
-    std::cout << "use" << glGetError() << std::endl;
-    shader.setMat4("model", model);
+    shader.setMat4("model", nmodel);
     glBindVertexArray(VAO);
-    std::cout << "vao" << glGetError() << std::endl;
     int indexcount =sizeof(indices)/sizeof(indices[0]);
-    std::cout << "indexc" << glGetError() << std::endl;
     glDrawElements(GL_TRIANGLES, indexcount, GL_UNSIGNED_INT, 0);
-    std::cout << glGetError() << std::endl;
 }
 
 void Light::dispose() {
@@ -99,18 +91,17 @@ void Light::fillBuffers() {
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
-  
+      
     glBindVertexArray(VAO);
- 
+    
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-  
+    
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(indices), indices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, vertexXYZFloats, GL_FLOAT, GL_FALSE, vertexStride*sizeof(float), (void*)(0*sizeof(float)));
     glEnableVertexAttribArray(0);
-   
   
    
 }
