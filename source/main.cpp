@@ -18,6 +18,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <cube.hpp>
+#include <sphere.hpp>
 #include <camera.hpp>
 #include <mesh.hpp>
 #include <material.hpp>
@@ -103,6 +104,7 @@ int main()
     Shader lightShader("shaders/light_shader.vs", "shaders/light_shader.frag");
     
     Cube cubeData;
+    Sphere sphereData;
     // load and create a texture
     // -------------------------
     unsigned int containerTex = loadTexture("assets/container.png");
@@ -116,6 +118,10 @@ int main()
     Mesh m = Mesh(cubeData.GetVertices(), cubeData.GetIndices(), cubeData.GetVerticesCount(), cubeData.GetIndicesCount(), cubeData.GetVertexSize(), cubeData.GetIndicesSize());
     Model testCube = Model(defaultShader, mat,  glm::mat4(1.0f), m, containerTex2);
     Model testCube2 = Model(defaultShader, mat, glm::mat4(1.0f), m, containerTex);
+    
+    Mesh s = Mesh(sphereData.GetVertices(), sphereData.GetIndices(), 0, sphereData.getIndicesCount(), sphereData.getVertexSize(), sphereData.getIndicesSize());
+    Model sphere = Model(defaultShader, mat, glm::mat4(1.0f), s, containerTex);
+    
     
     Light light = Light(lightShader);
     light.setPosition(glm::vec3(2.7f,  2.2f,  0.5f));
@@ -155,11 +161,13 @@ int main()
         lightShader.setMat4("view", view);
         // Render Objects
         // ---------------
-        //testCube.render();
+        testCube.render();
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(1.0f, 1.0f, -1.0f));
         testCube2.render(model);
         light.render();
+        model = glm::translate(model, glm::vec3(-2.0f, 0.0f, 0.0f));
+        sphere.render(model);
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
