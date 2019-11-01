@@ -15,6 +15,7 @@
 
 Mesh::Mesh(){
 }
+
 Mesh::Mesh(float *vertices, unsigned int *indices, int verticesCount, int indicesCount, int verticesSize, int indicesSize) {
    // this->vertices.resize(verticesCount);
    // this->indices.resize(indicesCount);
