@@ -26,6 +26,9 @@
 #include <model.hpp>
 #include <light.hpp>
 #include <glm/gtx/string_cast.hpp>
+#include <nameNode.hpp>
+#include <transformNode.hpp>
+#include <modelNode.hpp>
 
 //Function protos
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -57,7 +60,7 @@ float lastFrame = 0.0f;    // Timing ensures consistent framerate independent of
 
 // global light
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-
+float xPosition = 0;
 // Self-explanatory
 int main()
 {
@@ -110,12 +113,14 @@ int main()
     // load and create a texture
     // -------------------------
     unsigned int containerTex = loadTexture("assets/container.png");
+    unsigned int containerTex2 = loadTexture("assets/container_specular.png");
+    
     
     defaultShader.use(); // don't forget to activate/use the shader before setting uniforms!
     // either set it manually like so:
     defaultShader.setInt("diffuse", 0);
     
-    unsigned int containerTex2 = loadTexture("assets/container_specular.png");
+    
     Material mat = Material(glm::vec3(0.2f), glm::vec3(0.8f), glm::vec3(0.5f),32.0f);
     
     Mesh m = Mesh(cubeData.GetVertices(), cubeData.GetIndices(), cubeData.GetVerticesCount(), cubeData.GetIndicesCount(), cubeData.GetVertexSize(), cubeData.GetIndicesSize());
@@ -130,6 +135,48 @@ int main()
     
     Light light = Light(lightShader);
     light.setPosition(glm::vec3(2.7f,  2.2f,  0.5f));
+    
+    float bodyHeight = 3.0f;
+    float headHeight = 1.5f;
+    
+    NameNode snowmanRoot = NameNode("root");
+    TransformNode snowmanMoveTranslate = TransformNode("snowman transform", glm::translate(glm::mat4(1.0f), glm::vec3(xPosition,0,0)));
+    TransformNode snowmanTranslate = TransformNode("snowman transform2", glm::translate(glm::mat4(1.0f), glm::vec3(0, bodyHeight, 0)));
+    
+    NameNode body = NameNode("body");
+        glm::mat4 mm = glm::scale(glm::mat4(1.0f), glm::vec3(bodyHeight));
+        TransformNode bodyTransform = TransformNode("body transform", mm);
+        ModelNode bodyShape = ModelNode("Sphere(body)", sphere);
+    
+    NameNode head = NameNode("head");
+        mm = glm::mat4(1.0f);
+        mm = glm::translate(mm, glm::vec3(0, bodyHeight, 0));
+        mm = glm::scale(mm, glm::vec3(headHeight));
+        TransformNode headTransform = TransformNode("head transform", mm);
+        ModelNode headShape = ModelNode("Sphere(head)", sphere);
+    
+    
+                           
+                      
+                    
+                 
+           
+        
+    snowmanRoot.addChild(snowmanMoveTranslate);
+        snowmanMoveTranslate.addChild(snowmanTranslate);
+            snowmanTranslate.addChild(body);
+                bodyTransform.addChild(bodyShape);
+                    body.addChild(bodyTransform);
+                    body.addChild(head);
+                        head.addChild(headTransform);
+                            headTransform.addChild(headShape);
+                   
+                        
+    
+    snowmanRoot.update();
+    snowmanRoot.print(0, false);
+                                
+                                
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -166,18 +213,23 @@ int main()
         lightShader.setMat4("view", view);
         // Render Objects
         // ---------------
-        testCube.render();
+//        testCube.render();
+//        glm::mat4 model = glm::mat4(1.0f);
+//        model = glm::translate(model, glm::vec3(1.0f, 1.0f, -1.0f));
+//        testCube2.render(model);
+//        light.render();
+//        model = glm::translate(model, glm::vec3(-2.0f, 0.0f, 0.0f));
+//        sphere.render(model);
+//
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(1.0f, 1.0f, -1.0f));
-        testCube2.render(model);
-        light.render();
-        model = glm::translate(model, glm::vec3(-2.0f, 0.0f, 0.0f));
-        sphere.render(model);
-        
-        model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
         model = glm::scale(model, glm::vec3(10.0f, 0.0f, 10.0f));
         floor.render(model);
+        
+        snowmanRoot.draw();
+        
+        
+        
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -188,6 +240,7 @@ int main()
     // -------------------------------------------------------------
     testCube.dispose();
     testCube2.dispose();
+    sphere.dispose();
     light.dispose();
     // Terminate GLFW, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------

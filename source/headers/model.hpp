@@ -18,6 +18,7 @@
 class Model {
    
 public:
+    Model();
     Model(Shader shader, Material mat, glm::mat4 modelMatrix, Mesh mesh, unsigned int diffusemap);
     void render(glm::mat4 modelMatrix);
     void setModelMatrix(glm::mat4 m);

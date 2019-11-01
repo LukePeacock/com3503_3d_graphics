@@ -25,6 +25,10 @@
 		A3044A5E2363381200D262F0 /* container_specular.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3044A5D2363380F00D262F0 /* container_specular.png */; };
 		A340B0B3236B071B006AD26C /* sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0B1236B071B006AD26C /* sphere.cpp */; };
 		A340B0B6236B0BA5006AD26C /* twoTriangles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0B4236B0BA5006AD26C /* twoTriangles.cpp */; };
+		A340B0B9236C683B006AD26C /* modelNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0B7236C683B006AD26C /* modelNode.cpp */; };
+		A340B0BC236C6972006AD26C /* sgNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0BA236C6972006AD26C /* sgNode.cpp */; };
+		A340B0BF236C739C006AD26C /* transformNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0BD236C739C006AD26C /* transformNode.cpp */; };
+		A340B0C2236C75B8006AD26C /* nameNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0C0236C75B8006AD26C /* nameNode.cpp */; };
 		A3F0F749236343DB001B49E9 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3F0F747236343DB001B49E9 /* light.cpp */; };
 		A3F0F74C23634892001B49E9 /* light_shader.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3F0F74A2363458F001B49E9 /* light_shader.frag */; };
 		A3F0F74D23634894001B49E9 /* light_shader.vs in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3F0F74B236345A6001B49E9 /* light_shader.vs */; };
@@ -464,6 +468,14 @@
 		A340B0B2236B071B006AD26C /* sphere.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sphere.hpp; sourceTree = "<group>"; };
 		A340B0B4236B0BA5006AD26C /* twoTriangles.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = twoTriangles.cpp; sourceTree = "<group>"; };
 		A340B0B5236B0BA5006AD26C /* twoTriangles.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = twoTriangles.hpp; sourceTree = "<group>"; };
+		A340B0B7236C683B006AD26C /* modelNode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = modelNode.cpp; sourceTree = "<group>"; };
+		A340B0B8236C683B006AD26C /* modelNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = modelNode.hpp; sourceTree = "<group>"; };
+		A340B0BA236C6972006AD26C /* sgNode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sgNode.cpp; sourceTree = "<group>"; };
+		A340B0BB236C6972006AD26C /* sgNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sgNode.hpp; sourceTree = "<group>"; };
+		A340B0BD236C739C006AD26C /* transformNode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = transformNode.cpp; sourceTree = "<group>"; };
+		A340B0BE236C739C006AD26C /* transformNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transformNode.hpp; sourceTree = "<group>"; };
+		A340B0C0236C75B8006AD26C /* nameNode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = nameNode.cpp; sourceTree = "<group>"; };
+		A340B0C1236C75B8006AD26C /* nameNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = nameNode.hpp; sourceTree = "<group>"; };
 		A3F0F747236343DB001B49E9 /* light.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = light.cpp; sourceTree = "<group>"; };
 		A3F0F748236343DB001B49E9 /* light.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = light.hpp; sourceTree = "<group>"; };
 		A3F0F74A2363458F001B49E9 /* light_shader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = light_shader.frag; sourceTree = "<group>"; };
@@ -518,6 +530,10 @@
 				A3F0F747236343DB001B49E9 /* light.cpp */,
 				A340B0B1236B071B006AD26C /* sphere.cpp */,
 				A340B0B4236B0BA5006AD26C /* twoTriangles.cpp */,
+				A340B0B7236C683B006AD26C /* modelNode.cpp */,
+				A340B0BA236C6972006AD26C /* sgNode.cpp */,
+				A340B0BD236C739C006AD26C /* transformNode.cpp */,
+				A340B0C0236C75B8006AD26C /* nameNode.cpp */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -535,6 +551,10 @@
 		A3044725236202F500D262F0 /* headers */ = {
 			isa = PBXGroup;
 			children = (
+				A340B0C1236C75B8006AD26C /* nameNode.hpp */,
+				A340B0BE236C739C006AD26C /* transformNode.hpp */,
+				A340B0BB236C6972006AD26C /* sgNode.hpp */,
+				A340B0B8236C683B006AD26C /* modelNode.hpp */,
 				A340B0B5236B0BA5006AD26C /* twoTriangles.hpp */,
 				A340B0B2236B071B006AD26C /* sphere.hpp */,
 				A3F0F748236343DB001B49E9 /* light.hpp */,
@@ -1057,13 +1077,17 @@
 				A3044A2D2362050300D262F0 /* glm.cpp in Sources */,
 				A340B0B3236B071B006AD26C /* sphere.cpp in Sources */,
 				A3044A3923620BF500D262F0 /* stb_image_implementation.cpp in Sources */,
+				A340B0BC236C6972006AD26C /* sgNode.cpp in Sources */,
+				A340B0C2236C75B8006AD26C /* nameNode.cpp in Sources */,
 				A3044A4F2362F97500D262F0 /* material.cpp in Sources */,
 				A3044A522362FF5500D262F0 /* model.cpp in Sources */,
 				A3044A5C2363092300D262F0 /* camera.cpp in Sources */,
+				A340B0B9236C683B006AD26C /* modelNode.cpp in Sources */,
 				A3044A4C2362F26A00D262F0 /* mesh.cpp in Sources */,
 				A30447152361FEE000D262F0 /* main.cpp in Sources */,
 				A340B0B6236B0BA5006AD26C /* twoTriangles.cpp in Sources */,
 				A3044A492362EF0A00D262F0 /* cube.cpp in Sources */,
+				A340B0BF236C739C006AD26C /* transformNode.cpp in Sources */,
 				A3F0F749236343DB001B49E9 /* light.cpp in Sources */,
 				A3044A32236205F800D262F0 /* glad.c in Sources */,
 			);

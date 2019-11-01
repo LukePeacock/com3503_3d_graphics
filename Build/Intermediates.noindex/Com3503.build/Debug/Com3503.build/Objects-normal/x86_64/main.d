@@ -270,4 +270,8 @@ dependencies: \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/../gtc/constants.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/dual_quaternion.inl \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/../geometric.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/string_cast.inl
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/string_cast.inl \
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/nameNode.hpp \
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/sgNode.hpp \
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/transformNode.hpp \
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/modelNode.hpp
