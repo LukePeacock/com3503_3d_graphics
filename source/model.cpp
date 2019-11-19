@@ -36,7 +36,6 @@ void Model::render(glm::mat4 modelMatrix) {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, diffusemap);
     shader.setMat4("model", modelMatrix);
-    
     shader.setVec3("material.ambient", material.getAmbient());
     shader.setVec3("material.diffuse", material.getDiffuse());
     shader.setVec3("material.specular", material.getSpecular());

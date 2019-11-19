@@ -49,7 +49,7 @@ static unsigned char wireframe;         // Allows scene to be rendered in wirefr
 static bool userCam = false;            // Gives user control of camera
 
 // camera settings
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 5.0f, 3.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -136,12 +136,14 @@ int main()
     Light light = Light(lightShader);
     light.setPosition(glm::vec3(2.7f,  2.2f,  0.5f));
     
+    
     float bodyHeight = 3.0f;
-    float headHeight = 1.5f;
+    float headHeight = 2.0f;
     
     NameNode snowmanRoot = NameNode("root");
     TransformNode snowmanMoveTranslate = TransformNode("snowman transform", glm::translate(glm::mat4(1.0f), glm::vec3(xPosition,0,0)));
-    TransformNode snowmanTranslate = TransformNode("snowman transform2", glm::translate(glm::mat4(1.0f), glm::vec3(0, bodyHeight, 0)));
+    
+    TransformNode snowmanTranslate = TransformNode("snowman transform2", glm::translate(glm::mat4(1.0f), glm::vec3(0, bodyHeight/2, 0)));
     
     NameNode body = NameNode("body");
         glm::mat4 mm = glm::scale(glm::mat4(1.0f), glm::vec3(bodyHeight));
@@ -150,7 +152,7 @@ int main()
     
     NameNode head = NameNode("head");
         mm = glm::mat4(1.0f);
-        mm = glm::translate(mm, glm::vec3(0, bodyHeight, 0));
+        mm = glm::translate(mm, glm::vec3(0, bodyHeight/2+headHeight/2, 0));
         mm = glm::scale(mm, glm::vec3(headHeight));
         TransformNode headTransform = TransformNode("head transform", mm);
         ModelNode headShape = ModelNode("Sphere(head)", sphere);
@@ -171,8 +173,7 @@ int main()
                         head.addChild(headTransform);
                             headTransform.addChild(headShape);
                    
-                        
-    
+                            
     snowmanRoot.update();
     snowmanRoot.print(0, false);
                                 
@@ -222,7 +223,7 @@ int main()
 //        sphere.render(model);
 //
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
         model = glm::scale(model, glm::vec3(10.0f, 0.0f, 10.0f));
         floor.render(model);
         
