@@ -20,12 +20,18 @@ Model::Model(Shader shader,Material mat,glm::mat4 modelMatrix, Mesh mesh, unsign
     this->mesh = mesh;
     this->material = mat;
     this->modelMatrix = modelMatrix;
-//    this->diffuse = diffuse;
-//    this->ambient = ambient;
-//    this->specular = specular;
-//    this->shininess = shininess;
     this->diffusemap = diffusemap;
 }
+
+Model::Model(Shader shader,Material mat,glm::mat4 modelMatrix, Mesh mesh, unsigned int diffusemap, unsigned int specularmap) : shader("shaders/default_shader.vs", "shaders/default_shader.frag"), mesh(){
+    this->shader = shader;
+    this->mesh = mesh;
+    this->material = mat;
+    this->modelMatrix = modelMatrix;
+    this->diffusemap = diffusemap;
+    this->specularmap = specularmap;
+}
+
 void Model::setModelMatrix(glm::mat4 m) {
     modelMatrix = m;
 }
@@ -35,6 +41,8 @@ void Model::render(glm::mat4 modelMatrix) {
     shader.use();
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, diffusemap);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, specularmap);
     shader.setMat4("model", modelMatrix);
     shader.setVec3("material.ambient", material.getAmbient());
     shader.setVec3("material.diffuse", material.getDiffuse());

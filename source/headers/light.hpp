@@ -37,6 +37,8 @@ public:
     Material getMaterial();
     void render();
     void dispose();
+    glm::vec3 Front;
+    void setFront(glm::vec3 front);
 };
 
 #endif /* light_hpp */

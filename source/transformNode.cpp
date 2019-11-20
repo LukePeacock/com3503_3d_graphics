@@ -22,7 +22,6 @@ void TransformNode::setTransform(glm::mat4 t)
 
 void TransformNode::update(glm::mat4 t)
 {
-    std::cout << name << " children: " << children.size() << std::endl;
     worldTransform = t;
     t = worldTransform * transform;
     for(int i = 0; i < children.size(); i ++)

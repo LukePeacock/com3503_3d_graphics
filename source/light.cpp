@@ -102,6 +102,8 @@ void Light::fillBuffers() {
 
     glVertexAttribPointer(0, vertexXYZFloats, GL_FLOAT, GL_FALSE, vertexStride*sizeof(float), (void*)(0*sizeof(float)));
     glEnableVertexAttribArray(0);
-  
-   
+}
+
+void Light::setFront(glm::vec3 front){
+    this->Front = front;
 }

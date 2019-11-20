@@ -20,6 +20,7 @@ class Model {
 public:
     Model();
     Model(Shader shader, Material mat, glm::mat4 modelMatrix, Mesh mesh, unsigned int diffusemap);
+    Model(Shader shader, Material mat, glm::mat4 modelMatrix, Mesh mesh, unsigned int diffusemap, unsigned int specularmap);
     void render(glm::mat4 modelMatrix);
     void setModelMatrix(glm::mat4 m);
     void render();
@@ -30,5 +31,6 @@ private:
     Shader shader;
     glm::mat4 modelMatrix;
     unsigned int diffusemap;
+    unsigned int specularmap;
 };
 #endif /* model_hpp */
