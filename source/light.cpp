@@ -38,9 +38,9 @@ Light::Light(Shader shader) : shader("shaders/light_shader.vs", "shaders/light_s
   this->material = Material();
   this->shader = shader;
   material.setAmbient(0.5f, 0.5f, 0.5f);
-  material.setDiffuse(0.8f, 0.8f, 0.8f);
-  material.setSpecular(0.8f, 0.8f, 0.8f);
-  position = glm::vec3(3.0f,2.0f,1.0f);
+  material.setDiffuse(0.5f, 0.5f, 0.5f);
+  material.setSpecular(0.5f, 0.5f, 0.5f);
+  position = glm::vec3(0.0f,0.0f,0.0f);
   this->model = glm::mat4(1.0f);
   fillBuffers();
 }

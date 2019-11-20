@@ -37,12 +37,11 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 unsigned int loadTexture(char const * path);
-glm::vec3 getLightPosition(glm::vec3 position, float lightPostHeadLength, float lightPostWidth);
 float getElapsedTime();
 void rotateLight(Light &bulb, float distanceFromPole);
 
+
 TransformNode postHeadRotate = TransformNode("Post Head Rotate", glm::mat4(1.0f));
-TransformNode postTransform = TransformNode("Post Transform", glm::mat4(1.0f));
 glm::vec3 postBulbPosition;
 NameNode lightPostRoot = NameNode("Light Post Root");
 
@@ -97,8 +96,7 @@ int main()
     glfwSetCursorPosCallback(window, mouse_callback);   //Mouse to move camera
     glfwSetScrollCallback(window, scroll_callback);     //Scroll Mouse to zoom
     glfwSetKeyCallback(window, key_callback);   // Prevents multiple actions from one key press
-    // tell GLFW to capture our mouse
-    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    
 
     // load all OpenGL function pointers using GLAD
     // ---------------------------------------
@@ -111,85 +109,94 @@ int main()
     // configure global opengl state
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_CULL_FACE);
     
     Shader defaultShader("shaders/default_shader.vs", "shaders/default_shader.frag");
     Shader lightShader("shaders/light_shader.vs", "shaders/light_shader.frag");
+    Shader planeShader("shaders/plane_shader.vs", "shaders/plane_shader.frag");
     
     Cube cubeData;
     Sphere sphereData;
     TwoTriangles planeData;
     // load and create a texture
     // -------------------------
-    unsigned int containerTex = loadTexture("assets/container.png");
-    unsigned int containerTex2 = loadTexture("assets/container_specular.png");
     unsigned int snowDiffTex = loadTexture("assets/snow.png");
     unsigned int snow2DiffTex = loadTexture("assets/snow2.png");
     unsigned int metalTex = loadTexture("assets/metal.jpg");
-   // unsigned int snowDiffTex2 = loadTexture("assets/snow_diff.jpg");
+    unsigned int treesTex = loadTexture("assets/trees.png");
+   
+    defaultShader.use();
+    defaultShader.setInt("material.diffusemap", 0);
+    defaultShader.setInt("material.specularmap", 1);
     
     
-    defaultShader.use(); // don't forget to activate/use the shader before setting uniforms!
-    // either set it manually like so:
-    defaultShader.setInt("diffuse", 0);
-    
-    
+    // Default material
     Material mat = Material(glm::vec3(0.2f), glm::vec3(0.8f), glm::vec3(0.5f),32.0f);
-    
-    
-    
-    Mesh s = Mesh(sphereData.GetVertices(), sphereData.GetIndices(), 0, sphereData.getIndicesCount(), sphereData.getVertexSize(), sphereData.getIndicesSize());
-    Model sphere = Model(defaultShader, mat, glm::mat4(1.0f), s, snowDiffTex);
-    
+
+    // Two Triangles Mesh
     Mesh t = Mesh(planeData.getVertices(), planeData.getIndices(), 0, planeData.getIndicesCount(), planeData.getVertexSize(), planeData.getIndicesSize());
     
-    // Floor texture
+    // Floor object
+    Material floorMat = Material(glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(1.0f), 16.0f);
     glm::mat4 mm = glm::mat4(1.0f);
     mm = glm::translate(mm, glm::vec3(0.0f, 0.0f, 0.0f));
-    mm = glm::scale(mm, glm::vec3(20.0f, 0.0f, 20.0f));
-    Model floor = Model(defaultShader, mat, mm, t, snow2DiffTex);
-    
-    mm = glm::mat4(1.0f);
-    mm = glm::rotate(mm, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     mm = glm::scale(mm, glm::vec3(20.0f, 1.0f, 20.0f));
-    mm = glm::translate(mm, glm::vec3(0.0f, -5.0f, -0.5f));
-    Model background = Model(defaultShader, mat, mm, t, containerTex);
+    Model floor = Model(defaultShader, floorMat, mm, t, snow2DiffTex);
     
+    // background object
+    mm = glm::mat4(1.0f);
+    mm = glm::rotate(mm, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    mm = glm::scale(mm, glm::vec3(20.0f, 1.0f, 20.0f));
+    mm = glm::translate(mm, glm::vec3(0.0f, 10.0f, 0.5f));
+    Model background = Model(planeShader, mat, mm, t, treesTex);
+    
+    
+    // =======================================================
+    // Create Light Post
+     Mesh s = Mesh(sphereData.GetVertices(), sphereData.GetIndices(), 0, sphereData.getIndicesCount(), sphereData.getVertexSize(), sphereData.getIndicesSize());
+    Model lightPost = Model(defaultShader, mat, glm::mat4(1.0f), s, metalTex);      // basic model
+    Light light = Light(lightShader);                                               // Light object
    
-    
-    
-    // LIGHT POST
-   // Mesh m = Mesh(cubeData.GetVertices(), cubeData.GetIndices(), cubeData.GetVerticesCount(), cubeData.GetIndicesCount(), cubeData.GetVertexSize(), cubeData.GetIndicesSize());
-    Model lightPost = Model(defaultShader, mat, glm::mat4(1.0f), s, metalTex);
-    
-    Light light = Light(lightShader);
-   
-    
+    // Params
     float lightPostHeight = 5.0f;
     float lightPostWidth = 0.5f;
     float lightPostHeadLength = 2.0f;
     
+    // Generate the nodes
     lightPostRoot = NameNode("root");
-    TransformNode lightPostMoveTranslate = TransformNode("light post transform", glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, 0, 5.0f)));
+        // Root translations
+        TransformNode lightPostMoveTranslate = TransformNode("light post transform", glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, 0, 5.0f)));
     
-    TransformNode lightPostTranslate = TransformNode("light post transform 2", glm::translate(glm::mat4(1.0f), glm::vec3(0, lightPostHeight/2, 0)));
+        TransformNode lightPostTranslate = TransformNode("light post transform 2", glm::translate(glm::mat4(1.0f), glm::vec3(0, lightPostHeight/2, 0)));
     
+    // Main post Nodes
     NameNode post = NameNode("Post");
         mm = glm::scale(glm::mat4(1.0f), glm::vec3(lightPostWidth, lightPostHeight, lightPostWidth));
-        postTransform = TransformNode("post Transform", mm);
+        TransformNode postTransform = TransformNode("post Transform", mm);
         ModelNode postShape = ModelNode("Sphere(post body)", lightPost);
 
+    // Post head nodes
     NameNode postHead = NameNode("Post Head");
+        // Post head body nodes
         mm = glm::mat4(1.0f);
-
         TransformNode postHeadTranslate = TransformNode("Translate", glm::translate(mm, glm::vec3(0.0f, lightPostHeight/2 + lightPostWidth/2, 0.0f)));
         postHeadRotate= TransformNode("post head Rotate", glm::rotate(mm, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
         TransformNode postHeadScale = TransformNode("scale", glm::scale(mm, glm::vec3(lightPostWidth, lightPostHeadLength, lightPostWidth)));
         ModelNode postHeadShape = ModelNode("sphere(post head)", lightPost);
-                  
+    
+        // Post head bulb cover nodes
+        mm = glm::mat4(1.0f);
+        mm = glm::translate(mm, glm::vec3(0.0f, lightPostHeadLength/6, 0.0f));
+        mm = glm::scale(mm, glm::vec3(3.0f, 0.1f, 3.0f));
+        TransformNode postBulbCoverTransform = TransformNode("Translate cover", mm);
+        ModelNode postBulbCover = ModelNode("cube(cover)", lightPost);
+        
+        // Calculate bulb position
         postBulbPosition = glm::vec3(-5.0f, lightPostHeight + lightPostWidth/2, 5.0f);
         postBulbPosition = postBulbPosition / glm::vec3(0.3);
         light.setPosition(postBulbPosition);
         
+    // create scene graph
     lightPostRoot.addChild(lightPostMoveTranslate);
         lightPostMoveTranslate.addChild(lightPostTranslate);
             lightPostTranslate.addChild(post);
@@ -200,15 +207,19 @@ int main()
                         postHeadTranslate.addChild(postHeadRotate);
                             postHeadRotate.addChild(postHeadScale);
                                 postHeadScale.addChild(postHeadShape);
-                                
+                                postHeadScale.addChild(postBulbCoverTransform);
+                                    postBulbCoverTransform.addChild(postBulbCover);
+    // Update scene graph
     lightPostRoot.update();
-    lightPostRoot.print(0, false);
+    lightPostRoot.print(0, false);  // Print
     
     
     
-    
-    
-    // SNOWMAN
+    // =======================================================
+    // Create Snowman
+   
+       Model sphere = Model(defaultShader, mat, glm::mat4(1.0f), s, snowDiffTex);
+    // Params
     float bodyHeight = 3.0f;
     float headHeight = 2.0f;
     
@@ -268,7 +279,7 @@ int main()
 
         // render
         // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear colour and depth buffer bits
 
         // Set Projection and View Matrices in Shaders
@@ -283,26 +294,31 @@ int main()
         defaultShader.setMat4("view", view);
         defaultShader.setVec3("viewPos", camera.Position);
         defaultShader.setVec3("light.position", light.getPosition());
-        
         // light properties
         defaultShader.setVec3("light.ambient", light.getMaterial().getAmbient());
         defaultShader.setVec3("light.diffuse", light.getMaterial().getDiffuse());
         defaultShader.setVec3("light.specular", light.getMaterial().getSpecular());
         
+        planeShader.use();
+        planeShader.setMat4("projection", projection);
+        planeShader.setMat4("view", view);
+        planeShader.setVec3("viewPos", camera.Position);
+        planeShader.setVec3("light.position", light.getPosition());
+        // light properties
+        planeShader.setVec3("light.ambient", light.getMaterial().getAmbient());
+        planeShader.setVec3("light.diffuse", light.getMaterial().getDiffuse());
+        planeShader.setVec3("light.specular", light.getMaterial().getSpecular());
+        float t = (getElapsedTime() - startTime)*0.1;
+        planeShader.setVec2("offset", glm::vec2(t- glm::floor(t), 0.0f));
+    
+        
         
         lightShader.use();
         lightShader.setMat4("projection", projection);
         lightShader.setMat4("view", view);
-        // Render Objects
-        // ---------------
-//        testCube.render();
-//        glm::mat4 model = glm::mat4(1.0f);
-//        model = glm::translate(model, glm::vec3(1.0f, 1.0f, -1.0f));
-//        testCube2.render(model);
-//        light.render();
-//        model = glm::translate(model, glm::vec3(-2.0f, 0.0f, 0.0f));
-//        sphere.render(model);
-//
+        
+        
+        
         floor.render();
         background.render();
         
@@ -364,7 +380,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_F && action == GLFW_PRESS) // render wireframe with F
         glPolygonMode(GL_FRONT_AND_BACK, (wireframe = 1 - wireframe) ? GL_LINE : GL_FILL);
     if (key == GLFW_KEY_Q && action == GLFW_PRESS) // render wireframe with F
-        userCam = !userCam;
+        
+        // tell GLFW to capture our mouse
+        glfwSetInputMode(window, GLFW_CURSOR,(userCam = !userCam) ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) // Exit program with escape
         glfwSetWindowShouldClose(window, true);
 //    if (key == GLFW_KEY_R && action == GLFW_PRESS) // render wireframe with F
@@ -424,7 +442,7 @@ unsigned int loadTexture(char const * path)
     unsigned char *data = stbi_load(path, &width, &height, &nrComponents, 0);
     if (data)
     {
-        GLenum format = GL_RED;
+        GLenum format = GL_RGB;
         if (nrComponents == 1)
             format = GL_RED;
         else if (nrComponents == 3)
@@ -436,8 +454,8 @@ unsigned int loadTexture(char const * path)
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT); // for this tutorial: use GL_CLAMP_TO_EDGE to prevent semi-transparent borders. Due to interpolation it takes texels from next repeat
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, format ==  GL_REPEAT); // for this
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, format ==  GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
