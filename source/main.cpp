@@ -37,6 +37,14 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 unsigned int loadTexture(char const * path);
+glm::vec3 getLightPosition(glm::vec3 position, float lightPostHeadLength, float lightPostWidth);
+float getElapsedTime();
+void rotateLight(Light &bulb, float distanceFromPole);
+
+TransformNode postHeadRotate = TransformNode("Post Head Rotate", glm::mat4(1.0f));
+TransformNode postTransform = TransformNode("Post Transform", glm::mat4(1.0f));
+glm::vec3 postBulbPosition;
+NameNode lightPostRoot = NameNode("Light Post Root");
 
 
 // global settings
@@ -49,7 +57,7 @@ static unsigned char wireframe;         // Allows scene to be rendered in wirefr
 static bool userCam = false;            // Gives user control of camera
 
 // camera settings
-Camera camera(glm::vec3(0.0f, 5.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 3.0f, 10.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -57,9 +65,9 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;    // time between current frame and last frame
 float lastFrame = 0.0f;    // Timing ensures consistent framerate independent of hardware
+float startTime = 0.0f;
 
-// global light
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+// global
 float xPosition = 0;
 // Self-explanatory
 int main()
@@ -114,6 +122,10 @@ int main()
     // -------------------------
     unsigned int containerTex = loadTexture("assets/container.png");
     unsigned int containerTex2 = loadTexture("assets/container_specular.png");
+    unsigned int snowDiffTex = loadTexture("assets/snow.png");
+    unsigned int snow2DiffTex = loadTexture("assets/snow2.png");
+    unsigned int metalTex = loadTexture("assets/metal.jpg");
+   // unsigned int snowDiffTex2 = loadTexture("assets/snow_diff.jpg");
     
     
     defaultShader.use(); // don't forget to activate/use the shader before setting uniforms!
@@ -123,20 +135,80 @@ int main()
     
     Material mat = Material(glm::vec3(0.2f), glm::vec3(0.8f), glm::vec3(0.5f),32.0f);
     
-    Mesh m = Mesh(cubeData.GetVertices(), cubeData.GetIndices(), cubeData.GetVerticesCount(), cubeData.GetIndicesCount(), cubeData.GetVertexSize(), cubeData.GetIndicesSize());
-    Model testCube = Model(defaultShader, mat,  glm::mat4(1.0f), m, containerTex2);
-    Model testCube2 = Model(defaultShader, mat, glm::mat4(1.0f), m, containerTex);
+    
     
     Mesh s = Mesh(sphereData.GetVertices(), sphereData.GetIndices(), 0, sphereData.getIndicesCount(), sphereData.getVertexSize(), sphereData.getIndicesSize());
-    Model sphere = Model(defaultShader, mat, glm::mat4(1.0f), s, containerTex);
+    Model sphere = Model(defaultShader, mat, glm::mat4(1.0f), s, snowDiffTex);
     
     Mesh t = Mesh(planeData.getVertices(), planeData.getIndices(), 0, planeData.getIndicesCount(), planeData.getVertexSize(), planeData.getIndicesSize());
-    Model floor = Model(defaultShader, mat, glm::mat4(1.0f), t, containerTex2);
+    
+    // Floor texture
+    glm::mat4 mm = glm::mat4(1.0f);
+    mm = glm::translate(mm, glm::vec3(0.0f, 0.0f, 0.0f));
+    mm = glm::scale(mm, glm::vec3(20.0f, 0.0f, 20.0f));
+    Model floor = Model(defaultShader, mat, mm, t, snow2DiffTex);
+    
+    mm = glm::mat4(1.0f);
+    mm = glm::rotate(mm, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    mm = glm::scale(mm, glm::vec3(20.0f, 1.0f, 20.0f));
+    mm = glm::translate(mm, glm::vec3(0.0f, -5.0f, -0.5f));
+    Model background = Model(defaultShader, mat, mm, t, containerTex);
+    
+   
+    
+    
+    // LIGHT POST
+   // Mesh m = Mesh(cubeData.GetVertices(), cubeData.GetIndices(), cubeData.GetVerticesCount(), cubeData.GetIndicesCount(), cubeData.GetVertexSize(), cubeData.GetIndicesSize());
+    Model lightPost = Model(defaultShader, mat, glm::mat4(1.0f), s, metalTex);
     
     Light light = Light(lightShader);
-    light.setPosition(glm::vec3(2.7f,  2.2f,  0.5f));
+   
+    
+    float lightPostHeight = 5.0f;
+    float lightPostWidth = 0.5f;
+    float lightPostHeadLength = 2.0f;
+    
+    lightPostRoot = NameNode("root");
+    TransformNode lightPostMoveTranslate = TransformNode("light post transform", glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, 0, 5.0f)));
+    
+    TransformNode lightPostTranslate = TransformNode("light post transform 2", glm::translate(glm::mat4(1.0f), glm::vec3(0, lightPostHeight/2, 0)));
+    
+    NameNode post = NameNode("Post");
+        mm = glm::scale(glm::mat4(1.0f), glm::vec3(lightPostWidth, lightPostHeight, lightPostWidth));
+        postTransform = TransformNode("post Transform", mm);
+        ModelNode postShape = ModelNode("Sphere(post body)", lightPost);
+
+    NameNode postHead = NameNode("Post Head");
+        mm = glm::mat4(1.0f);
+
+        TransformNode postHeadTranslate = TransformNode("Translate", glm::translate(mm, glm::vec3(0.0f, lightPostHeight/2 + lightPostWidth/2, 0.0f)));
+        postHeadRotate= TransformNode("post head Rotate", glm::rotate(mm, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
+        TransformNode postHeadScale = TransformNode("scale", glm::scale(mm, glm::vec3(lightPostWidth, lightPostHeadLength, lightPostWidth)));
+        ModelNode postHeadShape = ModelNode("sphere(post head)", lightPost);
+                  
+        postBulbPosition = glm::vec3(-5.0f, lightPostHeight + lightPostWidth/2, 5.0f);
+        postBulbPosition = postBulbPosition / glm::vec3(0.3);
+        light.setPosition(postBulbPosition);
+        
+    lightPostRoot.addChild(lightPostMoveTranslate);
+        lightPostMoveTranslate.addChild(lightPostTranslate);
+            lightPostTranslate.addChild(post);
+                post.addChild(postTransform);
+                    postTransform.addChild(postShape);
+                post.addChild(postHead);
+                    postHead.addChild(postHeadTranslate);
+                        postHeadTranslate.addChild(postHeadRotate);
+                            postHeadRotate.addChild(postHeadScale);
+                                postHeadScale.addChild(postHeadShape);
+                                
+    lightPostRoot.update();
+    lightPostRoot.print(0, false);
     
     
+    
+    
+    
+    // SNOWMAN
     float bodyHeight = 3.0f;
     float headHeight = 2.0f;
     
@@ -146,7 +218,7 @@ int main()
     TransformNode snowmanTranslate = TransformNode("snowman transform2", glm::translate(glm::mat4(1.0f), glm::vec3(0, bodyHeight/2, 0)));
     
     NameNode body = NameNode("body");
-        glm::mat4 mm = glm::scale(glm::mat4(1.0f), glm::vec3(bodyHeight));
+        mm = glm::scale(glm::mat4(1.0f), glm::vec3(bodyHeight));
         TransformNode bodyTransform = TransformNode("body transform", mm);
         ModelNode bodyShape = ModelNode("Sphere(body)", sphere);
     
@@ -157,6 +229,7 @@ int main()
         TransformNode headTransform = TransformNode("head transform", mm);
         ModelNode headShape = ModelNode("Sphere(head)", sphere);
     
+       
     
                            
                       
@@ -208,6 +281,14 @@ int main()
         defaultShader.use();
         defaultShader.setMat4("projection", projection);
         defaultShader.setMat4("view", view);
+        defaultShader.setVec3("viewPos", camera.Position);
+        defaultShader.setVec3("light.position", light.getPosition());
+        
+        // light properties
+        defaultShader.setVec3("light.ambient", light.getMaterial().getAmbient());
+        defaultShader.setVec3("light.diffuse", light.getMaterial().getDiffuse());
+        defaultShader.setVec3("light.specular", light.getMaterial().getSpecular());
+        
         
         lightShader.use();
         lightShader.setMat4("projection", projection);
@@ -222,12 +303,18 @@ int main()
 //        model = glm::translate(model, glm::vec3(-2.0f, 0.0f, 0.0f));
 //        sphere.render(model);
 //
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(10.0f, 0.0f, 10.0f));
-        floor.render(model);
+        floor.render();
+        background.render();
         
+        
+        lightPostRoot.draw();
+        float lightDistanceFromPole = lightPostHeadLength + lightPostWidth + 1.0f;
+        rotateLight(light, lightDistanceFromPole);
+        light.render();
+        
+    
         snowmanRoot.draw();
+        
         
         
         
@@ -239,8 +326,8 @@ int main()
 
     // Dipose of resources now they're no longer needed:
     // -------------------------------------------------------------
-    testCube.dispose();
-    testCube2.dispose();
+    //testCube.dispose();
+   // testCube2.dispose();
     sphere.dispose();
     light.dispose();
     // Terminate GLFW, clearing all previously allocated GLFW resources.
@@ -280,6 +367,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         userCam = !userCam;
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) // Exit program with escape
         glfwSetWindowShouldClose(window, true);
+//    if (key == GLFW_KEY_R && action == GLFW_PRESS) // render wireframe with F
+//        (wireframe = 1 - wireframe) ? GL_LINE : stop;
 }
 
 // glfw: whenever the mouse moves, this callback is called
@@ -361,4 +450,23 @@ unsigned int loadTexture(char const * path)
     }
 
     return textureID;
+}
+
+
+float getElapsedTime(){
+    return glfwGetTime();
+}
+
+void rotateLight(Light &bulb, float bulbDistanceFromPole){
+    float elapsedTime = getElapsedTime()-startTime;
+    
+    float bulbX = bulbDistanceFromPole * glm::sin(glm::radians(elapsedTime*50));
+    float bulbZ = bulbDistanceFromPole * + glm::cos(glm::radians(elapsedTime*50));
+    bulb.setPosition(postBulbPosition + glm::vec3(bulbX, 0.0, bulbZ));
+    
+    float rotateAngle = -elapsedTime* 50; // rotate anti-clockwise
+    glm::mat4 transform = glm::rotate(glm::mat4(1.0f), glm::radians(90.f), glm::vec3(1, 0, 0));     // Rotate continuouslt
+    transform = glm::rotate(transform, glm::radians(rotateAngle), glm::vec3(0, 0, 1));              // Rotate to lie flat
+    postHeadRotate.setTransform(transform);
+    postHeadRotate.ModelNode::update();     //Update children
 }

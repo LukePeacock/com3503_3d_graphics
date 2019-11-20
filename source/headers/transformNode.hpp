@@ -26,5 +26,6 @@ public:
     void setTransform(glm::mat4 t);
     void print(int indent, bool inFull);
     virtual void update(glm::mat4 t);
+    glm::mat4 getTransform();
 };
 #endif /* transformNode_hpp */

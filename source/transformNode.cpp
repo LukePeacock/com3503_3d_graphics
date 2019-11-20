@@ -46,4 +46,6 @@ void TransformNode::print(int indent, bool inFull)
 }
 
 
-
+glm::mat4 TransformNode::getTransform(){
+    return transform;
+}

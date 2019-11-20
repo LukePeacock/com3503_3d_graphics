@@ -29,6 +29,9 @@
 		A340B0BC236C6972006AD26C /* sgNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0BA236C6972006AD26C /* sgNode.cpp */; };
 		A340B0BF236C739C006AD26C /* transformNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0BD236C739C006AD26C /* transformNode.cpp */; };
 		A340B0C2236C75B8006AD26C /* nameNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0C0236C75B8006AD26C /* nameNode.cpp */; };
+		A36A084F238546AA0016AE48 /* snow.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A084E238546A70016AE48 /* snow.png */; };
+		A36A0851238549AE0016AE48 /* snow2.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A0850238549AB0016AE48 /* snow2.png */; };
+		A36A085323854A6A0016AE48 /* metal.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A085223854A650016AE48 /* metal.jpg */; };
 		A3F0F749236343DB001B49E9 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3F0F747236343DB001B49E9 /* light.cpp */; };
 		A3F0F74C23634892001B49E9 /* light_shader.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3F0F74A2363458F001B49E9 /* light_shader.frag */; };
 		A3F0F74D23634894001B49E9 /* light_shader.vs in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3F0F74B236345A6001B49E9 /* light_shader.vs */; };
@@ -54,6 +57,9 @@
 			dstPath = assets;
 			dstSubfolderSpec = 7;
 			files = (
+				A36A085323854A6A0016AE48 /* metal.jpg in CopyFiles */,
+				A36A0851238549AE0016AE48 /* snow2.png in CopyFiles */,
+				A36A084F238546AA0016AE48 /* snow.png in CopyFiles */,
 				A3044A5E2363381200D262F0 /* container_specular.png in CopyFiles */,
 				A3044A43236219A100D262F0 /* container.png in CopyFiles */,
 			);
@@ -476,6 +482,11 @@
 		A340B0BE236C739C006AD26C /* transformNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transformNode.hpp; sourceTree = "<group>"; };
 		A340B0C0236C75B8006AD26C /* nameNode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = nameNode.cpp; sourceTree = "<group>"; };
 		A340B0C1236C75B8006AD26C /* nameNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = nameNode.hpp; sourceTree = "<group>"; };
+		A36A0849238541780016AE48 /* snow_norm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = snow_norm.jpg; sourceTree = "<group>"; };
+		A36A084A238541780016AE48 /* snow_diff.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = snow_diff.jpg; sourceTree = "<group>"; };
+		A36A084E238546A70016AE48 /* snow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = snow.png; path = snow/snow.png; sourceTree = "<group>"; };
+		A36A0850238549AB0016AE48 /* snow2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = snow2.png; path = snow/snow2.png; sourceTree = "<group>"; };
+		A36A085223854A650016AE48 /* metal.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = metal.jpg; sourceTree = "<group>"; };
 		A3F0F747236343DB001B49E9 /* light.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = light.cpp; sourceTree = "<group>"; };
 		A3F0F748236343DB001B49E9 /* light.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = light.hpp; sourceTree = "<group>"; };
 		A3F0F74A2363458F001B49E9 /* light_shader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = light_shader.frag; sourceTree = "<group>"; };
@@ -1010,10 +1021,23 @@
 		A3044A3E23620D1E00D262F0 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				A36A085223854A650016AE48 /* metal.jpg */,
+				A36A0850238549AB0016AE48 /* snow2.png */,
+				A36A084E238546A70016AE48 /* snow.png */,
+				A36A0848238541780016AE48 /* snow */,
 				A3044A5D2363380F00D262F0 /* container_specular.png */,
 				A3044A3F23620D1E00D262F0 /* container.png */,
 			);
 			path = assets;
+			sourceTree = "<group>";
+		};
+		A36A0848238541780016AE48 /* snow */ = {
+			isa = PBXGroup;
+			children = (
+				A36A0849238541780016AE48 /* snow_norm.jpg */,
+				A36A084A238541780016AE48 /* snow_diff.jpg */,
+			);
+			path = snow;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
