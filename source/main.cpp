@@ -444,7 +444,7 @@ int main()
             rotateLight(light, lightDistanceFromPole);
         defaultShader.setVec3("spotLight.direction", light.Front);
         light.render();
-        
+    
     
         box.render();
         
@@ -465,6 +465,9 @@ int main()
    // testCube2.dispose();
     sphere.dispose();
     light.dispose();
+    button.dispose();
+    cube.dispose();
+    box.dispose();
     // Terminate GLFW, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();
