@@ -268,16 +268,52 @@ int main()
         ModelNode headShape = ModelNode("Sphere(head)", sphere);
     
     NameNode face = NameNode("face");
-        mm = glm::scale(glm::mat4(1.0f), glm::vec3(buttonSize/2));
-        mm = glm::translate(mm, glm::vec3(headHeight/4, headHeight/4, headHeight/2));
-        TransformNode Eye1Transform = TransformNode("left eye", mm);
-        ModelNode leftEyeShape = ModelNode("Sphere(left eye)", button);
+        NameNode eyes = NameNode("eyes");
+            mm = glm::scale(glm::mat4(1.0f), glm::vec3(buttonSize/2));
+            mm = glm::translate(mm, glm::vec3(headHeight/2, headHeight/4, headHeight));
+            TransformNode leftEyeTransform = TransformNode("left eye transform", mm);
+            ModelNode leftEyeShape = ModelNode("Sphere(left eye)", button);
+        
+            mm = glm::scale(glm::mat4(1.0f), glm::vec3(buttonSize/2));
+            mm = glm::translate(mm, glm::vec3(-headHeight/2, headHeight/4, headHeight));
+            TransformNode rightEyeTransform = TransformNode("right eye transfrom", mm);
+            ModelNode rightEyeShape = ModelNode("SPhere(right eye)", button);
 
+    NameNode nose = NameNode("Nose");
+        mm = glm::scale(glm::mat4(1.0f), glm::vec3(buttonSize/4, buttonSize/4, buttonSize/2));
+        mm = glm::translate(mm, glm::vec3(0, 0, headHeight));
+        TransformNode noseTransform = TransformNode("nose transform", mm);
+        ModelNode noseShape = ModelNode("Sphere(nose shape)", button);
 
-
-                    
+    NameNode mouth = NameNode("mouth");
+    mm = glm::scale(glm::mat4(1.0f), glm::vec3(buttonSize, buttonSize/2, buttonSize/2));
+    mm = glm::translate(mm, glm::vec3(0, -headHeight/2, headHeight));
+                        TransformNode mouthTransform = TransformNode("Mouth Trasnform", mm);
+                        ModelNode mouthShape = ModelNode("Sphere(mouth)", button);
                  
-           
+    NameNode hat = NameNode("Hat");
+        // Two Triangles Mesh
+        Mesh c = Mesh(cubeData.GetVertices(), cubeData.GetIndices(), 0, cubeData.GetIndicesCount(), cubeData.GetVertexSize(), cubeData.GetIndicesSize());
+        Material cubeMat = Material(glm::vec3(0.5f), glm::vec3(0.5f), glm::vec3(0.5f), 32.0f);
+        Model cube = Model(defaultShader, cubeMat, mm, c, buttonTex);
+    
+        mm = glm::scale(glm::mat4(1.0f), glm::vec3(headHeight/2, headHeight/4, headHeight/2));
+        mm = glm::translate(mm, glm::vec3(0, headHeight/2, 0));
+        TransformNode hatTransform = TransformNode("Hat transform", mm);
+        
+        ModelNode hatShape = ModelNode("Cube(hat main)", cube);
+    
+        glm::mat4 sideScale = glm::scale(glm::mat4(1.0f), glm::vec3(headHeight/10, headHeight/2, headHeight/2));
+        mm = glm::translate(sideScale, glm::vec3(headHeight*1.2, headHeight/8, 0));
+        TransformNode hatLeftTransform = TransformNode("Left hat transform", mm);
+        ModelNode leftHatShape = ModelNode("Cube(Left hat)", cube);
+        
+        mm = glm::translate(sideScale, glm::vec3(-headHeight*1.2, headHeight/8,0));
+        TransformNode hatRightTransform = TransformNode("right hat transform", mm);
+        ModelNode rightHatShape = ModelNode("Cube(right hat)", cube);
+    
+    
+
         
     snowmanRoot.addChild(snowmanMoveTranslate);
         snowmanMoveTranslate.addChild(snowmanTranslate);
@@ -294,10 +330,27 @@ int main()
                         head.addChild(headTransform);
                             headTransform.addChild(headShape);
                             headTransform.addChild(face);
-    face.addChild(Eye1Transform);
-                                Eye1Transform.addChild(leftEyeShape);
+                                face.addChild(eyes);
+                                    eyes.addChild(leftEyeTransform);
+                                        leftEyeTransform.addChild(leftEyeShape);
+                                    eyes.addChild(rightEyeTransform);
+                                        rightEyeTransform.addChild(rightEyeShape);
 
-                            
+                                face.addChild(nose);
+                                    nose.addChild(noseTransform);
+                                        noseTransform.addChild(noseShape);
+                                face.addChild(mouth);
+                                    mouth.addChild(mouthTransform);
+                                        mouthTransform.addChild(mouthShape);
+                            headTransform.addChild(hat);
+                                hat.addChild(hatTransform);
+                                    hatTransform.addChild(hatShape);
+                                hat.addChild(hatLeftTransform);
+                                    hatLeftTransform.addChild(leftHatShape);
+                                hat.addChild(hatRightTransform);
+                                    hatRightTransform.addChild(rightHatShape);
+    
+    
     snowmanRoot.update();
     snowmanRoot.print(0, false);
                                 
@@ -305,10 +358,8 @@ int main()
 
         
     // Box
-    Mesh c = Mesh(cubeData.GetVertices(), cubeData.GetIndices(), 0, cubeData.GetIndicesCount(), cubeData.GetVertexSize(), cubeData.GetIndicesSize());
-    Material cubeMat = Material(glm::vec3(0.5f), glm::vec3(0.5f), glm::vec3(0.5f), 32.0f);
     mm = glm::scale(glm::mat4(1.0f), glm::vec3(bodyHeight+headHeight));
-    mm = glm::translate(mm, glm::vec3(-1.0f, 1.0f, 0.0f));
+    mm = glm::translate(mm, glm::vec3(-1.0f, 0.5f, 0.0f));
     Model box = Model(defaultShader, cubeMat, mm, c, containerTex, containerSpecTex);
        
     // render loop
