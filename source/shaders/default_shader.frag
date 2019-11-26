@@ -11,8 +11,8 @@ struct Material {
   vec3 diffuse;
   vec3 specular;
   float shininess;
-    sampler2D diffusemap;
-    sampler2D specularmap;
+  sampler2D diffusemap;
+  sampler2D specularmap;
 };
 
 struct SpotLight {
@@ -49,7 +49,8 @@ void main()
 {
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
-    vec3 result =CalcDirLight(dirLight, norm, viewDir);
+    
+    vec3 result = CalcDirLight(dirLight, norm, viewDir);
     result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
     FragColor = vec4(result, 1.0);
 }

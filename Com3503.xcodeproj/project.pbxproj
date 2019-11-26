@@ -23,6 +23,7 @@
 		A3044A522362FF5500D262F0 /* model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A502362FF5500D262F0 /* model.cpp */; };
 		A3044A5C2363092300D262F0 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A5B2363092300D262F0 /* camera.cpp */; };
 		A3044A5E2363381200D262F0 /* container_specular.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3044A5D2363380F00D262F0 /* container_specular.png */; };
+		A336BFB4238D560300D10B26 /* wool.jpeg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A336BFB3238D560000D10B26 /* wool.jpeg */; };
 		A340B0B3236B071B006AD26C /* sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0B1236B071B006AD26C /* sphere.cpp */; };
 		A340B0B6236B0BA5006AD26C /* twoTriangles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0B4236B0BA5006AD26C /* twoTriangles.cpp */; };
 		A340B0B9236C683B006AD26C /* modelNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0B7236C683B006AD26C /* modelNode.cpp */; };
@@ -63,6 +64,7 @@
 			dstPath = assets;
 			dstSubfolderSpec = 7;
 			files = (
+				A336BFB4238D560300D10B26 /* wool.jpeg in CopyFiles */,
 				A36A0861238592FC0016AE48 /* container.png in CopyFiles */,
 				A36A085F23858E710016AE48 /* stone.jpg in CopyFiles */,
 				A36A085323854A6A0016AE48 /* metal.jpg in CopyFiles */,
@@ -478,6 +480,7 @@
 		A3044A59236308D200D262F0 /* camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = camera.hpp; sourceTree = "<group>"; };
 		A3044A5B2363092300D262F0 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
 		A3044A5D2363380F00D262F0 /* container_specular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = container_specular.png; sourceTree = "<group>"; };
+		A336BFB3238D560000D10B26 /* wool.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wool.jpeg; sourceTree = "<group>"; };
 		A340B0B1236B071B006AD26C /* sphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sphere.cpp; sourceTree = "<group>"; };
 		A340B0B2236B071B006AD26C /* sphere.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sphere.hpp; sourceTree = "<group>"; };
 		A340B0B4236B0BA5006AD26C /* twoTriangles.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = twoTriangles.cpp; sourceTree = "<group>"; };
@@ -1035,6 +1038,7 @@
 		A3044A3E23620D1E00D262F0 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				A336BFB3238D560000D10B26 /* wool.jpeg */,
 				A36A0860238592F10016AE48 /* container.png */,
 				A36A085E23858E6F0016AE48 /* stone.jpg */,
 				A36A085223854A650016AE48 /* metal.jpg */,
@@ -1083,7 +1087,7 @@
 		A30447092361FEE000D262F0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = "Luke Peacock";
 				TargetAttributes = {
 					A30447102361FEE000D262F0 = {
@@ -1249,6 +1253,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				HEADER_SEARCH_PATHS = (
 					/users/luke/documents/rendering/glad/include,
@@ -1265,6 +1270,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				HEADER_SEARCH_PATHS = (
 					/users/luke/documents/rendering/glad/include,

@@ -35,44 +35,45 @@ int indices[] =  {
   };
 
 Light::Light(Shader shader) : shader("shaders/light_shader.vs", "shaders/light_shader.frag"){
-  this->material = Material();
-  this->shader = shader;
-  material.setAmbient(0.5f, 0.5f, 0.5f);
-  material.setDiffuse(0.5f, 0.5f, 0.5f);
-  material.setSpecular(0.5f, 0.5f, 0.5f);
-  position = glm::vec3(0.0f,0.0f,0.0f);
-  this->model = glm::mat4(1.0f);
-  fillBuffers();
+    this->material = Material();
+    this->shader = shader;
+    this->rotateAngle = 0.0f;
+    material.setAmbient(0.5f, 0.5f, 0.5f);
+    material.setDiffuse(0.8f, 0.8f, 0.8f);
+    material.setSpecular(0.8f, 0.8f, 0.8f);
+    position = glm::vec3(0.0f,0.0f,0.0f);
+    this->model = glm::mat4(1.0f);
+    fillBuffers();
 }
 
 void Light::setPosition(glm::vec3 pos) {
-  position.x = pos.x;
-  position.y = pos.y;
-  position.z = pos.z;
+    position.x = pos.x;
+    position.y = pos.y;
+    position.z = pos.z;
 }
 
 void Light::setPosition(float x, float y, float z) {
-  position.x = x;
-  position.y = y;
-  position.z = z;
+    position.x = x;
+    position.y = y;
+    position.z = z;
 }
 
 glm::vec3 Light::getPosition() {
-  return position;
+    return position;
 }
 
 void Light::setMaterial(Material m) {
-  material = m;
+    material = m;
 }
 
 Material Light::getMaterial() {
-  return material;
+    return material;
 }
 
 void Light::render() {
     glm::mat4 nmodel = glm::scale(model, glm::vec3(0.3f,0.3f,0.3f));
     nmodel = glm::translate(nmodel, position);
-    
+    nmodel = glm::rotate(nmodel, glm::radians(rotateAngle), glm::vec3(0,1,0));
     shader.use();
     shader.setMat4("model", nmodel);
     glBindVertexArray(VAO);
@@ -81,9 +82,9 @@ void Light::render() {
 }
 
 void Light::dispose() {
-  glDeleteBuffers(1, &VBO);
-  glDeleteVertexArrays(1, &VAO);
-  glDeleteBuffers(1, &EBO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &EBO);
 }
 
 
@@ -107,3 +108,5 @@ void Light::fillBuffers() {
 void Light::setFront(glm::vec3 front){
     this->Front = front;
 }
+
+

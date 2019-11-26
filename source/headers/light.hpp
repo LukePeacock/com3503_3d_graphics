@@ -38,6 +38,8 @@ public:
     void render();
     void dispose();
     glm::vec3 Front;
+    float rotateAngle;
+
     void setFront(glm::vec3 front);
 };
 

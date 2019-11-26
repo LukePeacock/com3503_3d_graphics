@@ -50,7 +50,7 @@ NameNode lightPostRoot = NameNode("Light Post Root");
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 const float NEAR_PLANE = 1.0f;
-const float FAR_PLANE = 100.0f;
+const float FAR_PLANE = 50.0f;
 
 bool animate = false;
 static unsigned char wireframe;         // Allows scene to be rendered in wireframe
@@ -113,6 +113,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     
+    
     Shader defaultShader("shaders/default_shader.vs", "shaders/default_shader.frag");
     Shader lightShader("shaders/light_shader.vs", "shaders/light_shader.frag");
     Shader planeShader("shaders/plane_shader.vs", "shaders/plane_shader.frag");
@@ -129,14 +130,15 @@ int main()
     unsigned int buttonTex = loadTexture("assets/stone.jpg");
     unsigned int containerTex = loadTexture("assets/container.png");
     unsigned int containerSpecTex = loadTexture("assets/container_specular.png");
-   
+    unsigned int woolTex = loadTexture("assets/wool.jpeg");
+    
     defaultShader.use();
     defaultShader.setInt("material.diffusemap", 0);
     defaultShader.setInt("material.specularmap", 1);
     
     
     // Default material
-    Material mat = Material(glm::vec3(0.2f), glm::vec3(0.8f), glm::vec3(0.5f),32.0f);
+    Material mat = Material(glm::vec3(0.2f), glm::vec3(0.8f), glm::vec3(0.5f),16.0f);
 
     // Two Triangles Mesh
     Mesh t = Mesh(planeData.getVertices(), planeData.getIndices(), 0, planeData.getIndicesCount(), planeData.getVertexSize(), planeData.getIndicesSize());
@@ -165,7 +167,7 @@ int main()
     Light light = Light(lightShader);                                               // Light object
    
     // Params
-    float lightPostHeight = 5.0f;
+    float lightPostHeight = 3.0f;
     float lightPostWidth = 0.5f;
     float lightPostHeadLength = 2.0f;
     
@@ -226,6 +228,7 @@ int main()
     
     // =======================================================
     // Create Snowman
+    // =======================================================
    
        Model sphere = Model(defaultShader, mat, glm::mat4(1.0f), s, snowDiffTex);
         Model button = Model(defaultShader, mat, glm::mat4(1.0f), s, buttonTex);
@@ -294,8 +297,8 @@ int main()
     NameNode hat = NameNode("Hat");
         // Two Triangles Mesh
         Mesh c = Mesh(cubeData.GetVertices(), cubeData.GetIndices(), 0, cubeData.GetIndicesCount(), cubeData.GetVertexSize(), cubeData.GetIndicesSize());
-        Material cubeMat = Material(glm::vec3(0.5f), glm::vec3(0.5f), glm::vec3(0.5f), 32.0f);
-        Model cube = Model(defaultShader, cubeMat, mm, c, buttonTex);
+        Material cubeMat = Material(glm::vec3(0.5f), glm::vec3(0.5f), glm::vec3(0.5f), 16.0f);
+        Model cube = Model(defaultShader, cubeMat, mm, c, woolTex);
     
         mm = glm::scale(glm::mat4(1.0f), glm::vec3(headHeight/2, headHeight/4, headHeight/2));
         mm = glm::translate(mm, glm::vec3(0, headHeight/2, 0));
@@ -303,7 +306,7 @@ int main()
         
         ModelNode hatShape = ModelNode("Cube(hat main)", cube);
     
-        glm::mat4 sideScale = glm::scale(glm::mat4(1.0f), glm::vec3(headHeight/10, headHeight/2, headHeight/2));
+        glm::mat4 sideScale = glm::scale(glm::mat4(1.0f), glm::vec3(headHeight/10, headHeight/2-0.0001, headHeight/2-0.0001));
         mm = glm::translate(sideScale, glm::vec3(headHeight*1.2, headHeight/8, 0));
         TransformNode hatLeftTransform = TransformNode("Left hat transform", mm);
         ModelNode leftHatShape = ModelNode("Cube(Left hat)", cube);
@@ -312,7 +315,10 @@ int main()
         TransformNode hatRightTransform = TransformNode("right hat transform", mm);
         ModelNode rightHatShape = ModelNode("Cube(right hat)", cube);
     
-    
+        glm::mat4 backScale = glm::scale(glm::mat4(1.0f), glm::vec3(headHeight/2-0.0001, headHeight/2-0.0001, headHeight/10));
+        mm = glm::translate(backScale, glm::vec3(0, headHeight/8, 0-headHeight ));
+        TransformNode hatBackTransform = TransformNode("back hat transform", mm);
+        ModelNode backHatShape = ModelNode ("Cube(back hat)", cube);
 
         
     snowmanRoot.addChild(snowmanMoveTranslate);
@@ -349,6 +355,8 @@ int main()
                                     hatLeftTransform.addChild(leftHatShape);
                                 hat.addChild(hatRightTransform);
                                     hatRightTransform.addChild(rightHatShape);
+                                hat.addChild(hatBackTransform);
+                                    hatBackTransform.addChild(backHatShape);
     
     
     snowmanRoot.update();
@@ -357,7 +365,8 @@ int main()
       
 
         
-    // Box
+    // Box Next to Snowman
+    cubeMat.setSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
     mm = glm::scale(glm::mat4(1.0f), glm::vec3(bodyHeight+headHeight));
     mm = glm::translate(mm, glm::vec3(-1.0f, 0.5f, 0.0f));
     Model box = Model(defaultShader, cubeMat, mm, c, containerTex, containerSpecTex);
@@ -393,22 +402,24 @@ int main()
         defaultShader.setMat4("projection", projection);
         defaultShader.setMat4("view", view);
         defaultShader.setVec3("viewPos", camera.Position);
-        defaultShader.setVec3("light.position", light.getPosition());
+        //defaultShader.setVec3("light.position", light.getPosition());
         //defaultShader.setVec3("light.position", camera.Position);
         // light properties
         defaultShader.setVec3("spotLight.ambient", glm::vec3(1.0f));
         defaultShader.setVec3("spotLight.diffuse", glm::vec3(1.0f));
         defaultShader.setVec3("spotLight.specular", glm::vec3(1.0f));
        // spotLight
-        defaultShader.setVec3("spotLight.position", light.getPosition());
-        defaultShader.setVec3("spotLight.direction", glm::vec3(0,0,0));
+        
+        defaultShader.setVec3("spotLight.position", light.getPosition() * 0.3f);
+        defaultShader.setVec3("spotLight.direction", light.Front);
+        std::cout << "Camera Front" << glm::to_string(camera.Front) << std::endl;
         defaultShader.setFloat("spotLight.constant", 1.0f);
         defaultShader.setFloat("spotLight.linear", 0.045);
         defaultShader.setFloat("spotLight.quadratic", 0.0075);
-        defaultShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(25.0f)));
-        defaultShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(30.0f)));
+        defaultShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(45.0f)));
+        defaultShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(60.0f)));
         
-         defaultShader.setVec3("dirLight.position", globalLightPos);
+        defaultShader.setVec3("dirLight.position", globalLightPos);
         defaultShader.setVec3("dirLight.ambient", light.getMaterial().getAmbient());
         defaultShader.setVec3("dirLight.diffuse", light.getMaterial().getDiffuse());
         defaultShader.setVec3("dirLight.specular", light.getMaterial().getSpecular());
@@ -442,7 +453,6 @@ int main()
         float lightDistanceFromPole = lightPostHeadLength + lightPostWidth + 1.0f;
         if (animate)
             rotateLight(light, lightDistanceFromPole);
-        defaultShader.setVec3("spotLight.direction", light.Front);
         light.render();
     
     
@@ -609,10 +619,8 @@ void rotateLight(Light &bulb, float bulbDistanceFromPole){
     float bulbX = bulbDistanceFromPole * glm::sin(glm::radians(elapsedTime*50));
     float bulbZ = bulbDistanceFromPole * + glm::cos(glm::radians(elapsedTime*50));
     bulb.setPosition(postBulbPosition + glm::vec3(bulbX, 0.0, bulbZ));
-    std::cout << "bulbPos: " << glm::to_string(glm::normalize(glm::vec3(bulbX, 0, bulbZ))) << std::endl;
-    //bulb.setFront(glm::normalize(glm::vec3(bulbX, 0, bulbZ)));
-    bulb.setFront(glm::vec3(0.0, 0.0, -1.0f));
+    //Calculate front direction of bulb and set its rotation;
+    bulb.rotateAngle = -rotateAngle; // rotate bulb clockwise to stay in rotation relative to post
+    bulb.setFront(glm::normalize(glm::vec3(bulbX, 0, bulbZ)));
    
-   // bulb.setFront(camera.Front);
-    //std::cout << "front: " << glm::to_string(glm::normalize(front)) << std::endl;
 }
