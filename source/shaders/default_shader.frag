@@ -41,6 +41,8 @@ uniform Material material;
 uniform vec3 viewPos;
 uniform DirLight dirLight;
 uniform SpotLight spotLight;
+uniform bool spotlightOn;
+uniform bool generalLightOn;
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
@@ -49,9 +51,11 @@ void main()
 {
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
-    
-    vec3 result = CalcDirLight(dirLight, norm, viewDir);
-    result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
+    vec3 result = vec3(0.0f);
+    if (generalLightOn)
+        result = CalcDirLight(dirLight, norm, viewDir);
+    if (spotlightOn)
+        result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
     FragColor = vec4(result, 1.0);
 }
 // calculates the color when using a directional light.

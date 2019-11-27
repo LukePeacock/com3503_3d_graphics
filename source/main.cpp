@@ -415,10 +415,14 @@ int main()
     
     //=====================================
     //  Set shader values which do NOT change
+    //  Materials and other values never change during runtime
     //=====================================
     
     // Spotlight values
     defaultShader.use();
+    defaultShader.setVec3("spotLight.ambient", light.getMaterial().getAmbient());
+    defaultShader.setVec3("spotLight.diffuse", light.getMaterial().getDiffuse());
+    defaultShader.setVec3("spotLight.specular", light.getMaterial().getSpecular());
     defaultShader.setFloat("spotLight.constant", 1.0f);
     defaultShader.setFloat("spotLight.linear", 0.045);
     defaultShader.setFloat("spotLight.quadratic", 0.0075);
@@ -427,6 +431,9 @@ int main()
      
     //Directional Light
     defaultShader.setVec3("dirLight.position", globalLightPos);
+    defaultShader.setVec3("dirLight.ambient", light.getMaterial().getAmbient());
+    defaultShader.setVec3("dirLight.diffuse", light.getMaterial().getDiffuse());
+    defaultShader.setVec3("dirLight.specular", light.getMaterial().getSpecular());
     
    
     // render loop
@@ -440,7 +447,7 @@ int main()
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
         
-        // input
+        // process input
         // -----
         processInput(window);
 
@@ -456,53 +463,28 @@ int main()
         // Projection
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, NEAR_PLANE, FAR_PLANE);
         
+        
         // Set view, projection, and view position for default shader
         defaultShader.use();
         defaultShader.setMat4("projection", projection);
         defaultShader.setMat4("view", view);
         defaultShader.setVec3("viewPos", camera.Position);
         
-        if (spotlightOn)// light properties depending on if light is on or off
+        
+        defaultShader.setBool("generalLightOn", (generalLightOn) ? true : false);   // set general light bool on or off in shader
+        defaultShader.setBool("spotlightOn", (spotlightOn) ? true : false); //set spotlight bool on or off in shader
+        if (spotlightOn)// if spotlight on, update position and direction in shader
         {
-            defaultShader.use();
-            defaultShader.setVec3("spotLight.ambient", light.getMaterial().getAmbient());
-            defaultShader.setVec3("spotLight.diffuse", light.getMaterial().getDiffuse());
-            defaultShader.setVec3("spotLight.specular", light.getMaterial().getSpecular());
             defaultShader.setVec3("spotLight.position", light.getPosition() * 0.3f);
             defaultShader.setVec3("spotLight.direction", light.Front);
-
-        }
-        else
-        {
-            defaultShader.use();
-            defaultShader.setVec3("spotLight.ambient", glm::vec3(0.0f));
-            defaultShader.setVec3("spotLight.diffuse", glm::vec3(0.0f));
-            defaultShader.setVec3("spotLight.specular", glm::vec3(0.0f));
-
-            
         }
         
-        // Turn general light on or off
-        if (generalLightOn)
-        {
-            defaultShader.use();
-            defaultShader.setVec3("dirLight.ambient", light.getMaterial().getAmbient());
-            defaultShader.setVec3("dirLight.diffuse", light.getMaterial().getDiffuse());
-            defaultShader.setVec3("dirLight.specular", light.getMaterial().getSpecular());
-
-        }
-        else
-        {
-            defaultShader.use();
-            defaultShader.setVec3("dirLight.ambient", glm::vec3(0.0f));
-            defaultShader.setVec3("dirLight.diffuse", glm::vec3(0.0f));
-            defaultShader.setVec3("dirLight.specular", glm::vec3(0.0f));
-
-        }
-        
+       
+        // Set lighting shader projection and view
         lightShader.use();
         lightShader.setMat4("projection", projection);
         lightShader.setMat4("view", view);
+        
         
         //render floor and background
         floor.render();
