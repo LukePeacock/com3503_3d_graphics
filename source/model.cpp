@@ -36,7 +36,7 @@ void Model::setModelMatrix(glm::mat4 m) {
     modelMatrix = m;
 }
 
-void Model::render(glm::mat4 modelMatrix) {
+void Model::render(glm::mat4 modelMatrix, glm::vec2 texOffset) {
    
     shader.use();
     glActiveTexture(GL_TEXTURE0);
@@ -44,15 +44,17 @@ void Model::render(glm::mat4 modelMatrix) {
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, specularmap);
     shader.setMat4("model", modelMatrix);
+    shader.setVec2("offset", texOffset);
     shader.setVec3("material.ambient", material.getAmbient());
     shader.setVec3("material.diffuse", material.getDiffuse());
     shader.setVec3("material.specular", material.getSpecular());
     shader.setFloat("material.shininess", material.getShininess());
     mesh.render();
+     shader.setVec2("offset", glm::vec2(0.0f));
 }
 
-void Model::render() {
-    render(modelMatrix);
+void Model::render(glm::vec2 texOffset) {
+    render(modelMatrix, texOffset);
 }
 
 void Model::dispose() {

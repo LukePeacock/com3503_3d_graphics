@@ -33,8 +33,6 @@
 		A36A084F238546AA0016AE48 /* snow.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A084E238546A70016AE48 /* snow.png */; };
 		A36A0851238549AE0016AE48 /* snow2.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A0850238549AB0016AE48 /* snow2.png */; };
 		A36A085323854A6A0016AE48 /* metal.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A085223854A650016AE48 /* metal.jpg */; };
-		A36A085623857C8A0016AE48 /* plane_shader.vs in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A085423857C350016AE48 /* plane_shader.vs */; };
-		A36A085723857C8D0016AE48 /* plane_shader.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A085523857C5D0016AE48 /* plane_shader.frag */; };
 		A36A085F23858E710016AE48 /* stone.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A085E23858E6F0016AE48 /* stone.jpg */; };
 		A36A0861238592FC0016AE48 /* container.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A0860238592F10016AE48 /* container.png */; };
 		A3F0F749236343DB001B49E9 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3F0F747236343DB001B49E9 /* light.cpp */; };
@@ -49,8 +47,6 @@
 			dstPath = shaders;
 			dstSubfolderSpec = 7;
 			files = (
-				A36A085723857C8D0016AE48 /* plane_shader.frag in CopyFiles */,
-				A36A085623857C8A0016AE48 /* plane_shader.vs in CopyFiles */,
 				A3F0F74D23634894001B49E9 /* light_shader.vs in CopyFiles */,
 				A3F0F74C23634892001B49E9 /* light_shader.frag in CopyFiles */,
 				A3044A36236208ED00D262F0 /* default_shader.frag in CopyFiles */,
@@ -498,8 +494,6 @@
 		A36A084E238546A70016AE48 /* snow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = snow.png; path = snow/snow.png; sourceTree = "<group>"; };
 		A36A0850238549AB0016AE48 /* snow2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = snow2.png; path = snow/snow2.png; sourceTree = "<group>"; };
 		A36A085223854A650016AE48 /* metal.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = metal.jpg; sourceTree = "<group>"; };
-		A36A085423857C350016AE48 /* plane_shader.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = plane_shader.vs; sourceTree = "<group>"; };
-		A36A085523857C5D0016AE48 /* plane_shader.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = plane_shader.frag; sourceTree = "<group>"; };
 		A36A085E23858E6F0016AE48 /* stone.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stone.jpg; sourceTree = "<group>"; };
 		A36A0860238592F10016AE48 /* container.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = container.png; sourceTree = "<group>"; };
 		A3F0F747236343DB001B49E9 /* light.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = light.cpp; sourceTree = "<group>"; };
@@ -603,8 +597,6 @@
 				A30447292362035500D262F0 /* default_shader.frag */,
 				A3F0F74A2363458F001B49E9 /* light_shader.frag */,
 				A3F0F74B236345A6001B49E9 /* light_shader.vs */,
-				A36A085423857C350016AE48 /* plane_shader.vs */,
-				A36A085523857C5D0016AE48 /* plane_shader.frag */,
 			);
 			path = shaders;
 			sourceTree = "<group>";

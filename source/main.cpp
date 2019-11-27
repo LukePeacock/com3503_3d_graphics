@@ -125,7 +125,7 @@ int main()
     
     Shader defaultShader("shaders/default_shader.vs", "shaders/default_shader.frag");
     Shader lightShader("shaders/light_shader.vs", "shaders/light_shader.frag");
-    Shader planeShader("shaders/plane_shader.vs", "shaders/plane_shader.frag");
+
     
     Cube cubeData;
     Sphere sphereData;
@@ -165,7 +165,7 @@ int main()
     mm = glm::rotate(mm, glm::radians(180.0f), glm::vec3(0, 0, 1));
     mm = glm::scale(mm, glm::vec3(20.0f, 1.0f, 20.0f));
     mm = glm::translate(mm, glm::vec3(0.0f, -10.0f, 0.5f));
-    Model background = Model(planeShader, mat, mm, t, treesTex);
+    Model background = Model(defaultShader, mat, mm, t, treesTex);
     
    
     
@@ -412,7 +412,23 @@ int main()
     mm = glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, 0.5 * (bodyHeight + headHeight), 0.0f));
     mm = glm::scale(mm, glm::vec3(bodyHeight, bodyHeight+headHeight, bodyHeight));
     Model box = Model(defaultShader, cubeMat, mm, c, containerTex, containerSpecTex);
-       
+    
+    //=====================================
+    //  Set shader values which do NOT change
+    //=====================================
+    
+    // Spotlight values
+    defaultShader.use();
+    defaultShader.setFloat("spotLight.constant", 1.0f);
+    defaultShader.setFloat("spotLight.linear", 0.045);
+    defaultShader.setFloat("spotLight.quadratic", 0.0075);
+    defaultShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(45.0f)));
+    defaultShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(60.0f)));
+     
+    //Directional Light
+    defaultShader.setVec3("dirLight.position", globalLightPos);
+    
+   
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -448,76 +464,64 @@ int main()
         
         if (spotlightOn)// light properties depending on if light is on or off
         {
+            defaultShader.use();
             defaultShader.setVec3("spotLight.ambient", light.getMaterial().getAmbient());
             defaultShader.setVec3("spotLight.diffuse", light.getMaterial().getDiffuse());
             defaultShader.setVec3("spotLight.specular", light.getMaterial().getSpecular());
+            defaultShader.setVec3("spotLight.position", light.getPosition() * 0.3f);
+            defaultShader.setVec3("spotLight.direction", light.Front);
+
         }
         else
         {
+            defaultShader.use();
             defaultShader.setVec3("spotLight.ambient", glm::vec3(0.0f));
             defaultShader.setVec3("spotLight.diffuse", glm::vec3(0.0f));
             defaultShader.setVec3("spotLight.specular", glm::vec3(0.0f));
+
+            
         }
-        // Rest of light values
-        defaultShader.setVec3("spotLight.position", light.getPosition() * 0.3f);
-        defaultShader.setVec3("spotLight.direction", light.Front);
-       
-        defaultShader.setFloat("spotLight.constant", 1.0f);
-        defaultShader.setFloat("spotLight.linear", 0.045);
-        defaultShader.setFloat("spotLight.quadratic", 0.0075);
-        defaultShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(45.0f)));
-        defaultShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(60.0f)));
         
-        //Directional Light
-        defaultShader.setVec3("dirLight.position", globalLightPos);
+        // Turn general light on or off
         if (generalLightOn)
         {
+            defaultShader.use();
             defaultShader.setVec3("dirLight.ambient", light.getMaterial().getAmbient());
             defaultShader.setVec3("dirLight.diffuse", light.getMaterial().getDiffuse());
             defaultShader.setVec3("dirLight.specular", light.getMaterial().getSpecular());
+
         }
         else
         {
+            defaultShader.use();
             defaultShader.setVec3("dirLight.ambient", glm::vec3(0.0f));
             defaultShader.setVec3("dirLight.diffuse", glm::vec3(0.0f));
             defaultShader.setVec3("dirLight.specular", glm::vec3(0.0f));
+
         }
-        
-        
-        
-        planeShader.use();
-        planeShader.setMat4("projection", projection);
-        planeShader.setMat4("view", view);
-        planeShader.setVec3("viewPos", camera.Position);
-        planeShader.setVec3("light.position", globalLightPos);
-        // light properties
-        planeShader.setVec3("light.ambient", light.getMaterial().getAmbient());
-        planeShader.setVec3("light.diffuse", light.getMaterial().getDiffuse());
-        planeShader.setVec3("light.specular", light.getMaterial().getSpecular());
-        float t = (getElapsedTime() - startTime)*0.1;
-        planeShader.setVec2("offset", glm::vec2(t- glm::floor(t), 0.0f));
-    
-        
         
         lightShader.use();
         lightShader.setMat4("projection", projection);
         lightShader.setMat4("view", view);
         
-        
-        
+        //render floor and background
         floor.render();
-        background.render();
         
+        // Calculate Time offset for background texture
+        float t = (getElapsedTime() - startTime)*0.1;
+        background.render(glm::vec2(t-glm::floor(t), 0.0f));
         
+        // Render light post + rotation animation
         lightPostRoot.draw();
         float lightDistanceFromPole = lightPostHeadLength + lightPostWidth + 1.0f;
         if (lightAnimate)
             rotateLight(light, lightDistanceFromPole);
         light.render();
     
+        // render box next to snowman
         box.render();
     
-        
+        // Render snowman + any animations
         if (rockSnowman)
             ;//headtransform.;// Rock the snowman
         snowmanRoot.draw();
@@ -525,7 +529,7 @@ int main()
         
         
         
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        // glfw: swap buffers and poll IO events
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
