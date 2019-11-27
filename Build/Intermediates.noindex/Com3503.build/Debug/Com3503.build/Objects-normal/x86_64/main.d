@@ -146,6 +146,10 @@ dependencies: \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/integer.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/detail/func_integer.inl \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/stb_image.h \
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/cube.hpp \
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/sphere.hpp \
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/twoTriangles.hpp \
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/camera.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/matrix_transform.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../mat4x4.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../vec2.hpp \
@@ -169,6 +173,8 @@ dependencies: \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../geometric.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../trigonometric.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../matrix.hpp \
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/mesh.hpp \
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/material.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/type_ptr.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../gtc/quaternion.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../gtc/constants.hpp \
@@ -243,12 +249,6 @@ dependencies: \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../mat4x2.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../mat4x3.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/type_ptr.inl \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/cube.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/sphere.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/twoTriangles.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/camera.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/mesh.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/material.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/model.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/light.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/string_cast.hpp \

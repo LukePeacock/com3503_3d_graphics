@@ -9,13 +9,14 @@
 //  Copyright © 2019 Luke Peacock. All rights reserved.
 //
 
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <shader.h>
 #include <stb_image.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+
+
 #include <iostream>
 #include <cube.hpp>
 #include <sphere.hpp>
@@ -41,9 +42,10 @@ float getElapsedTime();
 void rotateLight(Light &bulb, float distanceFromPole);
 
 
+
 TransformNode postHeadRotate = TransformNode("Post Head Rotate", glm::mat4(1.0f));
 glm::vec3 postBulbPosition;
-NameNode lightPostRoot = NameNode("Light Post Root");
+
 
 
 // global settings
@@ -132,10 +134,10 @@ int main()
     TwoTriangles planeData;
     // load and create a texture
     // -------------------------
-    unsigned int snowDiffTex = loadTexture("assets/snow.png");
-    unsigned int snow2DiffTex = loadTexture("assets/snow2.png");
+    unsigned int snowDiffTex = loadTexture("assets/snow2.jpg");
+    unsigned int snow2DiffTex = loadTexture("assets/snow.jpeg");
     unsigned int metalTex = loadTexture("assets/metal.jpg");
-    unsigned int treesTex = loadTexture("assets/trees.png");
+    unsigned int treesTex = loadTexture("assets/trees.jpg");
     unsigned int buttonTex = loadTexture("assets/stone.jpg");
     unsigned int containerTex = loadTexture("assets/container.png");
     unsigned int containerSpecTex = loadTexture("assets/container_specular.png");
@@ -181,7 +183,7 @@ int main()
     float lightPostHeadLength = 2.0f;
     
     // Generate the nodes
-    lightPostRoot = NameNode("root");
+    NameNode lightPostRoot = NameNode("Light Post Root");
         // Root translations
         TransformNode lightPostMoveTranslate = TransformNode("light post transform", glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, 0, 5.0f)));
     
@@ -519,8 +521,6 @@ int main()
 
     // Dipose of resources now they're no longer needed:
     // -------------------------------------------------------------
-    //testCube.dispose();
-   // testCube2.dispose();
     sphere.dispose();
     light.dispose();
     button.dispose();

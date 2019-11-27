@@ -16,7 +16,6 @@
 		A3044A35236208EB00D262F0 /* default_shader.vs in CopyFiles */ = {isa = PBXBuildFile; fileRef = A30447282362034A00D262F0 /* default_shader.vs */; };
 		A3044A36236208ED00D262F0 /* default_shader.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = A30447292362035500D262F0 /* default_shader.frag */; };
 		A3044A3923620BF500D262F0 /* stb_image_implementation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A3823620BF500D262F0 /* stb_image_implementation.cpp */; };
-		A3044A43236219A100D262F0 /* trees.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3044A3F23620D1E00D262F0 /* trees.png */; };
 		A3044A492362EF0A00D262F0 /* cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A472362EF0A00D262F0 /* cube.cpp */; };
 		A3044A4C2362F26A00D262F0 /* mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A4A2362F26A00D262F0 /* mesh.cpp */; };
 		A3044A4F2362F97500D262F0 /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A4D2362F97500D262F0 /* material.cpp */; };
@@ -24,14 +23,15 @@
 		A3044A5C2363092300D262F0 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3044A5B2363092300D262F0 /* camera.cpp */; };
 		A3044A5E2363381200D262F0 /* container_specular.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3044A5D2363380F00D262F0 /* container_specular.png */; };
 		A336BFB4238D560300D10B26 /* wool.jpeg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A336BFB3238D560000D10B26 /* wool.jpeg */; };
+		A336BFB8238EADD400D10B26 /* snow.jpeg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A336BFB7238EADB800D10B26 /* snow.jpeg */; };
+		A336BFBA238EAF6100D10B26 /* snow2.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A336BFB9238EAF5700D10B26 /* snow2.jpg */; };
+		A336BFBC238EB24100D10B26 /* trees.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A336BFBB238EB23C00D10B26 /* trees.jpg */; };
 		A340B0B3236B071B006AD26C /* sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0B1236B071B006AD26C /* sphere.cpp */; };
 		A340B0B6236B0BA5006AD26C /* twoTriangles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0B4236B0BA5006AD26C /* twoTriangles.cpp */; };
 		A340B0B9236C683B006AD26C /* modelNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0B7236C683B006AD26C /* modelNode.cpp */; };
 		A340B0BC236C6972006AD26C /* sgNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0BA236C6972006AD26C /* sgNode.cpp */; };
 		A340B0BF236C739C006AD26C /* transformNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0BD236C739C006AD26C /* transformNode.cpp */; };
 		A340B0C2236C75B8006AD26C /* nameNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0C0236C75B8006AD26C /* nameNode.cpp */; };
-		A36A084F238546AA0016AE48 /* snow.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A084E238546A70016AE48 /* snow.png */; };
-		A36A0851238549AE0016AE48 /* snow2.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A0850238549AB0016AE48 /* snow2.png */; };
 		A36A085323854A6A0016AE48 /* metal.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A085223854A650016AE48 /* metal.jpg */; };
 		A36A085F23858E710016AE48 /* stone.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A085E23858E6F0016AE48 /* stone.jpg */; };
 		A36A0861238592FC0016AE48 /* container.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A0860238592F10016AE48 /* container.png */; };
@@ -60,14 +60,14 @@
 			dstPath = assets;
 			dstSubfolderSpec = 7;
 			files = (
+				A336BFBC238EB24100D10B26 /* trees.jpg in CopyFiles */,
+				A336BFBA238EAF6100D10B26 /* snow2.jpg in CopyFiles */,
+				A336BFB8238EADD400D10B26 /* snow.jpeg in CopyFiles */,
 				A336BFB4238D560300D10B26 /* wool.jpeg in CopyFiles */,
 				A36A0861238592FC0016AE48 /* container.png in CopyFiles */,
 				A36A085F23858E710016AE48 /* stone.jpg in CopyFiles */,
 				A36A085323854A6A0016AE48 /* metal.jpg in CopyFiles */,
-				A36A0851238549AE0016AE48 /* snow2.png in CopyFiles */,
-				A36A084F238546AA0016AE48 /* snow.png in CopyFiles */,
 				A3044A5E2363381200D262F0 /* container_specular.png in CopyFiles */,
-				A3044A43236219A100D262F0 /* trees.png in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,7 +464,6 @@
 		A3044A31236205F800D262F0 /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
 		A3044A3723620BDD00D262F0 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		A3044A3823620BF500D262F0 /* stb_image_implementation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stb_image_implementation.cpp; sourceTree = "<group>"; };
-		A3044A3F23620D1E00D262F0 /* trees.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trees.png; sourceTree = "<group>"; };
 		A3044A452362EE9300D262F0 /* cube.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cube.hpp; sourceTree = "<group>"; };
 		A3044A472362EF0A00D262F0 /* cube.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cube.cpp; sourceTree = "<group>"; };
 		A3044A4A2362F26A00D262F0 /* mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mesh.cpp; sourceTree = "<group>"; };
@@ -477,6 +476,9 @@
 		A3044A5B2363092300D262F0 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
 		A3044A5D2363380F00D262F0 /* container_specular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = container_specular.png; sourceTree = "<group>"; };
 		A336BFB3238D560000D10B26 /* wool.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wool.jpeg; sourceTree = "<group>"; };
+		A336BFB7238EADB800D10B26 /* snow.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = snow.jpeg; sourceTree = "<group>"; };
+		A336BFB9238EAF5700D10B26 /* snow2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = snow2.jpg; sourceTree = "<group>"; };
+		A336BFBB238EB23C00D10B26 /* trees.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = trees.jpg; sourceTree = "<group>"; };
 		A340B0B1236B071B006AD26C /* sphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sphere.cpp; sourceTree = "<group>"; };
 		A340B0B2236B071B006AD26C /* sphere.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sphere.hpp; sourceTree = "<group>"; };
 		A340B0B4236B0BA5006AD26C /* twoTriangles.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = twoTriangles.cpp; sourceTree = "<group>"; };
@@ -489,10 +491,7 @@
 		A340B0BE236C739C006AD26C /* transformNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transformNode.hpp; sourceTree = "<group>"; };
 		A340B0C0236C75B8006AD26C /* nameNode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = nameNode.cpp; sourceTree = "<group>"; };
 		A340B0C1236C75B8006AD26C /* nameNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = nameNode.hpp; sourceTree = "<group>"; };
-		A36A0849238541780016AE48 /* snow_norm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = snow_norm.jpg; sourceTree = "<group>"; };
-		A36A084A238541780016AE48 /* snow_diff.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = snow_diff.jpg; sourceTree = "<group>"; };
-		A36A084E238546A70016AE48 /* snow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = snow.png; path = snow/snow.png; sourceTree = "<group>"; };
-		A36A0850238549AB0016AE48 /* snow2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = snow2.png; path = snow/snow2.png; sourceTree = "<group>"; };
+		A36A084E238546A70016AE48 /* snow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = snow.png; sourceTree = "<group>"; };
 		A36A085223854A650016AE48 /* metal.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = metal.jpg; sourceTree = "<group>"; };
 		A36A085E23858E6F0016AE48 /* stone.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stone.jpg; sourceTree = "<group>"; };
 		A36A0860238592F10016AE48 /* container.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = container.png; sourceTree = "<group>"; };
@@ -1030,26 +1029,17 @@
 		A3044A3E23620D1E00D262F0 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				A336BFBB238EB23C00D10B26 /* trees.jpg */,
+				A336BFB9238EAF5700D10B26 /* snow2.jpg */,
+				A336BFB7238EADB800D10B26 /* snow.jpeg */,
 				A336BFB3238D560000D10B26 /* wool.jpeg */,
 				A36A0860238592F10016AE48 /* container.png */,
 				A36A085E23858E6F0016AE48 /* stone.jpg */,
 				A36A085223854A650016AE48 /* metal.jpg */,
-				A36A0850238549AB0016AE48 /* snow2.png */,
 				A36A084E238546A70016AE48 /* snow.png */,
-				A36A0848238541780016AE48 /* snow */,
 				A3044A5D2363380F00D262F0 /* container_specular.png */,
-				A3044A3F23620D1E00D262F0 /* trees.png */,
 			);
 			path = assets;
-			sourceTree = "<group>";
-		};
-		A36A0848238541780016AE48 /* snow */ = {
-			isa = PBXGroup;
-			children = (
-				A36A0849238541780016AE48 /* snow_norm.jpg */,
-				A36A084A238541780016AE48 /* snow_diff.jpg */,
-			);
-			path = snow;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
