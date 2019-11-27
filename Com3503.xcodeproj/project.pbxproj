@@ -31,7 +31,6 @@
 		A340B0B9236C683B006AD26C /* modelNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0B7236C683B006AD26C /* modelNode.cpp */; };
 		A340B0BC236C6972006AD26C /* sgNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0BA236C6972006AD26C /* sgNode.cpp */; };
 		A340B0BF236C739C006AD26C /* transformNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0BD236C739C006AD26C /* transformNode.cpp */; };
-		A340B0C2236C75B8006AD26C /* nameNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0C0236C75B8006AD26C /* nameNode.cpp */; };
 		A36A085323854A6A0016AE48 /* metal.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A085223854A650016AE48 /* metal.jpg */; };
 		A36A085F23858E710016AE48 /* stone.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A085E23858E6F0016AE48 /* stone.jpg */; };
 		A36A0861238592FC0016AE48 /* container.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A36A0860238592F10016AE48 /* container.png */; };
@@ -489,7 +488,6 @@
 		A340B0BB236C6972006AD26C /* sgNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sgNode.hpp; sourceTree = "<group>"; };
 		A340B0BD236C739C006AD26C /* transformNode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = transformNode.cpp; sourceTree = "<group>"; };
 		A340B0BE236C739C006AD26C /* transformNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = transformNode.hpp; sourceTree = "<group>"; };
-		A340B0C0236C75B8006AD26C /* nameNode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = nameNode.cpp; sourceTree = "<group>"; };
 		A340B0C1236C75B8006AD26C /* nameNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = nameNode.hpp; sourceTree = "<group>"; };
 		A36A084E238546A70016AE48 /* snow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = snow.png; sourceTree = "<group>"; };
 		A36A085223854A650016AE48 /* metal.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = metal.jpg; sourceTree = "<group>"; };
@@ -552,7 +550,6 @@
 				A340B0B7236C683B006AD26C /* modelNode.cpp */,
 				A340B0BA236C6972006AD26C /* sgNode.cpp */,
 				A340B0BD236C739C006AD26C /* transformNode.cpp */,
-				A340B0C0236C75B8006AD26C /* nameNode.cpp */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -1104,7 +1101,6 @@
 				A340B0B3236B071B006AD26C /* sphere.cpp in Sources */,
 				A3044A3923620BF500D262F0 /* stb_image_implementation.cpp in Sources */,
 				A340B0BC236C6972006AD26C /* sgNode.cpp in Sources */,
-				A340B0C2236C75B8006AD26C /* nameNode.cpp in Sources */,
 				A3044A4F2362F97500D262F0 /* material.cpp in Sources */,
 				A3044A522362FF5500D262F0 /* model.cpp in Sources */,
 				A3044A5C2363092300D262F0 /* camera.cpp in Sources */,

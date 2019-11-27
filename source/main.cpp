@@ -3,20 +3,19 @@
 //  COM3503
 //
 //  Created by Luke Peacock on 24/10/2019.
+//  lpeacock1@sheffield.ac.uk
+//
 //  Some code based on Dr Steve Maddock's Tutorial
 //  Based tutorials by Joey De Vries': https://learnopengl.com
 //
 //  Copyright © 2019 Luke Peacock. All rights reserved.
 //
 
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <shader.h>
 #include <stb_image.h>
 #include <glm/glm.hpp>
-
-
 #include <iostream>
 #include <cube.hpp>
 #include <sphere.hpp>
@@ -38,7 +37,6 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 unsigned int loadTexture(char const * path);
-float getElapsedTime();
 void rotateLight(Light &bulb, float distanceFromPole);
 
 
@@ -449,14 +447,10 @@ int main()
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
         
-        // process input
-        // -----
-        processInput(window);
-
-        // render
-        // ------
+    
+        // clear buffer bits
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear colour and depth buffer bits
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Set Projection and View Matrices in Shaders
         //-------------------------------------------
@@ -487,12 +481,15 @@ int main()
         lightShader.setMat4("projection", projection);
         lightShader.setMat4("view", view);
         
+        //=========
+        // RENDER
+        //=========
         
         //render floor and background
         floor.render();
         
         // Calculate Time offset for background texture
-        float t = (getElapsedTime() - startTime)*0.1;
+        float t = (glfwGetTime() - startTime)*0.1;
         background.render(glm::vec2(t-glm::floor(t), 0.0f));
         
         // Render light post + rotation animation
@@ -514,29 +511,33 @@ int main()
         
         
         // glfw: swap buffers and poll IO events
-        // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
-        glfwPollEvents();
+        glfwPollEvents();   // all callbacks
+        processInput(window); // process continuous input
     }
 
-    // Dipose of resources now they're no longer needed:
-    // -------------------------------------------------------------
+    // Dipose of resources
     sphere.dispose();
     light.dispose();
     button.dispose();
     cube.dispose();
     box.dispose();
+    
     // Terminate GLFW, clearing all previously allocated GLFW resources.
-    // ------------------------------------------------------------------
     glfwTerminate();
     return 0;
 }
 
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// Can Cause issues with keys begin registered multiple times, hence the additional `key_callback` function
-// ---------------------------------------------------------------------------------------------------------
+
+/*
+ * Process the user input. Query GLFW whether relevant keys are pressed/released during frame. React accordingly. Causes issues with keys being registered multiple times, hence additional function `key_callback` to handle keys which should only be registered once.
+ *
+ * @param window: pointer to the window object.
+ *
+ */
 void processInput(GLFWwindow *window)
 {
+    // IF user in control of camera, process relevant key
     if (userCam) {
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
             camera.ProcessKeyboard(FORWARD, deltaTime);
@@ -553,6 +554,16 @@ void processInput(GLFWwindow *window)
     }
 }
 
+/*
+ * Keyboard callback. Whenever key is pressed, call function
+ *
+ * @param window: pointer to window object
+ * @param key: integer stating which key token was changed
+ * @param scancode: unique field for every key on keyboard (platform specific)
+ * @param action: integer stating which action was taken (pressed, released, etc.)
+ * @param mods: any special key modifiers
+ *
+ */
 // glfw: key callback function, causes event once per press of a key
 // -----------------------------------------------------------------
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -574,11 +585,18 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         generalLightOn = 1 - generalLightOn;
 }
 
-// glfw: whenever the mouse moves, this callback is called
-// If user is in control of camera, allows camera direction change
-// ---------------------------------------------------------------
+
+/*
+ * Mouse callback. Activated whenever mouse moves. Allows user to look around.
+ *
+ * @param window: pointer to the window object
+ * @param xpos: new x position of the mouse
+ * @param: ypos: new y position of the mouse
+ *
+ */
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
+    // if user is in control of camera, process movement
     if (userCam)
     {
         if (firstMouse)
@@ -597,27 +615,43 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     }
 }
 
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// If user is in control of camera, allows user to zoom view using scroll
-// ----------------------------------------------------------------------
+/*
+ * Callback for when user scrolls mousewheel. Allows user to zoom using scroll
+ *
+ * @param window: pointer to the window object
+ * @param xoffset: offset of new x position
+ * @param yoffset: offset of new y position
+ *
+ */
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     if (userCam)
         camera.ProcessMouseScroll(yoffset);
 }
 
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
+
+/*
+ * Callback for changing viewport size when window resized
+ *
+ * @param window: pointer to the window object
+ * @param width: new width of window
+ * @param height: new height of window
+ *
+ */
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    // make sure the viewport matches the new window dimensions; note that width and
-    // height will be significantly larger than specified on retina displays.
+    // make viewport dimensions the new window dimensions
+    // NOTE: width height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
 
-// utility function for loading a 2D texture from file
-
-// ---------------------------------------------------
+/*
+ * utility function for loading a 2D texture from file
+ *
+ * @param path: the filepath for the image being loaded
+ *
+ * @return unsigned int: the ID of the texture which was loaded.
+ */
 unsigned int loadTexture(char const * path)
 {
     unsigned int textureID;
@@ -655,13 +689,15 @@ unsigned int loadTexture(char const * path)
     return textureID;
 }
 
-
-float getElapsedTime(){
-    return glfwGetTime();
-}
-
+/*
+ *  Rotate the lamp post and bulb around the post
+ *
+ * @param &bulb: refernce to the bulb object, allows function to edit bulb parameters
+ * @param: bulbDistanceFromPole: The radius at which the bulb should rotate around the pole
+ *
+ */
 void rotateLight(Light &bulb, float bulbDistanceFromPole){
-    float elapsedTime = getElapsedTime()-startTime;
+    float elapsedTime = glfwGetTime()-startTime;
     
     // Rotate the lamp post
     float rotateAngle = -elapsedTime* 50; // rotate anti-clockwise

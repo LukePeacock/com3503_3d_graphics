@@ -3,7 +3,11 @@
 //  Com3503
 //
 //  Created by Luke on 01/11/2019.
+//  lpeacock1@sheffield.ac.uk
+//
 //  Copyright © 2019 Luke Peacock. All rights reserved.
+//
+//  Based on Dr. Steve Maddock's Tutorials, updated from Java to C++ by Luke Peacock.
 //
 
 #ifndef sgNode_hpp
@@ -19,7 +23,6 @@ protected:
     std::vector<SGNode*> children;
     glm::mat4 worldTransform;
     std::string getIndentString(int indent);
-    virtual const char* classname();
   
 public:
     SGNode(char const * name);

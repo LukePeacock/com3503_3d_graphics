@@ -3,7 +3,12 @@
 //  Com3503
 //
 //  Created by Luke on 25/10/2019.
+//  lpeacock1@sheffield.ac.uk
+//
 //  Copyright © 2019 Luke Peacock. All rights reserved.
+//
+//  Based on Work by Joey De Vries: https://learnopengl.com
+//  Alterations made by Luke Peacock
 //
 
 #include "camera.hpp"

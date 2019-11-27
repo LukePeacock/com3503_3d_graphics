@@ -3,6 +3,8 @@
 //  Com3503
 //
 //  Created by Luke on 31/10/2019.
+//  lpeacock1@sheffield.ac.uk
+//
 //  Copyright © 2019 Luke Peacock. All rights reserved.
 //
 
@@ -23,6 +25,8 @@ public:
         0, 1, 2,
         0, 2, 3
     };
+    
+    // Functions for creating a mesh
     float * getVertices();
     unsigned int * getIndices();
     int getVertexSize();

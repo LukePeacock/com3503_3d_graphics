@@ -3,7 +3,12 @@
 //  Com3503
 //
 //  Created by Luke on 25/10/2019.
+//  lpeacock1@sheffield.ac.uk
+//
 //  Copyright © 2019 Luke Peacock. All rights reserved.
+//
+//  Based on Dr. Steve Maddock's Tutorials, updated from Java to C++ by Luke Peacock.
+//  Updates for assignment also by Luke Peacock.
 //
 
 #ifndef light_hpp

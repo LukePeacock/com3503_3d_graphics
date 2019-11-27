@@ -1,7 +1,7 @@
 # COM3503 3D Graphics Assignment
 This folder contains all files necessary to compile and execute the COM3503 3D Graphics assignment. All code was written by myself, Luke Peacock, unless otherwise stated.
 
-Scene graph code and model, mesh, material code was heavily based on code from the Lab class tutorials. However, most of it needed updating to work within C++ (primarily adding pointer and references rather than copying objects). Several functions needed changing to use pointers and/or references in order to make the code more efficient and also to preserve the hierarchy of the scene graphs.
+Scene graph code and model, mesh, material code was heavily based on code from the Lab class tutorials. However, almost all of it needed updating to work within C++. This primarily involved adding pointer and references rather than copying objects. Several functions needed changing to use pointers and/or references in order to make the code more efficient and also to preserve the hierarchy of the scene graphs. I feel it is worth mentioning that a large portion of development time involved editing the code to work in C++. There are many differences betwen Java and C++ which altered the way the code behaved. You will see lots of new functions that seem unrelated to the assignment in several files, these are necessary to be able to run the code in C++. I believe this should be taken into consideration.
 
 
 ## File Structure
