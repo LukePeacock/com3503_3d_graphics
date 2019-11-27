@@ -1,5 +1,7 @@
 # COM3503 3D Graphics Assignment
-This folder contains all files necessary to compile and execute the COM3503 3D Graphics assignment. All code was written by myself, Luke Peacock, unless otherwise stated in the file.
+This folder contains all files necessary to compile and execute the COM3503 3D Graphics assignment. All code was written by myself, Luke Peacock, unless otherwise stated.
+
+Scene graph code and model, mesh, material code was heavily based on code from the Lab class tutorials. However, most of it needed updating to work within C++ (primarily adding pointer and references rather than copying objects). Several functions needed changing to use pointers and/or references in order to make the code more efficient and also to preserve the hierarchy of the scene graphs.
 
 
 ## File Structure
