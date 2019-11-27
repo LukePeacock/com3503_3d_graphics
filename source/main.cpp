@@ -52,7 +52,11 @@ const unsigned int SCR_HEIGHT = 600;
 const float NEAR_PLANE = 1.0f;
 const float FAR_PLANE = 50.0f;
 
-bool animate = false;
+// Booleans for different animations and user controls
+static bool lightAnimate = true;
+static bool spotlightOn = true;
+static bool generalLightOn = true;
+
 static unsigned char wireframe;         // Allows scene to be rendered in wireframe
 static bool userCam = false;            // Gives user control of camera
 
@@ -203,6 +207,7 @@ int main()
         // Calculate bulb position
         postBulbPosition = glm::vec3(-5.0f, lightPostHeight + lightPostWidth/2, 5.0f);
         postBulbPosition = postBulbPosition / glm::vec3(0.3);
+        light.Front = glm::vec3(1,0,0);
         light.setPosition(postBulbPosition);
         
     
@@ -398,18 +403,25 @@ int main()
         // Projection
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, NEAR_PLANE, FAR_PLANE);
         
+        // Set view, projection, and view position for default shader
         defaultShader.use();
         defaultShader.setMat4("projection", projection);
         defaultShader.setMat4("view", view);
         defaultShader.setVec3("viewPos", camera.Position);
-        //defaultShader.setVec3("light.position", light.getPosition());
-        //defaultShader.setVec3("light.position", camera.Position);
-        // light properties
-        defaultShader.setVec3("spotLight.ambient", glm::vec3(1.0f));
-        defaultShader.setVec3("spotLight.diffuse", glm::vec3(1.0f));
-        defaultShader.setVec3("spotLight.specular", glm::vec3(1.0f));
-       // spotLight
         
+        if (spotlightOn)// light properties depending on if light is on or off
+        {
+            defaultShader.setVec3("spotLight.ambient", light.getMaterial().getAmbient());
+            defaultShader.setVec3("spotLight.diffuse", light.getMaterial().getDiffuse());
+            defaultShader.setVec3("spotLight.specular", light.getMaterial().getSpecular());
+        }
+        else
+        {
+            defaultShader.setVec3("spotLight.ambient", glm::vec3(0.0f));
+            defaultShader.setVec3("spotLight.diffuse", glm::vec3(0.0f));
+            defaultShader.setVec3("spotLight.specular", glm::vec3(0.0f));
+        }
+        // Rest of light values
         defaultShader.setVec3("spotLight.position", light.getPosition() * 0.3f);
         defaultShader.setVec3("spotLight.direction", light.Front);
         std::cout << "Camera Front" << glm::to_string(camera.Front) << std::endl;
@@ -419,10 +431,21 @@ int main()
         defaultShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(45.0f)));
         defaultShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(60.0f)));
         
+        //Directional Light
         defaultShader.setVec3("dirLight.position", globalLightPos);
-        defaultShader.setVec3("dirLight.ambient", light.getMaterial().getAmbient());
-        defaultShader.setVec3("dirLight.diffuse", light.getMaterial().getDiffuse());
-        defaultShader.setVec3("dirLight.specular", light.getMaterial().getSpecular());
+        if (generalLightOn)
+        {
+            defaultShader.setVec3("dirLight.ambient", light.getMaterial().getAmbient());
+            defaultShader.setVec3("dirLight.diffuse", light.getMaterial().getDiffuse());
+            defaultShader.setVec3("dirLight.specular", light.getMaterial().getSpecular());
+        }
+        else
+        {
+            defaultShader.setVec3("dirLight.ambient", glm::vec3(0.0f));
+            defaultShader.setVec3("dirLight.diffuse", glm::vec3(0.0f));
+            defaultShader.setVec3("dirLight.specular", glm::vec3(0.0f));
+        }
+        
         
         
         planeShader.use();
@@ -451,7 +474,7 @@ int main()
         
         lightPostRoot.draw();
         float lightDistanceFromPole = lightPostHeadLength + lightPostWidth + 1.0f;
-        if (animate)
+        if (lightAnimate)
             rotateLight(light, lightDistanceFromPole);
         light.render();
     
@@ -509,16 +532,21 @@ void processInput(GLFWwindow *window)
 // -----------------------------------------------------------------
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+    // Change to wireframe view
     if (key == GLFW_KEY_F && action == GLFW_PRESS) // render wireframe with F
         glPolygonMode(GL_FRONT_AND_BACK, (wireframe = 1 - wireframe) ? GL_LINE : GL_FILL);
-    if (key == GLFW_KEY_Q && action == GLFW_PRESS) // render wireframe with F
-        
-        // tell GLFW to capture our mouse
+    //
+    if (key == GLFW_KEY_Q && action == GLFW_PRESS) // Set user cam and capture mouse
         glfwSetInputMode(window, GLFW_CURSOR,(userCam = !userCam) ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+    
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) // Exit program with escape
         glfwSetWindowShouldClose(window, true);
-    if (key == GLFW_KEY_R && action == GLFW_PRESS) // render wireframe with F
-        animate = 1 - animate;
+    if (key == GLFW_KEY_R && action == GLFW_PRESS) // Turn off spotlight animation with R
+        lightAnimate = 1 - lightAnimate;
+    if (key == GLFW_KEY_L && action == GLFW_PRESS) // Turn off spotlight light with L
+           spotlightOn = 1 - spotlightOn;
+    if (key == GLFW_KEY_K && action == GLFW_PRESS) // Turn off general light with K
+        generalLightOn = 1 - generalLightOn;
 }
 
 // glfw: whenever the mouse moves, this callback is called
@@ -610,12 +638,14 @@ float getElapsedTime(){
 void rotateLight(Light &bulb, float bulbDistanceFromPole){
     float elapsedTime = getElapsedTime()-startTime;
     
+    // Rotate the lamp post
     float rotateAngle = -elapsedTime* 50; // rotate anti-clockwise
     glm::mat4 transform = glm::rotate(glm::mat4(1.0f), glm::radians(90.f), glm::vec3(1, 0, 0));     // Rotate continuouslt
     transform = glm::rotate(transform, glm::radians(rotateAngle), glm::vec3(0, 0, 1));              // Rotate to lie flat
     postHeadRotate.setTransform(transform);
     postHeadRotate.ModelNode::update();     //Update children
     
+    // Rotate the actual bulb
     float bulbX = bulbDistanceFromPole * glm::sin(glm::radians(elapsedTime*50));
     float bulbZ = bulbDistanceFromPole * + glm::cos(glm::radians(elapsedTime*50));
     bulb.setPosition(postBulbPosition + glm::vec3(bulbX, 0.0, bulbZ));
