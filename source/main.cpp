@@ -406,10 +406,11 @@ int main()
     // =============
     // SPECULAR BOX NEXT TO SNOWMAN
     // ==============
-    // Box Next to Snowman
     cubeMat.setSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
-    mm = glm::scale(glm::mat4(1.0f), glm::vec3(bodyHeight+headHeight));
-    mm = glm::translate(mm, glm::vec3(-1.0f, 0.5f, 0.0f));
+    cubeMat.setShininess(128.0f);
+    
+    mm = glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, 0.5 * (bodyHeight + headHeight), 0.0f));
+    mm = glm::scale(mm, glm::vec3(bodyHeight, bodyHeight+headHeight, bodyHeight));
     Model box = Model(defaultShader, cubeMat, mm, c, containerTex, containerSpecTex);
        
     // render loop
@@ -460,7 +461,7 @@ int main()
         // Rest of light values
         defaultShader.setVec3("spotLight.position", light.getPosition() * 0.3f);
         defaultShader.setVec3("spotLight.direction", light.Front);
-        std::cout << "Camera Front" << glm::to_string(camera.Front) << std::endl;
+       
         defaultShader.setFloat("spotLight.constant", 1.0f);
         defaultShader.setFloat("spotLight.linear", 0.045);
         defaultShader.setFloat("spotLight.quadratic", 0.0075);
