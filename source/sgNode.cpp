@@ -80,4 +80,3 @@ void SGNode::draw()
         children.at(i)->draw();
     }
 }
-
