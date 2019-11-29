@@ -39,6 +39,7 @@ void processInput(GLFWwindow *window);
 unsigned int loadTexture(char const * path);
 void rotateLight(Light &bulb, float distanceFromPole);
 void slideSnowman(TransformNode *snowmanBaseTranslate, bool dir, float *xPosition);
+void rockSnowman(TransformNode *snowmanHeadTransform, bool dir, glm::vec3 *originalPos, glm::vec3 *scale);
 
 
 TransformNode postHeadRotate = TransformNode("Post Head Rotate", glm::mat4(1.0f));
@@ -60,7 +61,12 @@ static bool slideFbSnowman = false;
 static bool slideSsSnowman = false;
 static bool slideReturn = false;
 
-static bool rockSnowman = false;
+static bool rockFbSnowman = false;
+static bool rockSsSnowman = false;
+static bool rockReturn = false;
+
+
+
 static bool rollSnowman = false;
 
 static bool rockRollSlide = false;
@@ -261,6 +267,9 @@ int main()
     float hatHeight = 0.4f;
     float hatWidth = 1.0f;
     float hatSideDepth = 0.2f;
+    glm::vec3 headPos = glm::vec3(0, bodyHeight/2+headHeight/2, 0);
+    glm::vec3 headRockAxis = headPos - glm::vec3(0, bodyHeight/2 + headHeight/2, 0);
+    glm::vec3 headScale = glm::vec3(headHeight);
     glm::vec3 eyePos = glm::vec3(headHeight/4-buttonSize/2, buttonSize/4, headHeight/4-buttonSize/4);
     glm::vec3 hatSidePos = glm::vec3(headHeight/4, hatHeight/2, 0);
     
@@ -295,11 +304,13 @@ int main()
     //HEAD
     NameNode head = NameNode("head");
         mm = glm::mat4(1.0f);
-        mm = glm::translate(mm, glm::vec3(0, bodyHeight/2+headHeight/2, 0));
-        mm = glm::scale(mm, glm::vec3(headHeight));
+
+        mm = glm::translate(mm, headPos);
+        mm = glm::scale(mm, headScale);
         TransformNode headTransform = TransformNode("head transform", mm);
         ModelNode headShape = ModelNode("Sphere(head)", sphere);
     
+   
     //FACE
     NameNode face = NameNode("face");
         TransformNode faceTransform = TransformNode("face Transform", glm::translate(glm::mat4(1.0f), glm::vec3(0)));
@@ -512,6 +523,10 @@ int main()
             slideSnowman(&snowmanMoveTranslate, true, &xPosition);
         else if (slideSsSnowman)
             slideSnowman(&snowmanMoveTranslate, false, &xPosition);
+        else if (rockFbSnowman)
+            rockSnowman(&headTransform, true, &headPos, &headScale);
+        else if (rockSsSnowman)
+            rockSnowman(&headTransform, false, &headPos, &headScale);
         //headtransform.;// Rock the snowman
         snowmanRoot.draw();
         
@@ -607,6 +622,20 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             animationPlaying = true;
             slideReturn = false;
             std::cout << "sliding sideway" << std::endl;
+        }
+        if (key == GLFW_KEY_H && action == GLFW_PRESS)  // Slide forward and backwards using G
+        {
+            rockFbSnowman = true;
+            animationPlaying = true;
+            rockReturn = false;
+            std::cout << "Rock forward" << std::endl;
+        }
+        if (key == GLFW_KEY_Y && action == GLFW_PRESS)  // Slide left and right using T
+        {
+            rockSsSnowman = true;
+            animationPlaying = true;
+            rockReturn = false;
+            std::cout << "Rock sideway" << std::endl;
         }
     }
 }
@@ -742,6 +771,15 @@ void rotateLight(Light &bulb, float bulbDistanceFromPole){
    
 }
 
+/*
+ * Slide the snowman in chosen direction twice. Complete one full movement on each side of original position
+ * Mid -> Left -> Mid -> Right -> Mid -> Stop;
+ *
+ * @param snowmanBaseTransform: a pointer to the base transform transform node
+ * @param dir : boolean for direction; true is forward and backwards, fasle is sidways
+ * @param xPosition : a pointer to the x position varaible
+ *
+ */
 void slideSnowman(TransformNode *snowmanBaseTransform, bool dir, float *xPosition){
     float elapsedTime = glfwGetTime()-startTime;
     float distance = glm::sin(glm::radians(elapsedTime*50));
@@ -768,3 +806,45 @@ void slideSnowman(TransformNode *snowmanBaseTransform, bool dir, float *xPositio
     if (distance >= 0.99f) slideReturn = true;  //return true if snowman is on return to original position
 }
 
+/*
+ * Rock the snowman in chosen direction twice. Complete one full movement on each side of original position
+ * Mid -> Left -> Mid -> Right -> Mid -> Stop;
+ *
+ * @param snowmanHeadTransform: a pointer to the head transform' transform node
+ * @param dir : boolean for direction; true is forward and backwards, fasle is sidways
+ * @param originalPos : a pointer to the original position of the head
+ * @param scale: pointer to the scale of the head -> stored in variable
+ *
+ */
+void rockSnowman(TransformNode *snowmanHeadTransform, bool dir, glm::vec3 *originalPos, glm::vec3 *scale){
+    float elapsedTime = glfwGetTime()-startTime;
+    float distance = glm::sin(glm::radians(elapsedTime*50));
+    
+    // Exit function if animation has been played
+    if (rockReturn && abs(distance) <= 0.02f){ // When animation is on final rock, and distance less than 0.02; stop the animation and exit function
+        animationPlaying = false;
+        rockFbSnowman = false;
+        rockSsSnowman = false;
+        return;
+    }
+    else if (animationPlaying)
+    {
+        glm::mat4 mm = glm::mat4(1.0f); // Init model matrix
+    
+        // Rotate in appropriate direction
+        if (dir)
+            mm = glm::rotate(mm, distance, glm::vec3(0, 0, 1));
+            //mm = glm::translate(mm, glm::vec3(0, 0, distance));
+        else
+            mm = glm::rotate(mm, distance, glm::vec3(1, 0, 0));
+        
+        // Translate and scale to appropriate location.
+        mm = glm::translate(mm, *originalPos);              //*originalPos points to contents of originalPos variable
+        mm = glm::scale(mm, *scale);
+        //Apply transform and update children
+        snowmanHeadTransform->setTransform(mm);
+        snowmanHeadTransform->ModelNode::update();
+    }
+    
+    if (distance >= 0.99f) rockReturn = true;  //return true if snowman is on return to original position
+}
