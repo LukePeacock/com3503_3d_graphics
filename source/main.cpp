@@ -39,9 +39,9 @@ void processInput(GLFWwindow *window);
 unsigned int loadTexture(char const * path);
 void rotateLight(Light &bulb, float distanceFromPole);
 void slideSnowman(TransformNode *snowmanBaseTranslate, bool dir, float *xPosition);
-void rockSnowman(TransformNode *snowmanHeadTransform, bool dir, glm::vec3 *originalPos, glm::vec3 *scale);
+void rockSnowman(TransformNode *snowmanBaseTransform, bool dir, glm::vec3 *originalPos, glm::vec3 *scale);
 void rollSnowman(TransformNode *snowmanHeadTransform, bool dir, glm::vec3 *originalPos, glm::vec3 *scale);
-
+void resetPosition(TransformNode *baseTransform, float *xPosition, TransformNode *headTransform, glm::vec3 *hPos, glm::vec3 *hScale);
 
 TransformNode postHeadRotate = TransformNode("Post Head Rotate", glm::mat4(1.0f));
 glm::vec3 postBulbPosition;
@@ -70,8 +70,10 @@ static bool rollSnowmanHead = false;
 static bool rollStart = false;
 static bool rollEnding = false;
 
-static bool rockRollSlide = false;
 static bool resetSnowman = false;
+
+static bool rockRollSlide = false;
+
 static bool animationPlaying = false;
 
 static unsigned char wireframe;         // Allows scene to be rendered in wireframe
@@ -520,6 +522,8 @@ int main()
     
         glm::vec3 pos = glm::vec3(xPosition, 0, 0);
         // Render snowman + any animations
+        if (resetSnowman)
+            resetPosition(&snowmanMoveTranslate, &xPosition, &headTransform, &headPos, &headScale);
         if (slideFbSnowman)
             slideSnowman(&snowmanMoveTranslate, true, &xPosition);
         else if (slideSsSnowman)
@@ -603,12 +607,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) // Exit program with escape
         glfwSetWindowShouldClose(window, true);
-    if (key == GLFW_KEY_R && action == GLFW_PRESS) // Turn off spotlight animation with R
+    if (key == GLFW_KEY_E && action == GLFW_PRESS) // Turn off spotlight animation with R
         lightAnimate = 1 - lightAnimate;
     if (key == GLFW_KEY_L && action == GLFW_PRESS) // Turn off spotlight light with L
         spotlightOn = 1 - spotlightOn;
     if (key == GLFW_KEY_K && action == GLFW_PRESS) // Turn off general light with K
         generalLightOn = 1 - generalLightOn;
+    if (key == GLFW_KEY_R && action == GLFW_PRESS) // Reset snowman with R
+        resetSnowman = true;
     if (!animationPlaying)
     {
         std::cout << "No animation playing" << std::endl;
@@ -628,7 +634,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             startTime = glfwGetTime();
             std::cout << "sliding sideway" << std::endl;
         }
-        if (key == GLFW_KEY_H && action == GLFW_PRESS)  // Slide forward and backwards using G
+        if (key == GLFW_KEY_H && action == GLFW_PRESS)  // Rock forward and backwards using G
         {
             rockFbSnowman = true;
             animationPlaying = true;
@@ -636,7 +642,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             startTime = glfwGetTime();
             std::cout << "Rock forward" << std::endl;
         }
-        if (key == GLFW_KEY_Y && action == GLFW_PRESS)  // Slide left and right using T
+        if (key == GLFW_KEY_Y && action == GLFW_PRESS)  // Rocl left and right using T
         {
             rockSsSnowman = true;
             animationPlaying = true;
@@ -644,7 +650,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             startTime = glfwGetTime();
             std::cout << "Rock sideway" << std::endl;
         }
-        if (key == GLFW_KEY_J && action == GLFW_PRESS)  // Slide left and right using T
+        if (key == GLFW_KEY_J && action == GLFW_PRESS)  // Roll head around body with J
         {
             rollSnowmanHead = true;
             animationPlaying = true;
@@ -832,7 +838,7 @@ void slideSnowman(TransformNode *snowmanBaseTransform, bool dir, float *xPositio
  * @param scale: pointer to the scale of the head -> stored in variable
  *
  */
-void rockSnowman(TransformNode *snowmanHeadTransform, bool dir, glm::vec3 *originalPos, glm::vec3 *scale){
+void rockSnowman(TransformNode *snowmanBaseTransform, bool dir, glm::vec3 *originalPos, glm::vec3 *scale){
     float elapsedTime = glfwGetTime() - startTime;
     float distance = - glm::sin(glm::radians(elapsedTime*50)) /2;
     
@@ -859,8 +865,8 @@ void rockSnowman(TransformNode *snowmanHeadTransform, bool dir, glm::vec3 *origi
         mm = glm::translate(mm, *originalPos);              //*originalPos points to contents of originalPos variable
        // mm = glm::scale(mm, glm::vec3(1,1,1));
         //Apply transform and update children
-        snowmanHeadTransform->setTransform(mm);
-        snowmanHeadTransform->ModelNode::update();
+        snowmanBaseTransform->setTransform(mm);
+        snowmanBaseTransform->ModelNode::update();
     }
     
     if (distance >= 0.49f) rockReturn = true;  //return true if snowman is on return to original position
@@ -889,7 +895,7 @@ void rollSnowman(TransformNode *snowmanHeadTransform, bool dir, glm::vec3 *origi
         float distance = glm::sin(glm::radians(elapsedTime*50)) /2; // calcualte distance from original position to rotate
         
         // If is starting, rotate down the body to chosen level (rotate by 0.45 radians).
-        if (rollStart ){
+        if (rollStart){
             mm = glm::rotate(mm, distance, glm::vec3(1, 0, 0));
             // if distance is equal or greater than 0.45, stop rocking and start the calculation for the actual roll
             if (abs(distance) >= 0.45f)
@@ -930,4 +936,27 @@ void rollSnowman(TransformNode *snowmanHeadTransform, bool dir, glm::vec3 *origi
         snowmanHeadTransform->setTransform(mm);
         snowmanHeadTransform->ModelNode::update();
     }
+}
+
+void resetPosition(TransformNode *baseTransform, float *xPosition, TransformNode *headTransform, glm::vec3 *hPos, glm::vec3 *hScale){
+    glm::mat4 mm = glm::translate(glm::mat4(1.0f), glm::vec3(*xPosition, 0, 0));
+    baseTransform->setTransform(mm);
+    baseTransform->ModelNode::update();
+    
+    mm = glm::translate(glm::mat4(1.0f), *hPos);
+    mm = glm::scale(mm, *hScale);
+    headTransform->setTransform(mm);
+    headTransform->ModelNode::update();
+    
+    animationPlaying = false;
+    slideReturn = false;
+    slideFbSnowman = false;
+    slideSsSnowman = false;
+    rockReturn = false;
+    rockFbSnowman = false;
+    rockSsSnowman = false;
+    rollStart = false;
+    rollEnding = false;
+    rollSnowmanHead = false;
+    resetSnowman = false;
 }

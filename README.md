@@ -26,7 +26,8 @@ In order to be able to move the camera the `Q` key must be pressed. This will ca
 - `F`: active wireframe mode 
 - `L`: turn spotlight on or off
 - `K`: turn directional light on or off
-- `R`: activate/deactivate spotlight animation
+- `E`: activate/deactivate spotlight animation
+- `R`: Reset the snowman position
 - `G`: Begin animation to slide snowman forwards and backwards
 - `T`: Begin animation to slide snowman left and right
 - `H`: Begin animation to rock snowman forwards and backwards
