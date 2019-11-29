@@ -44,11 +44,11 @@ void rollSnowman(TransformNode *snowmanHeadTransform, bool dir, glm::vec3 *origi
 void resetPosition(TransformNode *baseTransform, float *xPosition, TransformNode *headTransform, glm::vec3 *hPos, glm::vec3 *hScale);
 void rockRollSlide(TransformNode *baseTransform, float *xPosition, TransformNode *headTransform, glm::vec3 *hPos, glm::vec3 *hScale);
 
+
+// Global Variables
 TransformNode postHeadRotate = TransformNode("Post Head Rotate", glm::mat4(1.0f));
 glm::vec3 postBulbPosition;
-
-
-
+float xPosition = 0;
 // global settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -94,7 +94,7 @@ float lastFrame = 0.0f;    // Timing ensures consistent framerate independent of
 float startTime = 0.0f;
 
 // global
-float xPosition = 0;
+
 glm::vec3 globalLightPos = glm::vec3(3.0f, 3.0f, 3.0f);
 // Self-explanatory
 int main()
@@ -275,6 +275,7 @@ int main()
     float hatSideDepth = 0.2f;
     glm::vec3 headPos = glm::vec3(0, bodyHeight/2+headHeight/2, 0);
     glm::vec3 headScale = glm::vec3(headHeight);
+    glm::vec3 bodyPos = glm::vec3(xPosition, 0, 0);
     glm::vec3 eyePos = glm::vec3(headHeight/4-buttonSize/2, buttonSize/4, headHeight/4-buttonSize/4);
     glm::vec3 hatSidePos = glm::vec3(headHeight/4, hatHeight/2, 0);
     
@@ -282,7 +283,7 @@ int main()
     //  SNOWMAN NODES
     //=================================================
     NameNode snowmanRoot = NameNode("root");
-    TransformNode snowmanMoveTranslate = TransformNode("snowman transform", glm::translate(glm::mat4(1.0f), glm::vec3(xPosition,0,0)));
+    TransformNode snowmanMoveTranslate = TransformNode("snowman transform", glm::translate(glm::mat4(1.0f), bodyPos));
     
     TransformNode snowmanTranslate = TransformNode("snowman transform2", glm::translate(glm::mat4(1.0f), glm::vec3(0, bodyHeight/2, 0)));
     
@@ -523,20 +524,19 @@ int main()
         // render box next to snowman
         box.render();
     
-        glm::vec3 pos = glm::vec3(xPosition, 0, 0);
         // Render snowman + any animations
         if (resetSnowman)               // RESET POSITION
             resetPosition(&snowmanMoveTranslate, &xPosition, &headTransform, &headPos, &headScale);
-        if (slideRockRoll)// ROCK ROLL AND SLIDE
+        else if (slideRockRoll)// ROCK ROLL AND SLIDE
             rockRollSlide(&snowmanMoveTranslate, &xPosition, &headTransform, &headPos, &headScale);
-        if (slideFbSnowman)             // SLIDE FORWARDS AND BACKWARD
+        else if (slideFbSnowman)             // SLIDE FORWARDS AND BACKWARD
             slideSnowman(&snowmanMoveTranslate, true, &xPosition);
         else if (slideSsSnowman)        // SLIDE SIDE TO SIDE
             slideSnowman(&snowmanMoveTranslate, false, &xPosition);
         else if (rockFbSnowman)         // ROCK FORWARDS AND BACKWARDS
-            rockSnowman(&snowmanMoveTranslate, true, &pos, &headScale);
+            rockSnowman(&snowmanMoveTranslate, true, &bodyPos, &headScale);
         else if (rockSsSnowman)         // ROCK SIDE TO SIDE
-            rockSnowman(&snowmanMoveTranslate, false, &pos, &headScale);
+            rockSnowman(&snowmanMoveTranslate, false, &bodyPos, &headScale);
         else if (rollSnowmanHead)       // ROLL HEAD AROUND THE BODY
             rollSnowman(&headTransform, false, &headPos, &headScale);
         
@@ -1066,7 +1066,6 @@ void rockRollSlide(TransformNode *baseTransform, float *xPosition, TransformNode
             }
         }
         
-            
 //        // Ending booleans
         if (rockDistance >= 0.49f) rockReturn = true;  //return true if snowman is on return to original position
         if (slideDistance >= 0.99f) slideReturn = true;  //return true if snowman is on return to original position
