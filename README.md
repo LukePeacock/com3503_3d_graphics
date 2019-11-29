@@ -3,8 +3,7 @@ This folder contains all files necessary to compile and execute the COM3503 3D G
 
 Scene graph code and model, mesh, material code was heavily based on code from the Lab class tutorials. However, almost all of it needed updating to work within C++. This primarily involved adding pointer and references rather than copying objects. Several functions needed changing to use pointers and/or references in order to make the code more efficient and also to preserve the hierarchy of the scene graphs. I feel it is worth mentioning that a large portion of development time involved editing the code to work in C++. There are many differences betwen Java and C++ which altered the way the code behaved. You will see lots of new functions that seem unrelated to the assignment in several files, these are necessary to be able to run the code in C++. I believe this should be taken into consideration.
 
-
-## File Structure
+# Instructions 
 In order to run the program, open the Terminal on your mac and navigate to the `executable` folder:
 
 `cd executable`
@@ -13,7 +12,32 @@ Once inside this folder, you should be able to run the program by running
 
 `./assignment` 
 
-in the Terminal window. In the event that the program does not run, you may be missing one or more of the following libraries in your system:
+in the Terminal window.
+
+
+### Button Layout 
+In order to be able to move the camera the `Q` key must be pressed. This will capture the mouse and allow the camera to move. The following is a list of actions and their corresponding keys:
+
+
+- `Q`: Activate/Deactive user camera controls
+- `A` : Move forwards
+- `Z`: Move backwards
+- `Arrow Keys`: move left, right, up and down
+- `F`: active wireframe mode 
+- `L`: turn spotlight on or off
+- `K`: turn directional light on or off
+- `R`: activate/deactivate spotlight animation
+- `G`: Begin animation to slide snowman forwards and backwards
+- `T`: Begin animation to slide snowman left and right
+- `H`: Begin animation to rock snowman forwards and backwards
+- `Y`: Begin animation to rock snowman left and right 
+- `J`: Begin animation to roll the snowman's head around its body
+- `U`: Begin animation to slide snowman left and right, rock  left and right, and roll its head around its body
+
+
+
+## Troubleshooting Tips
+ In the event that the program does not run, you may be missing one or more of the following libraries in your system:
 
 - `gflw`
 - `glad`
@@ -29,7 +53,7 @@ brew install glfw3
 
 If you wish to uninstall `glfw` after using this program, simply run `brew uninstall glfw3` in the Terminal window.
 
-
+## File Structure
 The folder [source](source) contains all header and class files used during development. You will not need to compile these yourself, they are here for marking purposes only. Inside of the [source](source) folder, you will find several files and subfolders. This folder contains all the class implementation files; to read the class header files, navigate to the [headers](source/headers) folder. Inside of the source folder, you will also find the [assets](source/assets) and [shaders](source/shaders) folders; these contain all textures and shader files, respectively.
 
 ### Texture Information

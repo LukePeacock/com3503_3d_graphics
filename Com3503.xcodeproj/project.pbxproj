@@ -478,6 +478,7 @@
 		A336BFB7238EADB800D10B26 /* snow.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = snow.jpeg; sourceTree = "<group>"; };
 		A336BFB9238EAF5700D10B26 /* snow2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = snow2.jpg; sourceTree = "<group>"; };
 		A336BFBB238EB23C00D10B26 /* trees.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = trees.jpg; sourceTree = "<group>"; };
+		A336BFBD23913DA400D10B26 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A340B0B1236B071B006AD26C /* sphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sphere.cpp; sourceTree = "<group>"; };
 		A340B0B2236B071B006AD26C /* sphere.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sphere.hpp; sourceTree = "<group>"; };
 		A340B0B4236B0BA5006AD26C /* twoTriangles.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = twoTriangles.cpp; sourceTree = "<group>"; };
@@ -516,6 +517,7 @@
 		A30447082361FEE000D262F0 = {
 			isa = PBXGroup;
 			children = (
+				A336BFBD23913DA400D10B26 /* README.md */,
 				A30447132361FEE000D262F0 /* source */,
 				A30447122361FEE000D262F0 /* Products */,
 				A304471B2361FF4600D262F0 /* Frameworks */,

@@ -518,15 +518,16 @@ int main()
         // render box next to snowman
         box.render();
     
+        glm::vec3 pos = glm::vec3(xPosition, 0, 0);
         // Render snowman + any animations
         if (slideFbSnowman)
             slideSnowman(&snowmanMoveTranslate, true, &xPosition);
         else if (slideSsSnowman)
             slideSnowman(&snowmanMoveTranslate, false, &xPosition);
         else if (rockFbSnowman)
-            rockSnowman(&headTransform, true, &headPos, &headScale);
+            rockSnowman(&snowmanMoveTranslate, true, &pos, &headScale);
         else if (rockSsSnowman)
-            rockSnowman(&headTransform, false, &headPos, &headScale);
+            rockSnowman(&snowmanMoveTranslate, false, &pos, &headScale);
         //headtransform.;// Rock the snowman
         snowmanRoot.draw();
         
@@ -614,6 +615,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             slideFbSnowman = true;
             animationPlaying = true;
             slideReturn = false;
+            startTime = glfwGetTime();
             std::cout << "sliding forward" << std::endl;
         }
         if (key == GLFW_KEY_T && action == GLFW_PRESS)  // Slide left and right using T
@@ -621,6 +623,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             slideSsSnowman = true;
             animationPlaying = true;
             slideReturn = false;
+            startTime = glfwGetTime();
             std::cout << "sliding sideway" << std::endl;
         }
         if (key == GLFW_KEY_H && action == GLFW_PRESS)  // Slide forward and backwards using G
@@ -628,6 +631,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             rockFbSnowman = true;
             animationPlaying = true;
             rockReturn = false;
+            startTime = glfwGetTime();
             std::cout << "Rock forward" << std::endl;
         }
         if (key == GLFW_KEY_Y && action == GLFW_PRESS)  // Slide left and right using T
@@ -635,6 +639,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             rockSsSnowman = true;
             animationPlaying = true;
             rockReturn = false;
+            startTime = glfwGetTime();
             std::cout << "Rock sideway" << std::endl;
         }
     }
@@ -752,7 +757,7 @@ unsigned int loadTexture(char const * path)
  *
  */
 void rotateLight(Light &bulb, float bulbDistanceFromPole){
-    float elapsedTime = glfwGetTime()-startTime;
+    float elapsedTime = glfwGetTime();
     
     // Rotate the lamp post
     float rotateAngle = -elapsedTime* 50; // rotate anti-clockwise
@@ -782,7 +787,7 @@ void rotateLight(Light &bulb, float bulbDistanceFromPole){
  */
 void slideSnowman(TransformNode *snowmanBaseTransform, bool dir, float *xPosition){
     float elapsedTime = glfwGetTime()-startTime;
-    float distance = glm::sin(glm::radians(elapsedTime*50));
+    float distance = -glm::sin(glm::radians(elapsedTime*50));
     
     // Exit function if animation has been played
     if (slideReturn && abs(distance) <= 0.02f){ // When animation is on final slide, and distance less than 0.02; stop the animation and exit function
@@ -810,18 +815,19 @@ void slideSnowman(TransformNode *snowmanBaseTransform, bool dir, float *xPositio
  * Rock the snowman in chosen direction twice. Complete one full movement on each side of original position
  * Mid -> Left -> Mid -> Right -> Mid -> Stop;
  *
- * @param snowmanHeadTransform: a pointer to the head transform' transform node
+ * @param snowmanBaseTransform: a pointer to the base transform' transform node
  * @param dir : boolean for direction; true is forward and backwards, fasle is sidways
- * @param originalPos : a pointer to the original position of the head
+ * @param originalPos : a pointer to the original position of the snowman
  * @param scale: pointer to the scale of the head -> stored in variable
  *
  */
 void rockSnowman(TransformNode *snowmanHeadTransform, bool dir, glm::vec3 *originalPos, glm::vec3 *scale){
-    float elapsedTime = glfwGetTime()-startTime;
-    float distance = glm::sin(glm::radians(elapsedTime*50));
+    float elapsedTime = glfwGetTime() - startTime;
+    float distance = - glm::sin(glm::radians(elapsedTime*50)) /2;
     
+    std::cout << distance << std::endl;
     // Exit function if animation has been played
-    if (rockReturn && abs(distance) <= 0.02f){ // When animation is on final rock, and distance less than 0.02; stop the animation and exit function
+    if (rockReturn && abs(distance) <= 0.01f){ // When animation is on final rock, and distance less than 0.02; stop the animation and exit function
         animationPlaying = false;
         rockFbSnowman = false;
         rockSsSnowman = false;
@@ -840,11 +846,11 @@ void rockSnowman(TransformNode *snowmanHeadTransform, bool dir, glm::vec3 *origi
         
         // Translate and scale to appropriate location.
         mm = glm::translate(mm, *originalPos);              //*originalPos points to contents of originalPos variable
-        mm = glm::scale(mm, *scale);
+       // mm = glm::scale(mm, glm::vec3(1,1,1));
         //Apply transform and update children
         snowmanHeadTransform->setTransform(mm);
         snowmanHeadTransform->ModelNode::update();
     }
     
-    if (distance >= 0.99f) rockReturn = true;  //return true if snowman is on return to original position
+    if (distance >= 0.49f) rockReturn = true;  //return true if snowman is on return to original position
 }
