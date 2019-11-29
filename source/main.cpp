@@ -38,7 +38,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 unsigned int loadTexture(char const * path);
 void rotateLight(Light &bulb, float distanceFromPole);
-
+void slideSnowman(TransformNode *snowmanBaseTranslate, bool dir, float *xPosition);
 
 
 TransformNode postHeadRotate = TransformNode("Post Head Rotate", glm::mat4(1.0f));
@@ -56,11 +56,16 @@ const float FAR_PLANE = 50.0f;
 static bool lightAnimate = true;
 static bool spotlightOn = true;
 static bool generalLightOn = true;
+static bool slideFbSnowman = false;
+static bool slideSsSnowman = false;
+static bool slideReturn = false;
+
 static bool rockSnowman = false;
 static bool rollSnowman = false;
-static bool slideSnowman = false;
+
 static bool rockRollSlide = false;
 static bool resetSnowman = false;
+static bool animationPlaying = false;
 
 static unsigned char wireframe;         // Allows scene to be rendered in wireframe
 static bool userCam = false;            // Gives user control of camera
@@ -503,8 +508,11 @@ int main()
         box.render();
     
         // Render snowman + any animations
-        if (rockSnowman)
-            ;//headtransform.;// Rock the snowman
+        if (slideFbSnowman)
+            slideSnowman(&snowmanMoveTranslate, true, &xPosition);
+        else if (slideSsSnowman)
+            slideSnowman(&snowmanMoveTranslate, false, &xPosition);
+        //headtransform.;// Rock the snowman
         snowmanRoot.draw();
         
         
@@ -580,9 +588,27 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_R && action == GLFW_PRESS) // Turn off spotlight animation with R
         lightAnimate = 1 - lightAnimate;
     if (key == GLFW_KEY_L && action == GLFW_PRESS) // Turn off spotlight light with L
-           spotlightOn = 1 - spotlightOn;
+        spotlightOn = 1 - spotlightOn;
     if (key == GLFW_KEY_K && action == GLFW_PRESS) // Turn off general light with K
         generalLightOn = 1 - generalLightOn;
+    if (!animationPlaying)
+    {
+        std::cout << "No animation playing" << std::endl;
+        if (key == GLFW_KEY_G && action == GLFW_PRESS)  // Slide forward and backwards using G
+        {
+            slideFbSnowman = true;
+            animationPlaying = true;
+            slideReturn = false;
+            std::cout << "sliding forward" << std::endl;
+        }
+        if (key == GLFW_KEY_T && action == GLFW_PRESS)  // Slide left and right using T
+        {
+            slideSsSnowman = true;
+            animationPlaying = true;
+            slideReturn = false;
+            std::cout << "sliding sideway" << std::endl;
+        }
+    }
 }
 
 
@@ -715,3 +741,30 @@ void rotateLight(Light &bulb, float bulbDistanceFromPole){
     bulb.setFront(glm::normalize(glm::vec3(bulbX, 0, bulbZ)));
    
 }
+
+void slideSnowman(TransformNode *snowmanBaseTransform, bool dir, float *xPosition){
+    float elapsedTime = glfwGetTime()-startTime;
+    float distance = glm::sin(glm::radians(elapsedTime*50));
+    
+    // Exit function if animation has been played
+    if (slideReturn && abs(distance) <= 0.02f){ // When animation is on final slide, and distance less than 0.02; stop the animation and exit function
+        animationPlaying = false;
+        slideFbSnowman = false;
+        slideSsSnowman = false;
+        return;
+    }
+    else if (animationPlaying)
+    {
+        // Move the snowman
+        glm::mat4 mm = glm::translate(glm::mat4(1.0f), glm::vec3(*xPosition, 0, 0));
+        if (dir)
+            mm = glm::translate(mm, glm::vec3(0, 0, distance));
+        else
+            mm = glm::translate(mm, glm::vec3(distance, 0, 0));
+        snowmanBaseTransform->setTransform(mm);
+        snowmanBaseTransform->ModelNode::update();
+    }
+    
+    if (distance >= 0.99f) slideReturn = true;  //return true if snowman is on return to original position
+}
+
