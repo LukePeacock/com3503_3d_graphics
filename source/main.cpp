@@ -30,6 +30,7 @@
 #include <transformNode.hpp>
 #include <modelNode.hpp>
 #include <lightpost.hpp>
+#include <snowman.hpp>
 
 //Function protos
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -38,7 +39,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 unsigned int loadTexture(char const * path);
-void rotateLight(Light &bulb, float distanceFromPole);
+
 void slideSnowman(TransformNode *snowmanBaseTranslate, bool dir, float *xPosition);
 void rockSnowman(TransformNode *snowmanBaseTransform, bool dir, glm::vec3 *originalPos, glm::vec3 *scale);
 void rollSnowman(TransformNode *snowmanHeadTransform, bool dir, glm::vec3 *originalPos, glm::vec3 *scale);
@@ -47,8 +48,6 @@ void rockRollSlide(TransformNode *baseTransform, float *xPosition, TransformNode
 
 
 // Global Variables
-TransformNode postHeadRotate = TransformNode("Post Head Rotate", glm::mat4(1.0f));
-glm::vec3 postBulbPosition;
 float xPosition = 0;
 // global settings
 const unsigned int SCR_WIDTH = 800;
@@ -206,175 +205,176 @@ int main()
     Material cubeMat = Material(glm::vec3(0.5f), glm::vec3(0.5f), glm::vec3(0.5f), 16.0f);
     Model cube = Model(defaultShader, cubeMat, mm, c, woolTex);
     
-    // Params
-    float bodyHeight = 3.0f;
-    float headHeight = 2.0f;
-    float buttonSize = 0.5f;
-    float noseSize = 0.15f;
-    float hatHeight = 0.4f;
-    float hatWidth = 1.0f;
-    float hatSideDepth = 0.2f;
-    glm::vec3 headPos = glm::vec3(0, bodyHeight/2+headHeight/2, 0);
-    glm::vec3 headScale = glm::vec3(headHeight);
-    glm::vec3 bodyPos = glm::vec3(xPosition, 0, 0);
-    glm::vec3 eyePos = glm::vec3(headHeight/4-buttonSize/2, buttonSize/4, headHeight/4-buttonSize/4);
-    glm::vec3 hatSidePos = glm::vec3(headHeight/4, hatHeight/2, 0);
-    
-    //=================================================
-    //  SNOWMAN NODES
-    //=================================================
-    NameNode snowmanRoot = NameNode("root");
-    TransformNode snowmanMoveTranslate = TransformNode("snowman transform", glm::translate(glm::mat4(1.0f), bodyPos));
-    
-    TransformNode snowmanTranslate = TransformNode("snowman transform2", glm::translate(glm::mat4(1.0f), glm::vec3(0, bodyHeight/2, 0)));
-    
-    NameNode body = NameNode("body");
-        mm = glm::scale(glm::mat4(1.0f), glm::vec3(bodyHeight));
-        TransformNode bodyTransform = TransformNode("body transform", mm);
-        ModelNode bodyShape = ModelNode("Sphere(body)", sphere);
-    
-    // THREE BUTTONS
-    NameNode buttons = NameNode("buttons");
-        mm = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, bodyHeight/2));
-        mm = glm::scale(mm, glm::vec3(buttonSize));
-        TransformNode Button1Transform = TransformNode("bottom button transform", mm);
-        ModelNode button1Shape = ModelNode("Sphere(button)", button);
-    
-        mm = glm::translate(mm, glm::vec3(0.0f,bodyHeight/3, -buttonSize/2));
-        TransformNode Button2Transform = TransformNode("middle button transform", mm);
-        ModelNode button2Shape = ModelNode("Sphere(button)", button);
-    
-        mm = glm::translate(mm, glm::vec3(0.0f, bodyHeight/3, 2*-buttonSize/3));
-        TransformNode Button3Transform = TransformNode("top button transform", mm);
-        ModelNode button3Shape = ModelNode("Sphere(button)", button);
-    
-    //HEAD
-    NameNode head = NameNode("head");
-        mm = glm::mat4(1.0f);
-
-        mm = glm::translate(mm, headPos);
-        mm = glm::scale(mm, headScale);
-        TransformNode headTransform = TransformNode("head transform", mm);
-        ModelNode headShape = ModelNode("Sphere(head)", sphere);
-    
+    Snowman snowman(&button, &sphere, &cube);
+//    // Params
+//    float bodyHeight = 3.0f;
+//    float headHeight = 2.0f;
+//    float buttonSize = 0.5f;
+//    float noseSize = 0.15f;
+//    float hatHeight = 0.4f;
+//    float hatWidth = 1.0f;
+//    float hatSideDepth = 0.2f;
+//    glm::vec3 headPos = glm::vec3(0, bodyHeight/2+headHeight/2, 0);
+//    glm::vec3 headScale = glm::vec3(headHeight);
+//    glm::vec3 bodyPos = glm::vec3(xPosition, 0, 0);
+//    glm::vec3 eyePos = glm::vec3(headHeight/4-buttonSize/2, buttonSize/4, headHeight/4-buttonSize/4);
+//    glm::vec3 hatSidePos = glm::vec3(headHeight/4, hatHeight/2, 0);
+//
+//    //=================================================
+//    //  SNOWMAN NODES
+//    //=================================================
+//    NameNode snowmanRoot = NameNode("root");
+//    TransformNode snowmanMoveTranslate = TransformNode("snowman transform", glm::translate(glm::mat4(1.0f), bodyPos));
+//
+//    TransformNode snowmanTranslate = TransformNode("snowman transform2", glm::translate(glm::mat4(1.0f), glm::vec3(0, bodyHeight/2, 0)));
+//
+//    NameNode body = NameNode("body");
+//        mm = glm::scale(glm::mat4(1.0f), glm::vec3(bodyHeight));
+//        TransformNode bodyTransform = TransformNode("body transform", mm);
+//        ModelNode bodyShape = ModelNode("Sphere(body)", sphere);
+//
+//    // THREE BUTTONS
+//    NameNode buttons = NameNode("buttons");
+//        mm = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, bodyHeight/2));
+//        mm = glm::scale(mm, glm::vec3(buttonSize));
+//        TransformNode Button1Transform = TransformNode("bottom button transform", mm);
+//        ModelNode button1Shape = ModelNode("Sphere(button)", button);
+//
+//        mm = glm::translate(mm, glm::vec3(0.0f,bodyHeight/3, -buttonSize/2));
+//        TransformNode Button2Transform = TransformNode("middle button transform", mm);
+//        ModelNode button2Shape = ModelNode("Sphere(button)", button);
+//
+//        mm = glm::translate(mm, glm::vec3(0.0f, bodyHeight/3, 2*-buttonSize/3));
+//        TransformNode Button3Transform = TransformNode("top button transform", mm);
+//        ModelNode button3Shape = ModelNode("Sphere(button)", button);
+//
+//    //HEAD
+//    NameNode head = NameNode("head");
+//        mm = glm::mat4(1.0f);
+//
+//        mm = glm::translate(mm, headPos);
+//        mm = glm::scale(mm, headScale);
+//        TransformNode headTransform = TransformNode("head transform", mm);
+//        ModelNode headShape = ModelNode("Sphere(head)", sphere);
+//
+//
+//    //FACE
+//    NameNode face = NameNode("face");
+//        TransformNode faceTransform = TransformNode("face Transform", glm::translate(glm::mat4(1.0f), glm::vec3(0)));
+//
+//        NameNode eyes = NameNode("eyes");
+//            mm = glm::translate(glm::mat4(1.0f), eyePos);
+//            mm = glm::scale(mm, glm::vec3(buttonSize/2));
+//            TransformNode leftEyeTransform = TransformNode("left eye transform", mm);
+//            ModelNode leftEyeShape = ModelNode("Sphere(left eye)", button);
+//
+//
+//            mm = glm::translate(glm::mat4(1.0f), eyePos * glm::vec3(-1,1,1));
+//            mm = glm::scale(mm, glm::vec3(buttonSize/2));
+//            TransformNode rightEyeTransform = TransformNode("right eye transfrom", mm);
+//            ModelNode rightEyeShape = ModelNode("SPhere(right eye)", button);
+//
+//        NameNode nose = NameNode("Nose");
+//            mm = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, headHeight/4));
+//            mm = glm::scale(mm, glm::vec3(noseSize, noseSize, buttonSize));
+//            TransformNode noseTransform = TransformNode("nose transform", mm);
+//            ModelNode noseShape = ModelNode("Sphere(nose shape)", button);
+//
+//        NameNode mouth = NameNode("mouth");
+//            mm = glm::translate(glm::mat4(1.0f), glm::vec3(0, -headHeight/4+buttonSize/2, headHeight/4-buttonSize/4));
+//            mm = glm::scale(mm, glm::vec3(buttonSize, buttonSize/2, buttonSize/2));
+//            TransformNode mouthTransform = TransformNode("Mouth Trasnform", mm);
+//            ModelNode mouthShape = ModelNode("Sphere(mouth)", button);
+//
+//    //====================================================================================
+//    // SNOWMAN HAT
+//    //====================================================================================
+//    NameNode hat = NameNode("Hat");
+//        mm = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0 , 0));
+//        TransformNode hatTransform = TransformNode("Hat transform", mm);
+//
+//        // Top of hat
+//        mm = glm::translate(glm::mat4(1.0f), glm::vec3(0, headHeight/4, 0));
+//        mm = glm::scale(mm, glm::vec3(hatWidth, hatHeight, hatWidth));
+//        TransformNode hatTopTransform = TransformNode("hat top transform", mm);
+//        ModelNode hatTopShape = ModelNode("Cube(hat main)", cube);
+//
+//        // Right Side
+//        glm::vec3 sideScale = glm::vec3(hatSideDepth, hatWidth - 0.001, hatWidth - 0.001);
+//        mm = glm::translate(glm::mat4(1.0f), hatSidePos);
+//        mm = glm::scale(mm, sideScale);
+//        TransformNode hatRightTransform = TransformNode("Right hat transform", mm);
+//        ModelNode rightHatShape = ModelNode("Cube(Right hat)", cube);
+//
+//        //Left Side
+//        mm = glm::translate(glm::mat4(1.0f), hatSidePos * glm::vec3(-1,1,1));
+//        mm = glm::scale(mm, sideScale);
+//        TransformNode hatLeftTransform = TransformNode("Left hat transform", mm);
+//        ModelNode leftHatShape = ModelNode("Cube(Left hat)", cube);
+//
+//        // Back
+//        mm = glm::translate(glm::mat4(1.0f), glm::vec3(hatSidePos.z, hatSidePos.y, -hatSidePos.x + hatSideDepth/2 - 0.002));
+//        mm = glm::scale(mm,glm::vec3(hatWidth, sideScale.y, sideScale.x));
+//        mm = glm::rotate(mm, glm::radians(90.0f), glm::vec3(0,1,0));
+//        TransformNode hatBackTransform = TransformNode("back hat transform", mm);
+//        ModelNode backHatShape = ModelNode ("Cube(back hat)", cube);
+//
+//    //================================================================================
+//    // CREATE SNOWMAN SCENE GRAPH
+//    //================================================================================
+//    snowmanRoot.addChild(snowmanMoveTranslate);
+//        snowmanMoveTranslate.addChild(snowmanTranslate);
+//            snowmanTranslate.addChild(body);
+//                bodyTransform.addChild(bodyShape);
+//                    body.addChild(bodyTransform);
+//                    body.addChild(Button1Transform);
+//                        Button1Transform.addChild(button1Shape);
+//                    body.addChild(Button2Transform);
+//                        Button2Transform.addChild(button2Shape);
+//                    body.addChild(Button3Transform);
+//                        Button3Transform.addChild(button3Shape);
+//                    body.addChild(head);
+//                        head.addChild(headTransform);
+//                            headTransform.addChild(headShape);
+//                            headTransform.addChild(face);
+//                                face.addChild(faceTransform);
+//                                    faceTransform.addChild(eyes);
+//                                        eyes.addChild(leftEyeTransform);
+//                                            leftEyeTransform.addChild(leftEyeShape);
+//                                        eyes.addChild(rightEyeTransform);
+//                                            rightEyeTransform.addChild(rightEyeShape);
+//                                    faceTransform.addChild(nose);
+//                                        nose.addChild(noseTransform);
+//                                            noseTransform.addChild(noseShape);
+//                                    faceTransform.addChild(mouth);
+//                                        mouth.addChild(mouthTransform);
+//                                        mouthTransform.addChild(mouthShape);
+//                            headTransform.addChild(hat);
+//                                hat.addChild(hatTransform);
+//                                    hatTransform.addChild(hatTopTransform);
+//                                        hatTopTransform.addChild(hatTopShape);
+//                                    hatTransform.addChild(hatLeftTransform);
+//                                        hatLeftTransform.addChild(leftHatShape);
+//                                    hatTransform.addChild(hatRightTransform);
+//                                        hatRightTransform.addChild(rightHatShape);
+//                                    hatTransform.addChild(hatBackTransform);
+//                                        hatBackTransform.addChild(backHatShape);
+//
+//
+//    snowmanRoot.update();
+//    snowmanRoot.print(0, false);
+//
    
-    //FACE
-    NameNode face = NameNode("face");
-        TransformNode faceTransform = TransformNode("face Transform", glm::translate(glm::mat4(1.0f), glm::vec3(0)));
-    
-        NameNode eyes = NameNode("eyes");
-            mm = glm::translate(glm::mat4(1.0f), eyePos);
-            mm = glm::scale(mm, glm::vec3(buttonSize/2));
-            TransformNode leftEyeTransform = TransformNode("left eye transform", mm);
-            ModelNode leftEyeShape = ModelNode("Sphere(left eye)", button);
-        
-    
-            mm = glm::translate(glm::mat4(1.0f), eyePos * glm::vec3(-1,1,1));
-            mm = glm::scale(mm, glm::vec3(buttonSize/2));
-            TransformNode rightEyeTransform = TransformNode("right eye transfrom", mm);
-            ModelNode rightEyeShape = ModelNode("SPhere(right eye)", button);
 
-        NameNode nose = NameNode("Nose");
-            mm = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, headHeight/4));
-            mm = glm::scale(mm, glm::vec3(noseSize, noseSize, buttonSize));
-            TransformNode noseTransform = TransformNode("nose transform", mm);
-            ModelNode noseShape = ModelNode("Sphere(nose shape)", button);
-
-        NameNode mouth = NameNode("mouth");
-            mm = glm::translate(glm::mat4(1.0f), glm::vec3(0, -headHeight/4+buttonSize/2, headHeight/4-buttonSize/4));
-            mm = glm::scale(mm, glm::vec3(buttonSize, buttonSize/2, buttonSize/2));
-            TransformNode mouthTransform = TransformNode("Mouth Trasnform", mm);
-            ModelNode mouthShape = ModelNode("Sphere(mouth)", button);
-                 
-    //====================================================================================
-    // SNOWMAN HAT
-    //====================================================================================
-    NameNode hat = NameNode("Hat");
-        mm = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0 , 0));
-        TransformNode hatTransform = TransformNode("Hat transform", mm);
-            
-        // Top of hat
-        mm = glm::translate(glm::mat4(1.0f), glm::vec3(0, headHeight/4, 0));
-        mm = glm::scale(mm, glm::vec3(hatWidth, hatHeight, hatWidth));
-        TransformNode hatTopTransform = TransformNode("hat top transform", mm);
-        ModelNode hatTopShape = ModelNode("Cube(hat main)", cube);
-    
-        // Right Side
-        glm::vec3 sideScale = glm::vec3(hatSideDepth, hatWidth - 0.001, hatWidth - 0.001);
-        mm = glm::translate(glm::mat4(1.0f), hatSidePos);
-        mm = glm::scale(mm, sideScale);
-        TransformNode hatRightTransform = TransformNode("Right hat transform", mm);
-        ModelNode rightHatShape = ModelNode("Cube(Right hat)", cube);
-        
-        //Left Side
-        mm = glm::translate(glm::mat4(1.0f), hatSidePos * glm::vec3(-1,1,1));
-        mm = glm::scale(mm, sideScale);
-        TransformNode hatLeftTransform = TransformNode("Left hat transform", mm);
-        ModelNode leftHatShape = ModelNode("Cube(Left hat)", cube);
-    
-        // Back
-        mm = glm::translate(glm::mat4(1.0f), glm::vec3(hatSidePos.z, hatSidePos.y, -hatSidePos.x + hatSideDepth/2 - 0.002));
-        mm = glm::scale(mm,glm::vec3(hatWidth, sideScale.y, sideScale.x));
-        mm = glm::rotate(mm, glm::radians(90.0f), glm::vec3(0,1,0));
-        TransformNode hatBackTransform = TransformNode("back hat transform", mm);
-        ModelNode backHatShape = ModelNode ("Cube(back hat)", cube);
-
-    //================================================================================
-    // CREATE SNOWMAN SCENE GRAPH
-    //================================================================================
-    snowmanRoot.addChild(snowmanMoveTranslate);
-        snowmanMoveTranslate.addChild(snowmanTranslate);
-            snowmanTranslate.addChild(body);
-                bodyTransform.addChild(bodyShape);
-                    body.addChild(bodyTransform);
-                    body.addChild(Button1Transform);
-                        Button1Transform.addChild(button1Shape);
-                    body.addChild(Button2Transform);
-                        Button2Transform.addChild(button2Shape);
-                    body.addChild(Button3Transform);
-                        Button3Transform.addChild(button3Shape);
-                    body.addChild(head);
-                        head.addChild(headTransform);
-                            headTransform.addChild(headShape);
-                            headTransform.addChild(face);
-                                face.addChild(faceTransform);
-                                    faceTransform.addChild(eyes);
-                                        eyes.addChild(leftEyeTransform);
-                                            leftEyeTransform.addChild(leftEyeShape);
-                                        eyes.addChild(rightEyeTransform);
-                                            rightEyeTransform.addChild(rightEyeShape);
-                                    faceTransform.addChild(nose);
-                                        nose.addChild(noseTransform);
-                                            noseTransform.addChild(noseShape);
-                                    faceTransform.addChild(mouth);
-                                        mouth.addChild(mouthTransform);
-                                        mouthTransform.addChild(mouthShape);
-                            headTransform.addChild(hat);
-                                hat.addChild(hatTransform);
-                                    hatTransform.addChild(hatTopTransform);
-                                        hatTopTransform.addChild(hatTopShape);
-                                    hatTransform.addChild(hatLeftTransform);
-                                        hatLeftTransform.addChild(leftHatShape);
-                                    hatTransform.addChild(hatRightTransform);
-                                        hatRightTransform.addChild(rightHatShape);
-                                    hatTransform.addChild(hatBackTransform);
-                                        hatBackTransform.addChild(backHatShape);
-    
-    
-    snowmanRoot.update();
-    snowmanRoot.print(0, false);
-                                
-   
-
-    // =============
-    // SPECULAR BOX NEXT TO SNOWMAN
-    // ==============
-    cubeMat.setSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
-    cubeMat.setShininess(128.0f);
-    
-    mm = glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f - headHeight, 0.5 * (bodyHeight + headHeight), 0.0f));
-    mm = glm::scale(mm, glm::vec3(bodyHeight, bodyHeight+headHeight, bodyHeight));
-    Model box = Model(defaultShader, cubeMat, mm, c, containerTex, containerSpecTex);
+//    // =============
+//    // SPECULAR BOX NEXT TO SNOWMAN
+//    // ==============
+//    cubeMat.setSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
+//    cubeMat.setShininess(128.0f);
+//
+//    mm = glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f - headHeight, 0.5 * (bodyHeight + headHeight), 0.0f));
+//    mm = glm::scale(mm, glm::vec3(bodyHeight, bodyHeight+headHeight, bodyHeight));
+//    Model box = Model(defaultShader, cubeMat, mm, c, containerTex, containerSpecTex);
     
     //=====================================
     //  Set shader values which do NOT change
@@ -462,27 +462,27 @@ int main()
         lamppost.draw();
     
         // render box next to snowman
-        box.render();
+//        box.render();
     
         // Render snowman + any animations
-        if (resetSnowman)               // RESET POSITION
-            resetPosition(&snowmanMoveTranslate, &xPosition, &headTransform, &headPos, &headScale);
-        else if (slideRockRoll)// ROCK ROLL AND SLIDE
-            rockRollSlide(&snowmanMoveTranslate, &xPosition, &headTransform, &headPos, &headScale);
-        else if (slideFbSnowman)             // SLIDE FORWARDS AND BACKWARD
-            slideSnowman(&snowmanMoveTranslate, true, &xPosition);
-        else if (slideSsSnowman)        // SLIDE SIDE TO SIDE
-            slideSnowman(&snowmanMoveTranslate, false, &xPosition);
-        else if (rockFbSnowman)         // ROCK FORWARDS AND BACKWARDS
-            rockSnowman(&snowmanMoveTranslate, true, &bodyPos, &headScale);
-        else if (rockSsSnowman)         // ROCK SIDE TO SIDE
-            rockSnowman(&snowmanMoveTranslate, false, &bodyPos, &headScale);
-        else if (rollSnowmanHead)       // ROLL HEAD AROUND THE BODY
-            rollSnowman(&headTransform, false, &headPos, &headScale);
-        
+//        if (resetSnowman)               // RESET POSITION
+//            resetPosition(&snowmanMoveTranslate, &xPosition, &headTransform, &headPos, &headScale);
+//        else if (slideRockRoll)// ROCK ROLL AND SLIDE
+//            rockRollSlide(&snowmanMoveTranslate, &xPosition, &headTransform, &headPos, &headScale);
+//        else if (slideFbSnowman)             // SLIDE FORWARDS AND BACKWARD
+//            slideSnowman(&snowmanMoveTranslate, true, &xPosition);
+//        else if (slideSsSnowman)        // SLIDE SIDE TO SIDE
+//            slideSnowman(&snowmanMoveTranslate, false, &xPosition);
+//        else if (rockFbSnowman)         // ROCK FORWARDS AND BACKWARDS
+//            rockSnowman(&snowmanMoveTranslate, true, &bodyPos, &headScale);
+//        else if (rockSsSnowman)         // ROCK SIDE TO SIDE
+//            rockSnowman(&snowmanMoveTranslate, false, &bodyPos, &headScale);
+//        else if (rollSnowmanHead)       // ROLL HEAD AROUND THE BODY
+//            rollSnowman(&headTransform, false, &headPos, &headScale);
+//
         
         // RENDER UPDATED SNOWMAN
-        snowmanRoot.draw();
+        snowman.draw();
         
         
         
@@ -498,7 +498,7 @@ int main()
     lamppost.light.dispose();
     button.dispose();
     cube.dispose();
-    box.dispose();
+    //box.dispose();
     
     // Terminate GLFW, clearing all previously allocated GLFW resources.
     glfwTerminate();

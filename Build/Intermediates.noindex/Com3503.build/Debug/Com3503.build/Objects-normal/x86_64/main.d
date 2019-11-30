@@ -275,4 +275,5 @@ dependencies: \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/sgNode.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/transformNode.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/modelNode.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/lightpost.hpp
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/lightpost.hpp \
+  /users/luke/documents/github/com3503_3d_graphics/source/headers/snowman.hpp
