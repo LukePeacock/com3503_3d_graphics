@@ -61,7 +61,10 @@ bool spotlightOn = true;
 bool generalLightOn = true;
 bool animationPlaying = false;
 bool snowmanSlide = false;
-bool snowmanSlideDir = false;
+bool snowmanRock = false;
+bool snowmanRoll = false;
+bool snowmanChaos = false;
+bool snowmanMoveDir = false;    //false = left/right, true = front/back
 bool snowmanReset = false;
 
 
@@ -188,7 +191,8 @@ int main()
     
     // Create Snowman
     Model cube = Model(defaultShader, mat, mm, c, woolTex);
-    Snowman snowman = Snowman(&button, &sphere, &cube);
+    Model hatBobble = Model(defaultShader, mat, mm, s, woolTex);
+    Snowman snowman = Snowman(&button, &sphere, &cube, &hatBobble);
 
     // =============
     // SPECULAR BOX NEXT TO SNOWMAN
@@ -292,9 +296,14 @@ int main()
         box.render();
     
         // Render snowman + any animations
-        if (snowman.singleAnimEnded)
+        if (snowman.singleAnimEnded) // If animation has ended, change animation bool to false
+        {
             animationPlaying = false;
-        if (animationPlaying)
+            snowmanSlide = false;
+            snowmanRock = false;
+            snowman.singleAnimEnded = false;
+        }
+        if (animationPlaying)   // If an animation is playing, set snowman animation bool and start time
         {
             snowman.animationPlaying = true;
             snowman.startTime = startTime;
@@ -306,7 +315,7 @@ int main()
         }
 //        else if (slideRockRoll)// ROCK ROLL AND SLIDE
 //            rockRollSlide(&snowmanMoveTranslate, &xPosition, &headTransform, &headPos, &headScale);
-        else if (snowmanSlide && snowmanSlideDir)
+        else if (snowmanSlide && snowmanMoveDir)
         {            // SLIDE FORWARDS AND BACKWARD
             snowman.startTime = startTime;
             snowman.slideMove(true);
@@ -316,10 +325,10 @@ int main()
             snowman.slideMove(false);
             snowman.startTime = startTime;
         }
-//        else if (rockFbSnowman)         // ROCK FORWARDS AND BACKWARDS
-//            rockSnowman(&snowmanMoveTranslate, true, &bodyPos, &headScale);
-//        else if (rockSsSnowman)         // ROCK SIDE TO SIDE
-//            rockSnowman(&snowmanMoveTranslate, false, &bodyPos, &headScale);
+        else if (snowmanRock && snowmanMoveDir)         // ROCK FORWARDS AND BACKWARDS
+            snowman.rockMove(true);
+        else if (snowmanRock)         // ROCK SIDE TO SIDE
+            snowman.rockMove(false);
 //        else if (rollSnowmanHead)       // ROLL HEAD AROUND THE BODY
 //            rollSnowman(&headTransform, false, &headPos, &headScale);
 //
@@ -412,7 +421,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         {
             snowmanSlide = true;
             animationPlaying = true;
-            snowmanSlideDir = true;
+            snowmanMoveDir = true;
             startTime = glfwGetTime();
             std::cout << "sliding forward" << std::endl;
         }
@@ -420,26 +429,26 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         {
             snowmanSlide = true;
             animationPlaying = true;
-            snowmanSlideDir = false;
+            snowmanMoveDir = false;
             startTime = glfwGetTime();
             std::cout << "sliding sideway" << std::endl;
         }
-//        if (key == GLFW_KEY_H && action == GLFW_PRESS)  // Rock forward and backwards using G
-//        {
-//            snowman.rockFbSnowman = true;
-//            snowman.animationPlaying = true;
-//            snowman.rockReturn = false;
-//            startTime = glfwGetTime();
-//            std::cout << "Rock forward" << std::endl;
-//        }
-//        if (key == GLFW_KEY_Y && action == GLFW_PRESS)  // Rocl left and right using T
-//        {
-//            snowman.rockSsSnowman = true;
-//            snowman.animationPlaying = true;
-//            snowman.rockReturn = false;
-//            startTime = glfwGetTime();
-//            std::cout << "Rock sideway" << std::endl;
-//        }
+        if (key == GLFW_KEY_H && action == GLFW_PRESS)  // Rock forward and backwards using G
+        {
+            snowmanRock = true;
+            animationPlaying = true;
+            snowmanMoveDir = true;
+            startTime = glfwGetTime();
+            std::cout << "Rock forward" << std::endl;
+        }
+        if (key == GLFW_KEY_Y && action == GLFW_PRESS)  // Rocl left and right using T
+        {
+            snowmanRock = true;
+            animationPlaying = true;
+            snowmanMoveDir = false;
+            startTime = glfwGetTime();
+            std::cout << "Rock sideway" << std::endl;
+        }
 //        if (key == GLFW_KEY_J && action == GLFW_PRESS)  // Roll head around body with J
 //        {
 //            snowman.rollSnowmanHead = true;
@@ -569,50 +578,7 @@ unsigned int loadTexture(char const * path)
 
 
 
-///*
-// * Rock the snowman in chosen direction twice. Complete one full movement on each side of original position
-// * Mid -> Left -> Mid -> Right -> Mid -> Stop;
-// *
-// * @param snowmanBaseTransform: a pointer to the base transform' transform node
-// * @param dir : boolean for direction; true is forward and backwards, fasle is sidways
-// * @param originalPos : a pointer to the original position of the snowman
-// * @param scale: pointer to the scale of the head -> stored in variable
-// *
-// */
-//void rockSnowman(TransformNode *snowmanBaseTransform, bool dir, glm::vec3 *originalPos, glm::vec3 *scale){
-//    float elapsedTime = glfwGetTime() - startTime;
-//    float distance = - glm::sin(glm::radians(elapsedTime*50)) /2;
-//    
-//    std::cout << distance << std::endl;
-//    // Exit function if animation has been played
-//    if (rockReturn && abs(distance) <= 0.01f){ // When animation is on final rock, and distance less than 0.02; stop the animation and exit function
-//        animationPlaying = false;
-//        rockFbSnowman = false;
-//        rockSsSnowman = false;
-//        return;
-//    }
-//    else if (animationPlaying)
-//    {
-//        glm::mat4 mm = glm::mat4(1.0f); // Init model matrix
-//    
-//        // Rotate in appropriate direction
-//        if (dir)
-//            mm = glm::rotate(mm, distance, glm::vec3(0, 0, 1));
-//            //mm = glm::translate(mm, glm::vec3(0, 0, distance));
-//        else
-//            mm = glm::rotate(mm, distance, glm::vec3(1, 0, 0));
-//        
-//        // Translate and scale to appropriate location.
-//        mm = glm::translate(mm, *originalPos);              //*originalPos points to contents of originalPos variable
-//       // mm = glm::scale(mm, glm::vec3(1,1,1));
-//        //Apply transform and update children
-//        snowmanBaseTransform->setTransform(mm);
-//        snowmanBaseTransform->ModelNode::update();
-//    }
-//    
-//    if (distance >= 0.49f) rockReturn = true;  //return true if snowman is on return to original position
-//}
-//
+
 //
 ///*
 // * Rock the snowman in chosen direction twice. Complete one full movement on each side of original position

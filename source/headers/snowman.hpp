@@ -19,7 +19,7 @@
 class Snowman{
 public:
     Snowman(){};
-    Snowman(Model *button, Model*snowman, Model *hat){
+    Snowman(Model *button, Model*snowman, Model *hat, Model *hatBobble){
         root = NameNode("root");
         glm::mat4 mm = glm::mat4(1.0f);
         mm = glm::translate(mm, rootXZPos);
@@ -108,6 +108,10 @@ public:
         hatTopTransform = TransformNode("hat top transform", mm);
         hatTopShape = ModelNode("Cube (hat top)", *hat);
 
+        mm = glm::translate(glm::mat4(1.0f), hatBobblePos);
+        mm = glm::scale(mm, hatBobbleScale);
+        hatBobbleTransform = TransformNode("hat Bobble Translate", mm);
+        hatBobbleShape = ModelNode("Sphere (hat top)", *hatBobble);
         // Right Side
         mm = glm::translate(glm::mat4(1.0f), hatSidePos);
         mm = glm::scale(mm, hatSideScale);
@@ -171,6 +175,8 @@ public:
         hatRightSideTransform.addChild(hatRightShape);
         hatRootTranslate.addChild(hatBackSideTransform);
         hatBackSideTransform.addChild(hatBackShape);
+        hatRootTranslate.addChild(hatBobbleTransform);
+        hatBobbleTransform.addChild(hatBobbleShape);
                         
 
          
@@ -236,6 +242,7 @@ public:
             animationPlaying = false;
             singleAnimEnded = true;
             slideFbSnowman = false;
+            slideReturn = false;
             slideSsSnowman = false;
             return;
         }
@@ -253,6 +260,54 @@ public:
     
         if (distance >= 0.99f) slideReturn = true;  //return true if snowman is on return to original position
     }
+    
+    /*
+     * Rock the snowman in chosen direction twice. Complete one full movement on each side of original position
+     * Mid -> Left -> Mid -> Right -> Mid -> Stop;
+     *
+     * @param snowmanBaseTransform: a pointer to the base transform' transform node
+     * @param dir : boolean for direction; true is forward and backwards, fasle is sidways
+     * @param originalPos : a pointer to the original position of the snowman
+     * @param scale: pointer to the scale of the head -> stored in variable
+     *
+     */
+    void rockMove(bool dir){
+        float elapsedTime = glfwGetTime() - startTime;
+        float distance = - glm::sin(glm::radians(elapsedTime*50)) /2;
+    
+        std::cout << distance << std::endl;
+        // Exit function if animation has been played
+        if (rockReturn && abs(distance) <= 0.01f){ // When animation is on final rock, and distance less than 0.02; stop the animation and exit function
+            
+            singleAnimEnded = true;
+            animationPlaying = false;
+            rockFbSnowman = false;
+            rockSsSnowman = false;
+            rockReturn = false;
+            return;
+        }
+        else if (animationPlaying)
+        {
+            glm::mat4 mm = glm::mat4(1.0f); // Init model matrix
+    
+            // Rotate in appropriate direction
+            if (dir)
+                mm = glm::rotate(mm, distance, glm::vec3(1, 0, 0));
+                //mm = glm::translate(mm, glm::vec3(0, 0, distance));
+            else
+                mm = glm::rotate(mm, distance, glm::vec3(0, 0, 1));
+    
+            // Translate and scale to appropriate location.
+            mm = glm::translate(mm, bodyPos);              //*originalPos points to contents of originalPos variable
+           // mm = glm::scale(mm, glm::vec3(1,1,1));
+            //Apply transform and update children
+            rootXZTranslate.setTransform(mm);
+            rootXZTranslate.ModelNode::update();
+        }
+    
+        if (distance >= 0.49f) rockReturn = true;  //return true if snowman is on return to original position
+    }
+    
     
     
     
@@ -322,6 +377,7 @@ private:
     
     NameNode hatRoot;
     TransformNode hatRootTranslate;
+    TransformNode hatBobbleTransform;
     TransformNode hatTopTransform;
     TransformNode hatLeftSideTransform;
     TransformNode hatRightSideTransform;
@@ -330,6 +386,7 @@ private:
     ModelNode hatLeftShape;
     ModelNode hatRightShape;
     ModelNode hatBackShape;
+    ModelNode hatBobbleShape;
 
     // Position, Size, and Scale variables
     float bodyHeight = 3.0f;
@@ -344,6 +401,7 @@ private:
     float hatWidth = 1.0f;
     float hatTopHeight = 0.4f;
     float hatSideDepth = 0.2f;
+    float hatBobbleSize = 0.4f;
     
     glm::vec3 rootXZPos = glm::vec3(0,0,0);
     glm::vec3 rootYPos = glm::vec3(0, bodyHeight/2, 0);
@@ -373,6 +431,8 @@ private:
     glm::vec3 hatRootPos = glm::vec3(0,0,0);
     glm::vec3 hatTopPos = glm::vec3(0, headHeight/4, 0);
     glm::vec3 hatTopScale = glm::vec3(hatWidth, hatTopHeight, hatWidth);
+    glm::vec3 hatBobblePos = glm::vec3(0, headHeight/4 + hatBobbleSize, 0);
+    glm::vec3 hatBobbleScale = glm::vec3(hatBobbleSize);
     glm::vec3 hatSidePos = glm::vec3(headHeight/4, hatHeight/2, 0);
     glm::vec3 hatSideScale = glm::vec3(hatSideDepth, hatWidth - 0.001, hatWidth - 0.001);
     glm::vec3 hatBackPos = glm::vec3(hatSidePos.z, hatSidePos.y, - hatSidePos.x + hatSideDepth/2 - 0.002);
