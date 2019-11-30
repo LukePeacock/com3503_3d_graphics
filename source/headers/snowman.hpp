@@ -18,6 +18,7 @@
 
 class Snowman{
 public:
+    Snowman(){};
     Snowman(Model *button, Model*snowman, Model *hat){
         root = NameNode("root");
         glm::mat4 mm = glm::mat4(1.0f);
@@ -160,7 +161,6 @@ public:
         mouth.addChild(mouthTranslate);
         mouthTranslate.addChild(mouthScaleTransform);
         mouthScaleTransform.addChild(mouthShape);
-        
         faceTransform.addChild(hatRoot);
         hatRoot.addChild(hatRootTranslate);
         hatRootTranslate.addChild(hatTopTransform);
@@ -172,19 +172,7 @@ public:
         hatRootTranslate.addChild(hatBackSideTransform);
         hatBackSideTransform.addChild(hatBackShape);
                         
-                                                
-                                            
-//                                 headTransform.addChild(hat);
-//                                     hat.addChild(hatTransform);
-//                                         hatTransform.addChild(hatTopTransform);
-//                                             hatTopTransform.addChild(hatTopShape);
-//                                         hatTransform.addChild(hatLeftTransform);
-//                                             hatLeftTransform.addChild(leftHatShape);
-//                                         hatTransform.addChild(hatRightTransform);
-//                                             hatRightTransform.addChild(rightHatShape);
-//                                         hatTransform.addChild(hatBackTransform);
-//                                             hatBackTransform.addChild(backHatShape);
-         
+
          
          root.update();
          root.print(0, false);
@@ -193,6 +181,100 @@ public:
         root.draw();
     }
     
+    float getBodyHeight(){
+        return bodyHeight;
+    }
+    float getHeadHeight(){
+        return headHeight;
+    }
+    float getTotalHeight(){
+        return bodyHeight + headHeight;
+    }
+    
+    void resetPosition(){
+        glm::mat4 mm = glm::translate(glm::mat4(1.0f), rootXZPos);
+        rootXZTranslate.setTransform(mm);
+        //rootXZTranslate.ModelNode::update();
+        
+        mm = glm::translate(glm::mat4(1.0f), headPos);
+
+        headTranslate.setTransform(mm);
+        //headTranslate.ModelNode::update();
+        
+        animationPlaying = false;
+        slideReturn = false;
+        slideFbSnowman = false;
+        slideSsSnowman = false;
+        rockReturn = false;
+        rockFbSnowman = false;
+        rockSsSnowman = false;
+        rollStart = false;
+        rollEnding = false;
+        rollSnowmanHead = false;
+        slideRockRoll = false;
+        animationPlaying = false;
+        root.update();
+    }
+    
+    
+    /*
+     * Slide the snowman in chosen direction twice. Complete one full movement on each side of original position
+     * Mid -> Left -> Mid -> Right -> Mid -> Stop;
+     *
+     * @param snowmanBaseTransform: a pointer to the base transform transform node
+     * @param dir : boolean for direction; true is forward and backwards, fasle is sidways
+     * @param xPosition : a pointer to the x position varaible
+     *
+     */
+    void slideMove(bool dir){
+        std::cout << "Slide Snowman" << std::endl;
+        float elapsedTime = glfwGetTime()-startTime;
+        float distance = -glm::sin(glm::radians(elapsedTime*50));
+    
+        // Exit function if animation has been played
+        if (slideReturn && abs(distance) <= 0.02f){ // When animation is on final slide, and distance less than 0.02; stop the animation and exit function
+            animationPlaying = false;
+            singleAnimEnded = true;
+            slideFbSnowman = false;
+            slideSsSnowman = false;
+            return;
+        }
+        else if (animationPlaying)
+        {
+            // Move the snowman
+            glm::mat4 mm = glm::translate(glm::mat4(1.0f), rootXZPos);
+            if (dir)
+                mm = glm::translate(mm, glm::vec3(0, 0, distance));
+            else
+                mm = glm::translate(mm, glm::vec3(distance, 0, 0));
+            rootXZTranslate.setTransform(mm);
+            rootXZTranslate.ModelNode::update();
+        }
+    
+        if (distance >= 0.99f) slideReturn = true;  //return true if snowman is on return to original position
+    }
+    
+    
+    
+    // Booleans for different animations and user controls
+    bool slideFbSnowman = false;
+    bool slideSsSnowman = false;
+    bool slideReturn = false;
+
+    bool rockFbSnowman = false;
+    bool rockSsSnowman = false;
+    bool rockReturn = false;
+
+    bool rollSnowmanHead = false;
+    bool rollStart = false;
+    bool rollEnding = false;
+
+    bool slideRockRoll = false;
+    
+    bool animationPlaying = false;
+    bool singleAnimEnded = false;
+    std::vector<bool> AnimationEnded{false, false, false};
+    float startTime;
 private:
     
     
@@ -294,6 +376,8 @@ private:
     glm::vec3 hatSidePos = glm::vec3(headHeight/4, hatHeight/2, 0);
     glm::vec3 hatSideScale = glm::vec3(hatSideDepth, hatWidth - 0.001, hatWidth - 0.001);
     glm::vec3 hatBackPos = glm::vec3(hatSidePos.z, hatSidePos.y, - hatSidePos.x + hatSideDepth/2 - 0.002);
+    
+
     
 };
 #endif /* snowman_hpp */
