@@ -35,6 +35,7 @@ private:
     
 public:
     Light(Shader shader);
+    Light();
     void setPosition(glm::vec3 pos);
     void setPosition(float x, float y, float z);
     glm::vec3 getPosition();

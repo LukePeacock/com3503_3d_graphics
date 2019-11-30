@@ -29,6 +29,7 @@
 #include <nameNode.hpp>
 #include <transformNode.hpp>
 #include <modelNode.hpp>
+#include <lightpost.hpp>
 
 //Function protos
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -190,68 +191,8 @@ int main()
     // Create Light Post
      Mesh s = Mesh(sphereData.GetVertices(), sphereData.GetIndices(), 0, sphereData.getIndicesCount(), sphereData.getVertexSize(), sphereData.getIndicesSize());
     Model lightPost = Model(defaultShader, mat, glm::mat4(1.0f), s, metalTex);      // basic model
-    Light light = Light(lightShader);                                               // Light object
-   
-    // Params
-    float lightPostHeight = 3.0f;
-    float lightPostWidth = 0.5f;
-    float lightPostHeadLength = 2.0f;
-    
-    // Generate the nodes
-    NameNode lightPostRoot = NameNode("Light Post Root");
-        // Root translations
-        TransformNode lightPostMoveTranslate = TransformNode("light post transform", glm::translate(glm::mat4(1.0f), glm::vec3(-5.0f, 0, 5.0f)));
-    
-        TransformNode lightPostTranslate = TransformNode("light post transform 2", glm::translate(glm::mat4(1.0f), glm::vec3(0, lightPostHeight/2, 0)));
-    
-    // Main post Nodes
-    NameNode post = NameNode("Post");
-        mm = glm::scale(glm::mat4(1.0f), glm::vec3(lightPostWidth, lightPostHeight, lightPostWidth));
-        TransformNode postTransform = TransformNode("post Transform", mm);
-        ModelNode postShape = ModelNode("Sphere(post body)", lightPost);
-
-    // Post head nodes
-    NameNode postHead = NameNode("Post Head");
-        // Post head body nodes
-        mm = glm::mat4(1.0f);
-        TransformNode postHeadTranslate = TransformNode("Translate", glm::translate(mm, glm::vec3(0.0f, lightPostHeight/2 + lightPostWidth/2, 0.0f)));
-        postHeadRotate= TransformNode("post head Rotate", glm::rotate(mm, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
-        TransformNode postHeadScale = TransformNode("scale", glm::scale(mm, glm::vec3(lightPostWidth, lightPostHeadLength, lightPostWidth)));
-        ModelNode postHeadShape = ModelNode("sphere(post head)", lightPost);
-    
-        // Post head bulb cover nodes
-        mm = glm::mat4(1.0f);
-        mm = glm::translate(mm, glm::vec3(0.0f, lightPostHeadLength/6, 0.0f));
-        mm = glm::scale(mm, glm::vec3(3.0f, 0.1f, 3.0f));
-        TransformNode postBulbCoverTransform = TransformNode("Translate cover", mm);
-        ModelNode postBulbCover = ModelNode("cube(cover)", lightPost);
-        
-        // Calculate bulb position
-        postBulbPosition = glm::vec3(-5.0f, lightPostHeight + lightPostWidth/2, 5.0f);
-        postBulbPosition = postBulbPosition / glm::vec3(0.3);
-        light.Front = glm::vec3(1,0,0);
-        light.setPosition(postBulbPosition);
-        
-    
-    
-    // create scene graph
-    lightPostRoot.addChild(lightPostMoveTranslate);
-        lightPostMoveTranslate.addChild(lightPostTranslate);
-            lightPostTranslate.addChild(post);
-                post.addChild(postTransform);
-                    postTransform.addChild(postShape);
-                post.addChild(postHead);
-                    postHead.addChild(postHeadTranslate);
-                        postHeadTranslate.addChild(postHeadRotate);
-                            postHeadRotate.addChild(postHeadScale);
-                                postHeadScale.addChild(postHeadShape);
-                                postHeadScale.addChild(postBulbCoverTransform);
-                                    postBulbCoverTransform.addChild(postBulbCover);
-    // Update scene graph
-    lightPostRoot.update();
-    lightPostRoot.print(0, false);  // Print
-    
-    
+    //Light light = Light(lightShader);                                               // Light object
+    Lightpost lamppost(&lightPost, lightShader);
     
     // =================================================================
     // SNOWMAN CREATION AND SCENE GRAPH
@@ -442,9 +383,9 @@ int main()
     
     // Spotlight values
     defaultShader.use();
-    defaultShader.setVec3("spotLight.ambient", light.getMaterial().getAmbient());
-    defaultShader.setVec3("spotLight.diffuse", light.getMaterial().getDiffuse());
-    defaultShader.setVec3("spotLight.specular", light.getMaterial().getSpecular());
+    defaultShader.setVec3("spotLight.ambient", lamppost.light.getMaterial().getAmbient());
+    defaultShader.setVec3("spotLight.diffuse", lamppost.light.getMaterial().getDiffuse());
+    defaultShader.setVec3("spotLight.specular", lamppost.light.getMaterial().getSpecular());
     defaultShader.setFloat("spotLight.constant", 1.0f);
     defaultShader.setFloat("spotLight.linear", 0.045);
     defaultShader.setFloat("spotLight.quadratic", 0.0075);
@@ -453,9 +394,9 @@ int main()
      
     //Directional Light
     defaultShader.setVec3("dirLight.position", globalLightPos);
-    defaultShader.setVec3("dirLight.ambient", light.getMaterial().getAmbient());
-    defaultShader.setVec3("dirLight.diffuse", light.getMaterial().getDiffuse());
-    defaultShader.setVec3("dirLight.specular", light.getMaterial().getSpecular());
+    defaultShader.setVec3("dirLight.ambient", lamppost.light.getMaterial().getAmbient());
+    defaultShader.setVec3("dirLight.diffuse", lamppost.light.getMaterial().getDiffuse());
+    defaultShader.setVec3("dirLight.specular", lamppost.light.getMaterial().getSpecular());
     
    
     // render loop
@@ -493,8 +434,8 @@ int main()
         defaultShader.setBool("spotlightOn", (spotlightOn) ? true : false); //set spotlight bool on or off in shader
         if (spotlightOn)// if spotlight on, update position and direction in shader
         {
-            defaultShader.setVec3("spotLight.position", light.getPosition() * 0.3f);
-            defaultShader.setVec3("spotLight.direction", light.Front);
+            defaultShader.setVec3("spotLight.position", lamppost.light.getPosition() * 0.3f);
+            defaultShader.setVec3("spotLight.direction", lamppost.light.Front);
         }
         
        
@@ -515,11 +456,10 @@ int main()
         background.render(glm::vec2(t-glm::floor(t), 0.0f));
         
         // Render light post + rotation animation
-        lightPostRoot.draw();
-        float lightDistanceFromPole = lightPostHeadLength + lightPostWidth + 1.0f;
+        
         if (lightAnimate)
-            rotateLight(light, lightDistanceFromPole);
-        light.render();
+            lamppost.rotateLight();
+        lamppost.draw();
     
         // render box next to snowman
         box.render();
@@ -555,7 +495,7 @@ int main()
 
     // Dipose of resources
     sphere.dispose();
-    light.dispose();
+    lamppost.light.dispose();
     button.dispose();
     cube.dispose();
     box.dispose();
@@ -784,32 +724,7 @@ unsigned int loadTexture(char const * path)
     return textureID;
 }
 
-/*
- *  Rotate the lamp post and bulb around the post
- *
- * @param &bulb: refernce to the bulb object, allows function to edit bulb parameters
- * @param: bulbDistanceFromPole: The radius at which the bulb should rotate around the pole
- *
- */
-void rotateLight(Light &bulb, float bulbDistanceFromPole){
-    float elapsedTime = glfwGetTime();
-    
-    // Rotate the lamp post
-    float rotateAngle = -elapsedTime* 50; // rotate anti-clockwise
-    glm::mat4 transform = glm::rotate(glm::mat4(1.0f), glm::radians(90.f), glm::vec3(1, 0, 0));     // Rotate continuouslt
-    transform = glm::rotate(transform, glm::radians(rotateAngle), glm::vec3(0, 0, 1));              // Rotate to lie flat
-    postHeadRotate.setTransform(transform);
-    postHeadRotate.ModelNode::update();     //Update children
-    
-    // Rotate the actual bulb
-    float bulbX = bulbDistanceFromPole * glm::sin(glm::radians(elapsedTime*50));
-    float bulbZ = bulbDistanceFromPole * + glm::cos(glm::radians(elapsedTime*50));
-    bulb.setPosition(postBulbPosition + glm::vec3(bulbX, 0.0, bulbZ));
-    //Calculate front direction of bulb and set its rotation;
-    bulb.rotateAngle = -rotateAngle; // rotate bulb clockwise to stay in rotation relative to post
-    bulb.setFront(glm::normalize(glm::vec3(bulbX, 0, bulbZ)));
-   
-}
+
 
 /*
  * Slide the snowman in chosen direction twice. Complete one full movement on each side of original position

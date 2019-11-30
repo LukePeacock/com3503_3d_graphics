@@ -14,6 +14,12 @@
 #include <iostream>
 #include <glm/gtx/string_cast.hpp>
 
+
+//Default Constructor
+TransformNode::TransformNode() : SGNode("Default Transform Node"){
+    transform = glm::mat4(1.0f);
+}
+
 TransformNode::TransformNode(char const * name, glm::mat4 t) : SGNode(name)
 {
     transform = t;

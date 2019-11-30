@@ -26,6 +26,7 @@ protected:
     virtual void update(glm::mat4 t);
     
 public:
+    TransformNode();
     TransformNode(char const * name, glm::mat4 t);
     void setTransform(glm::mat4 t);
     void print(int indent, bool inFull);

@@ -22,6 +22,7 @@ protected:
     Model model;
     
 public:
+    ModelNode();
     ModelNode(char const * name, Model m);
     virtual void draw();
     

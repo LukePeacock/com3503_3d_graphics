@@ -26,6 +26,7 @@
 		A336BFB8238EADD400D10B26 /* snow.jpeg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A336BFB7238EADB800D10B26 /* snow.jpeg */; };
 		A336BFBA238EAF6100D10B26 /* snow2.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A336BFB9238EAF5700D10B26 /* snow2.jpg */; };
 		A336BFBC238EB24100D10B26 /* trees.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = A336BFBB238EB23C00D10B26 /* trees.jpg */; };
+		A336BFC323928C0C00D10B26 /* lightpost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A336BFC123928C0C00D10B26 /* lightpost.cpp */; };
 		A340B0B3236B071B006AD26C /* sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0B1236B071B006AD26C /* sphere.cpp */; };
 		A340B0B6236B0BA5006AD26C /* twoTriangles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0B4236B0BA5006AD26C /* twoTriangles.cpp */; };
 		A340B0B9236C683B006AD26C /* modelNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A340B0B7236C683B006AD26C /* modelNode.cpp */; };
@@ -479,6 +480,8 @@
 		A336BFB9238EAF5700D10B26 /* snow2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = snow2.jpg; sourceTree = "<group>"; };
 		A336BFBB238EB23C00D10B26 /* trees.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = trees.jpg; sourceTree = "<group>"; };
 		A336BFBD23913DA400D10B26 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		A336BFC123928C0C00D10B26 /* lightpost.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = lightpost.cpp; sourceTree = "<group>"; };
+		A336BFC223928C0C00D10B26 /* lightpost.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = lightpost.hpp; sourceTree = "<group>"; };
 		A340B0B1236B071B006AD26C /* sphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sphere.cpp; sourceTree = "<group>"; };
 		A340B0B2236B071B006AD26C /* sphere.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sphere.hpp; sourceTree = "<group>"; };
 		A340B0B4236B0BA5006AD26C /* twoTriangles.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = twoTriangles.cpp; sourceTree = "<group>"; };
@@ -552,6 +555,7 @@
 				A340B0B7236C683B006AD26C /* modelNode.cpp */,
 				A340B0BA236C6972006AD26C /* sgNode.cpp */,
 				A340B0BD236C739C006AD26C /* transformNode.cpp */,
+				A336BFC123928C0C00D10B26 /* lightpost.cpp */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -584,6 +588,7 @@
 				A3044A3723620BDD00D262F0 /* stb_image.h */,
 				A30448AC2362050200D262F0 /* glm */,
 				A3044726236202FF00D262F0 /* shader.h */,
+				A336BFC223928C0C00D10B26 /* lightpost.hpp */,
 			);
 			path = headers;
 			sourceTree = "<group>";
@@ -1111,6 +1116,7 @@
 				A30447152361FEE000D262F0 /* main.cpp in Sources */,
 				A340B0B6236B0BA5006AD26C /* twoTriangles.cpp in Sources */,
 				A3044A492362EF0A00D262F0 /* cube.cpp in Sources */,
+				A336BFC323928C0C00D10B26 /* lightpost.cpp in Sources */,
 				A340B0BF236C739C006AD26C /* transformNode.cpp in Sources */,
 				A3F0F749236343DB001B49E9 /* light.cpp in Sources */,
 				A3044A32236205F800D262F0 /* glad.c in Sources */,

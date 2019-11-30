@@ -21,5 +21,6 @@ class NameNode: public SGNode {
     
 public:
     NameNode(char const * name): SGNode(name) {};
+    NameNode() : SGNode("default") {};
 };
 #endif /* nameNode_hpp */

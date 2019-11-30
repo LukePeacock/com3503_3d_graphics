@@ -14,6 +14,10 @@
 #include <iostream>
 #include <glm/gtx/string_cast.hpp>
 
+//Default constructor
+ModelNode::ModelNode() : SGNode("Default Model Node"){
+}
+
 ModelNode::ModelNode(char const * name, Model m) : SGNode(name)
 {
     model = m;
