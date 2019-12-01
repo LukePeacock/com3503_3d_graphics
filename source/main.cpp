@@ -181,18 +181,18 @@ int main()
     // =======================================================
     // Create Light Post
     
-    Model lightPost = Model(defaultShader, mat, glm::mat4(1.0f), s, metalTex);
-    Lightpost lamppost(&lightPost, lightShader);
+    Model lightPostMain = Model(defaultShader, mat, glm::mat4(1.0f), s, metalTex);
+    Lightpost lamppost(&lightPostMain, lightShader);
     
     // Models
-    Model sphere = Model(defaultShader, mat, glm::mat4(1.0f), s, snowDiffTex);
-    Model button = Model(defaultShader, mat, glm::mat4(1.0f), s, buttonTex);
+    Model snowmanSphere = Model(defaultShader, mat, glm::mat4(1.0f), s, snowDiffTex);
+    Model snowmanButton = Model(defaultShader, mat, glm::mat4(1.0f), s, buttonTex);
     
     
     // Create Snowman
-    Model cube = Model(defaultShader, mat, mm, c, woolTex);
+    Model hatMain = Model(defaultShader, mat, mm, c, woolTex);
     Model hatBobble = Model(defaultShader, mat, mm, s, woolTex);
-    Snowman snowman = Snowman(&button, &sphere, &cube, &hatBobble);
+    Snowman snowman = Snowman(&snowmanButton, &snowmanSphere, &hatMain, &hatBobble);
 
     // =============
     // SPECULAR BOX NEXT TO SNOWMAN
@@ -296,7 +296,7 @@ int main()
         box.render();
     
         // Render snowman + any animations
-        if (snowman.singleAnimEnded) // If animation has ended, change animation bool to false
+        if (snowman.singleAnimEnded) // If animation has ended, change animation booleans to false
         {
             animationPlaying = false;
             snowmanSlide = false;
@@ -314,25 +314,21 @@ int main()
         {
             snowman.startTime = startTime;
             snowman.animationPlaying = true;
-            if (snowmanChaos)// ROCK ROLL AND SLIDE
+            if (snowmanChaos)                           // ROCK ROLL AND SLIDE
                 snowman.rockRollSlideMove();
-            else if (snowmanSlide && snowmanMoveDir) // SLIDE FORWARDS AND BACKWARD
+            else if (snowmanSlide && snowmanMoveDir)    // SLIDE FORWARDS AND BACKWARD
                 snowman.slideMove(true);
-            else if (snowmanSlide) // SLIDE SIDE TO SIDE
+            else if (snowmanSlide)                      // SLIDE SIDE TO SIDE
                 snowman.slideMove(false);
-            else if (snowmanRock && snowmanMoveDir)         // ROCK FORWARDS AND BACKWARDS
+            else if (snowmanRock && snowmanMoveDir)     // ROCK FORWARDS AND BACKWARDS
                 snowman.rockMove(true);
-            else if (snowmanRock)         // ROCK SIDE TO SIDE
+            else if (snowmanRock)                       // ROCK SIDE TO SIDE
                 snowman.rockMove(false);
-            else if (snowmanRollHead)       // ROLL HEAD AROUND THE BODY
+            else if (snowmanRollHead)                   // ROLL HEAD AROUND THE BODY
                 snowman.rollMove();
         }
-        
-        
-
         // RENDER UPDATED SNOWMAN
         snowman.draw();
-        
         
         
         
@@ -342,11 +338,13 @@ int main()
         processInput(window); // process continuous input
     }
 
-    // Dipose of resources
-    sphere.dispose();
+    // Dispose of all models
+    snowmanSphere.dispose();
+    lightPostMain.dispose();
     lamppost.light.dispose();
-    button.dispose();
-    cube.dispose();
+    snowmanButton.dispose();
+    hatMain.dispose();
+    hatBobble.dispose();
     box.dispose();
     
     // Terminate GLFW, clearing all previously allocated GLFW resources.
@@ -565,7 +563,3 @@ unsigned int loadTexture(char const * path)
 
     return textureID;
 }
-
-
-
-
