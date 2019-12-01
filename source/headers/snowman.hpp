@@ -212,8 +212,10 @@ public:
         rockReturn = false;
         rollStarted = false;
         rollEnding = false;
-        animationPlaying = false;
+        singleAnimEnded = false;
+        animationEnded = {false, false, false};
         root.update();
+        
     }
     
     
@@ -426,6 +428,8 @@ public:
                 singleAnimEnded = true;
                 slideReturn = false;
                 rockReturn = false;
+                rollStarted = false;
+                rollEnding = false;
                 animationEnded = {false, false, false};
                 return;
             }

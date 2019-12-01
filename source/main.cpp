@@ -296,18 +296,16 @@ int main()
         box.render();
     
         // Render snowman + any animations
-        if (snowman.singleAnimEnded) // If animation has ended, change animation booleans to false
+        
+        if (snowman.singleAnimEnded || snowmanReset) // If animation has ended (or position reset), change animation booleans to false
         {
+            snowman.resetPosition();
             animationPlaying = false;
             snowmanSlide = false;
             snowmanRock = false;
             snowmanChaos = false;
             snowman.singleAnimEnded = false;
             snowman.animationEnded = {false, false, false};
-        }
-        if (snowmanReset)               // RESET POSITION
-        {
-            snowman.resetPosition();
             snowmanReset = false;
         }
         if (animationPlaying)   // If an animation is playing, set snowman animation bool and start time
