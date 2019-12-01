@@ -214,7 +214,7 @@ public:
         rockReturn = false;
         rockFbSnowman = false;
         rockSsSnowman = false;
-        rollStart = false;
+        rollStarted = false;
         rollEnding = false;
         rollSnowmanHead = false;
         slideRockRoll = false;
@@ -309,6 +309,81 @@ public:
     }
     
     
+    /*
+     * Rock the snowman in chosen direction twice. Complete one full movement on each side of original position
+     * Mid -> Left -> Mid -> Right -> Mid -> Stop;
+     *
+     * @param snowmanBaseTransform: a pointer to the base transform' transform node
+     * @param dir : boolean for direction; true is forward and backwards, fasle is sidways
+     * @param originalPos : a pointer to the original position of the snowman
+     * @param scale: pointer to the scale of the head -> stored in variable
+     *
+     */
+    void rollMove(){
+        
+        if (animationPlaying)
+        {
+            glm::mat4 mm = glm::mat4(1.0f); // Init model matrix
+           
+            // If is starting, rotate down the body to chosen level (rotate by 0.45 radians).
+            if (!rollStarted) {
+                float elapsedTime = glfwGetTime() - startTime;  // get elapsed time
+                float distance = glm::sin(glm::radians(elapsedTime*50)) /2; // calcualte distance from original position to rotate
+                
+                mm = glm::rotate(mm, distance, glm::vec3(1, 0, 0));     // apply rotation
+                
+                // if distance is equal or greater than 0.45, stop rocking and start the calculation for the actual roll
+                if (distance >= 0.45f)
+                {
+                    rollStartTime = glfwGetTime();
+                    rollStarted = true;
+                }
+            }
+            else
+            {
+                float elapsedTime = glfwGetTime() - rollStartTime;  // get elapsed time since roll around body began
+                float distance = glm::sin(glm::radians(elapsedTime*50)) /2; // calcualte distance from original position to rotate
+                
+                // if roll is ending, rotate head up the body back to original position
+                if (rollEnding){
+                    
+                    mm = glm::rotate(mm, 0.45f-distance, glm::vec3(1, 0, 0));   // rotate vertically
+                    
+                    // if distance is equal to or greater than 0.45 then head has been returned, make bools false and exit function
+                    if (abs(distance) >= 0.45f)
+                    {
+                        singleAnimEnded = true;
+                        animationPlaying = false;
+                        rollSnowmanHead = false;
+                        rollEnding = false;
+                        rollStarted = false;
+                        return;
+                    }
+                }
+                // else roll is not starting or ending, hence it is in motion, so calculate the angle and apply it
+                else {
+        
+                    // calculate angle to rotate around the body
+                    float rotateAngle = glm::radians(elapsedTime*50);
+        
+                    // Rotate around the head around the y axis and down by 0.45 radians in x axis.
+                    mm = glm::rotate(mm, -rotateAngle, glm::vec3(0,1,0));
+                    mm = glm::rotate(mm, 0.45f, glm::vec3(1,0,0));
+        
+                    // Once a full loop is complete, activate ending sequence (full loop is 2*pi, or approximately 6.3
+                    if (rotateAngle >= 6.3f) rollEnding = true;  //return true if head is approximately return to original rotation
+                }
+            }
+        
+            // do translation and scale
+            mm = glm::translate(mm, headPos);              //*originalPos points to contents of originalPos variable
+            //Apply transform and update children
+            headTranslate.setTransform(mm);
+            headTranslate.ModelNode::update();
+        }
+    }
+    
+    
     
     
     // Booleans for different animations and user controls
@@ -321,7 +396,7 @@ public:
     bool rockReturn = false;
 
     bool rollSnowmanHead = false;
-    bool rollStart = false;
+    bool rollStarted = false;
     bool rollEnding = false;
 
     bool slideRockRoll = false;
@@ -330,6 +405,7 @@ public:
     bool singleAnimEnded = false;
     std::vector<bool> AnimationEnded{false, false, false};
     float startTime;
+    float rollStartTime;
 private:
     
     
