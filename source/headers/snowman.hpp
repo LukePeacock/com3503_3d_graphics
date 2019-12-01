@@ -209,15 +209,9 @@ public:
         
         animationPlaying = false;
         slideReturn = false;
-        slideFbSnowman = false;
-        slideSsSnowman = false;
         rockReturn = false;
-        rockFbSnowman = false;
-        rockSsSnowman = false;
         rollStarted = false;
         rollEnding = false;
-        rollSnowmanHead = false;
-        slideRockRoll = false;
         animationPlaying = false;
         root.update();
     }
@@ -241,9 +235,7 @@ public:
         if (slideReturn && abs(distance) <= 0.02f){ // When animation is on final slide, and distance less than 0.02; stop the animation and exit function
             animationPlaying = false;
             singleAnimEnded = true;
-            slideFbSnowman = false;
             slideReturn = false;
-            slideSsSnowman = false;
             return;
         }
         else if (animationPlaying)
@@ -281,8 +273,6 @@ public:
             
             singleAnimEnded = true;
             animationPlaying = false;
-            rockFbSnowman = false;
-            rockSsSnowman = false;
             rockReturn = false;
             return;
         }
@@ -354,7 +344,6 @@ public:
                     {
                         singleAnimEnded = true;
                         animationPlaying = false;
-                        rollSnowmanHead = false;
                         rollEnding = false;
                         rollStarted = false;
                         return;
@@ -383,27 +372,127 @@ public:
         }
     }
     
+
     
+    
+    void rockRollSlideMove()
+    {
+        // Elapsed time since animation began
+        float elapsedTime;
+    
+        // Model matrices for body and head
+        glm::mat4 mm = glm::mat4(1.0f);
+        glm::mat4 mmHead = glm::mat4(1.0f);
+    
+        // If animation is starting, rotate head down the body to chosen level (rotate by 0.45 radians).
+        
+        if (!rollStarted) {
+            float elapsedTime = glfwGetTime() - startTime;  // get elapsed time
+            float rollDistance = glm::sin(glm::radians(elapsedTime*50)) /2; // calcualte distance from original position to rotate
+            
+            mmHead = glm::rotate(mmHead, rollDistance, glm::vec3(1, 0, 0));     // apply rotation
+            
+            // if distance is equal or greater than 0.45, stop rocking and start the calculation for the actual roll
+            if (rollDistance >= 0.45f)
+            {
+                rollStartTime = glfwGetTime();
+                rollStarted = true;
+            }
+        }
+    
+    
+        // Else if animation is not just starting, run rest of animations
+        else {
+            elapsedTime = glfwGetTime()-rollStartTime;  // time since combination part of animation began
+            
+            // Distances, and angles
+            float slideDistance = -glm::sin(glm::radians(elapsedTime*50));
+            float rockDistance = -glm::sin(glm::radians(elapsedTime*50)) /2;
+            float rotateAngle = glm::radians(elapsedTime*50); // calculate angle to rotate around the body
+            float rollDistance = glm::sin(glm::radians(elapsedTime*50)) /2; // calculte distance from original position to rotate
+            
+            
+            //Ending criteria
+            if (slideReturn && (abs(slideDistance) <= 0.02f))
+                animationEnded[0] = true;
+            if (rockReturn && (abs(rockDistance) <= 0.01f))
+                animationEnded[1] = true;
+            if(rollEnding && (abs(rollDistance) >= 0.45f))
+                animationEnded[2] = true;
+    
+            
+            if (animationEnded[0] && animationEnded[1] && animationEnded[2]){
+                animationPlaying = false;
+                singleAnimEnded = true;
+                slideReturn = false;
+                rockReturn = false;
+                animationEnded = {false, false, false};
+                return;
+            }
+    
+            // SLIDE SIDEWAYS
+            // if slide not complete
+            if (!animationEnded[0])
+            {
+                mm = glm::translate(glm::mat4(1.0f), bodyPos);
+                mm = glm::translate(mm, glm::vec3(slideDistance, 0, 0));
+            }
+    
+    
+            // ROCK BACK TO FRONT
+            // If rock not compelte
+            if (!animationEnded[1])
+            {
+                mm = glm::rotate(mm, rockDistance, glm::vec3(1, 0, 0)); // Rotate in appropriate direction
+                mm = glm::translate(mm, bodyPos); // Translate and scale to appropriate location.
+            }
+    
+    
+            // ROLL HEAD
+    
+            // If roll is not complete
+            if (!animationEnded[2])
+            {
+                // if roll is ending, rotate head up the body back to original position
+                if (rollEnding){
+                    mmHead = glm::rotate(mmHead, 0.45f-rollDistance, glm::vec3(1, 0, 0));
+                }
+                // else roll around body
+                else {
+                    // Rotate around the head around the y axis and down by 0.45 radians in x axis.
+                    mmHead = glm::rotate(mmHead, -rotateAngle, glm::vec3(0,1,0));
+                    mmHead = glm::rotate(mmHead, 0.45f, glm::vec3(1,0,0));
+                }
+            }
+    
+    //        // Ending booleans
+            if (rockDistance >= 0.49f) rockReturn = true;  //return true if snowman is on return to original position
+            if (slideDistance >= 0.99f) slideReturn = true;  //return true if snowman is on return to original position
+            // Once a full loop is complete, activate ending sequence (full loop is 2*pi, or approximately 6.3
+            if (rotateAngle >= 6.3f) rollEnding = true;  //return true if head is approximately return to original rotation
+        }
+    
+    
+        // do translation and scale
+        mmHead = glm::translate(mmHead, headPos);              
+        rootXZTranslate.setTransform(mm);
+        rootXZTranslate.ModelNode::update();
+        headTranslate.setTransform(mmHead);
+        headTranslate.ModelNode::update();
+    }
+
     
     
     // Booleans for different animations and user controls
-    bool slideFbSnowman = false;
-    bool slideSsSnowman = false;
     bool slideReturn = false;
-
-    bool rockFbSnowman = false;
-    bool rockSsSnowman = false;
     bool rockReturn = false;
-
-    bool rollSnowmanHead = false;
     bool rollStarted = false;
     bool rollEnding = false;
 
-    bool slideRockRoll = false;
     
     bool animationPlaying = false;
     bool singleAnimEnded = false;
-    std::vector<bool> AnimationEnded{false, false, false};
+    std::vector<bool> animationEnded{false, false, false};
     float startTime;
     float rollStartTime;
 private:

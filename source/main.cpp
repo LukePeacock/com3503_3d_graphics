@@ -301,43 +301,34 @@ int main()
             animationPlaying = false;
             snowmanSlide = false;
             snowmanRock = false;
+            snowmanChaos = false;
             snowman.singleAnimEnded = false;
+            snowman.animationEnded = {false, false, false};
         }
-        if (animationPlaying)   // If an animation is playing, set snowman animation bool and start time
-            snowman.animationPlaying = true;
         if (snowmanReset)               // RESET POSITION
         {
             snowman.resetPosition();
             snowmanReset = false;
         }
-//        else if (slideRockRoll)// ROCK ROLL AND SLIDE
-//            rockRollSlide(&snowmanMoveTranslate, &xPosition, &headTransform, &headPos, &headScale);
-        else if (snowmanSlide && snowmanMoveDir)
-        {            // SLIDE FORWARDS AND BACKWARD
-            snowman.startTime = startTime;
-            snowman.slideMove(true);
-            
-        }
-        else if (snowmanSlide)
-        {// SLIDE SIDE TO SIDE
-            snowman.startTime = startTime;
-            snowman.slideMove(false);
-        }
-        else if (snowmanRock && snowmanMoveDir)         // ROCK FORWARDS AND BACKWARDS
+        if (animationPlaying)   // If an animation is playing, set snowman animation bool and start time
         {
             snowman.startTime = startTime;
-            snowman.rockMove(true);
+            snowman.animationPlaying = true;
+            if (snowmanChaos)// ROCK ROLL AND SLIDE
+                snowman.rockRollSlideMove();
+            else if (snowmanSlide && snowmanMoveDir) // SLIDE FORWARDS AND BACKWARD
+                snowman.slideMove(true);
+            else if (snowmanSlide) // SLIDE SIDE TO SIDE
+                snowman.slideMove(false);
+            else if (snowmanRock && snowmanMoveDir)         // ROCK FORWARDS AND BACKWARDS
+                snowman.rockMove(true);
+            else if (snowmanRock)         // ROCK SIDE TO SIDE
+                snowman.rockMove(false);
+            else if (snowmanRollHead)       // ROLL HEAD AROUND THE BODY
+                snowman.rollMove();
         }
-        else if (snowmanRock)         // ROCK SIDE TO SIDE
-        {
-            snowman.startTime = startTime;
-            snowman.rockMove(false);
-        }
-        else if (snowmanRollHead)       // ROLL HEAD AROUND THE BODY
-        {
-            snowman.startTime = startTime;
-            snowman.rollMove();
-        }
+        
+        
 
         // RENDER UPDATED SNOWMAN
         snowman.draw();
@@ -422,7 +413,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         snowmanReset = true;
     if (!animationPlaying)
     {
-        std::cout << "No animation playing" << std::endl;
         if (key == GLFW_KEY_G && action == GLFW_PRESS)  // Slide forward and backwards using G
         {
             snowmanSlide = true;
@@ -462,17 +452,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             startTime = glfwGetTime();
             std::cout << "Roll" << std::endl;
         }
-//        if (key == GLFW_KEY_U && action == GLFW_PRESS)  // Roll head around body with J
-//               {
-//                   slideRockRoll = true;
-//                   animationPlaying = true;
-//                   slideReturn = false;
-//                   rockReturn = false;
-//                   rollStart = true;
-//                   rollEnding = false;
-//                   startTime = glfwGetTime();
-//                   std::cout << "CHAOS!!!!!" << std::endl;
-//               }
+        if (key == GLFW_KEY_U && action == GLFW_PRESS)  // Roll head around body with J
+        {
+            snowmanChaos = true;
+            animationPlaying = true;
+            startTime = glfwGetTime();
+            std::cout << "CHAOS!!!!!" << std::endl;
+        }
     }
 }
 
@@ -583,108 +569,3 @@ unsigned int loadTexture(char const * path)
 
 
 
-
-//
-//
-//void rockRollSlide(TransformNode *baseTransform, float *xPosition, TransformNode *headTransform, glm::vec3 *hPos, glm::vec3 *hScale){
-//    
-//    // Elapsed time since animation began
-//    float elapsedTime = glfwGetTime()-startTime;
-//    
-//    // Model matrices for body and head
-//    glm::mat4 mm = glm::mat4(1.0f);
-//    glm::mat4 mmHead = glm::mat4(1.0f);
-//    
-//    
-//    // If animation is starting, rotate head down the body to chosen level (rotate by 0.45 radians).
-//    float rollDistance = glm::sin(glm::radians(elapsedTime*50)) /2; // calculte distance from original position to rotate
-//    if (rollStart){
-//        // Roll down the head
-//        mmHead = glm::rotate(mmHead, rollDistance, glm::vec3(1, 0, 0));
-//        // if distance is equal or greater than 0.45, stop rocking and start the calculation for the actual roll
-//        if (abs(rollDistance) >= 0.45f)
-//        {
-//            rollStart = false;
-//            startTime = glfwGetTime();
-//        }
-//    }
-//    
-//
-//    // Else if animation is not just starting, run rest of animations
-//    else {
-//       
-//        // Distances, and angles
-//        float slideDistance = -glm::sin(glm::radians(elapsedTime*50));
-//        float rockDistance = -glm::sin(glm::radians(elapsedTime*50)) /2;
-//        float rotateAngle = glm::radians(elapsedTime*50); // calculate angle to rotate around the body
-//        
-//        //Ending criteria
-//        std::cout << rockDistance << std::endl;
-//        if (slideReturn && (abs(slideDistance) <= 0.02f))
-//            AnimationEnded[0] = true;
-//        if (rockReturn && (abs(rockDistance) <= 0.01f))
-//            AnimationEnded[1] = true;
-//        if(rollEnding && (abs(rollDistance) >= 0.45f))
-//            AnimationEnded[2] = true;
-//        
-//        if (AnimationEnded[0] && AnimationEnded[1] && AnimationEnded[2]){
-//            animationPlaying = false;
-//            slideRockRoll = false;
-//            slideReturn = false;
-//            rockReturn = false;
-//            AnimationEnded = {false, false, false};
-//            return;
-//        }
-//        
-//        // SLIDE SIDEWAYS
-//        // if slide not complete
-//        if (!AnimationEnded[0])
-//        {
-//            mm = glm::translate(glm::mat4(1.0f), glm::vec3(*xPosition, 0, 0));
-//            mm = glm::translate(mm, glm::vec3(slideDistance, 0, 0));
-//        }
-//        
-//
-//        // ROCK BACK TO FRONT
-//        // If rock not compelte
-//        if (!AnimationEnded[1])
-//        {
-//            mm = glm::rotate(mm, rockDistance, glm::vec3(1, 0, 0)); // Rotate in appropriate direction
-//            mm = glm::translate(mm, glm::vec3(*xPosition, 0, 0)); // Translate and scale to appropriate location.
-//        }
-//       
-//
-//        // ROLL HEAD
-//        
-//        // If roll is not complete
-//        if (!AnimationEnded[2])
-//        {
-//            // if roll is ending, rotate head up the body back to original position
-//            if (rollEnding){
-//                mmHead = glm::rotate(mmHead, 0.45f-rollDistance, glm::vec3(1, 0, 0));
-//            }
-//            // else roll around body
-//            else {
-//                // Rotate around the head around the y axis and down by 0.45 radians in x axis.
-//                mmHead = glm::rotate(mmHead, -rotateAngle, glm::vec3(0,1,0));
-//                mmHead = glm::rotate(mmHead, 0.45f, glm::vec3(1,0,0));
-//            }
-//        }
-//        
-////        // Ending booleans
-//        if (rockDistance >= 0.49f) rockReturn = true;  //return true if snowman is on return to original position
-//        if (slideDistance >= 0.99f) slideReturn = true;  //return true if snowman is on return to original position
-//        // Once a full loop is complete, activate ending sequence (full loop is 2*pi, or approximately 6.3
-//        if (rotateAngle >= 6.3f) rollEnding = true;  //return true if head is approximately return to original rotation
-//    }
-//    
-//    
-//    // do translation and scale
-//    mmHead = glm::translate(mmHead, *hPos);              //*hPos points to contents of head position variable
-//    mmHead = glm::scale(mmHead, *hScale);
-//    
-//    baseTransform->setTransform(mm);
-//    baseTransform->ModelNode::update();
-//    headTransform->setTransform(mmHead);
-//    headTransform->ModelNode::update();
-//}
