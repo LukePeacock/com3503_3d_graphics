@@ -11,8 +11,6 @@
 //
 
 #include "modelNode.hpp"
-#include <iostream>
-#include <glm/gtx/string_cast.hpp>
 
 //Default constructor
 ModelNode::ModelNode() : SGNode("Default Model Node"){

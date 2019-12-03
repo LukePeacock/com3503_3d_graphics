@@ -11,7 +11,6 @@
 //
 
 #include "model.hpp"
-#include <glm/gtx/string_cast.hpp>
 
 // default constructor - only used to instantiation errors with scene graph
 Model::Model(): shader("shaders/default_shader.vs", "shaders/default_shader.frag"), mesh()
