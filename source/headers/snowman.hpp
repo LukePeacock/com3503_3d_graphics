@@ -4,6 +4,8 @@
 //
 //  Created by Luke on 30/11/2019.
 //  Copyright © 2019 Luke Peacock. All rights reserved.
+//  I declare that this code is my own work
+//  lpeacock1@sheffield.ac.uk
 //
 
 #ifndef snowman_hpp

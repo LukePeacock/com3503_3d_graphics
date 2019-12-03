@@ -3,9 +3,10 @@
 //  Com3503
 //
 //  Created by Luke on 31/10/2019.
-//  lpeacock1@sheffield.ac.uk
-//
 //  Copyright © 2019 Luke Peacock. All rights reserved.
+//
+//  Based on Dr. Steve Maddock's Tutorials, updated from Java to C++ by Luke Peacock.
+//  lpeacock1@sheffield.ac.uk
 //
 
 #include "sphere.hpp"

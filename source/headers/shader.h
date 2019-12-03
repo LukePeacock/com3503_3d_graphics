@@ -5,6 +5,7 @@
 //  Created by Luke on 23/09/2019.
 //  Copyright © 2019 Luke Peacock. All rights reserved.
 //
+// Work by Joey De Vries: https://learnopengl.com 
 
 #ifndef SHADER_H
 #define SHADER_H

@@ -3,9 +3,9 @@
 //  Com3503
 //
 //  Created by Luke on 31/10/2019.
-//  lpeacock1@sheffield.ac.uk
-//
 //  Copyright © 2019 Luke Peacock. All rights reserved.
+//  I declare that this code is my own work
+//  lpeacock1@sheffield.ac.uk
 //
 
 #include "twoTriangles.hpp"

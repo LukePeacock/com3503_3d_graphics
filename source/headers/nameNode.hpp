@@ -7,8 +7,7 @@
 //
 //  Copyright © 2019 Luke Peacock. All rights reserved.
 //
-//
-//  Code taken from Dr. Steve Maddock's Tutorials, updated from Java to C++ by Luke Peacock
+//  Based on Dr. Steve Maddock's Tutorials, updated from Java to C++ by Luke Peacock.
 //
 
 #ifndef nameNode_hpp
