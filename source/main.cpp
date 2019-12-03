@@ -127,16 +127,16 @@ int main()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     
-    
+    // Load Shaders
     Shader defaultShader("shaders/default_shader.vs", "shaders/default_shader.frag");
     Shader lightShader("shaders/light_shader.vs", "shaders/light_shader.frag");
 
-    
+    // Load temporary vertex objects
     Cube cubeData;
     Sphere sphereData;
     TwoTriangles planeData;
-    // load and create a texture
-    // -------------------------
+    
+    // load and create textures
     unsigned int snowDiffTex = loadTexture("assets/snow2.jpg");
     unsigned int snow2DiffTex = loadTexture("assets/snow.jpeg");
     unsigned int metalTex = loadTexture("assets/metal.jpg");
@@ -146,6 +146,7 @@ int main()
     unsigned int containerSpecTex = loadTexture("assets/container_specular.png");
     unsigned int woolTex = loadTexture("assets/wool.jpeg");
     
+    // Set texture ints in shader
     defaultShader.use();
     defaultShader.setInt("material.diffusemap", 0);
     defaultShader.setInt("material.specularmap", 1);
@@ -154,6 +155,7 @@ int main()
     // Default material
     Material mat = Material(glm::vec3(0.2f), glm::vec3(0.8f), glm::vec3(0.5f),16.0f);
 
+    // Meshes
     // Two Triangles Mesh
     Mesh t = Mesh(planeData.getVertices(), planeData.getIndices(), 0, planeData.getIndicesCount(), planeData.getVertexSize(), planeData.getIndicesSize());
     // Cube Mesh
@@ -177,19 +179,16 @@ int main()
     Model background = Model(defaultShader, mat, mm, t, treesTex);
     
    
-    // Create Materials and Meshes for Models
+    
     // =======================================================
     // Create Light Post
-    
     Model lightPostMain = Model(defaultShader, mat, glm::mat4(1.0f), s, metalTex);
     Lightpost lamppost(&lightPostMain, lightShader);
     
-    // Models
+    // =======================================================
+    // Create Snowman
     Model snowmanSphere = Model(defaultShader, mat, glm::mat4(1.0f), s, snowDiffTex);
     Model snowmanButton = Model(defaultShader, mat, glm::mat4(1.0f), s, buttonTex);
-    
-    
-    // Create Snowman
     Model hatMain = Model(defaultShader, mat, mm, c, woolTex);
     Model hatBobble = Model(defaultShader, mat, mm, s, woolTex);
     Snowman snowman = Snowman(&snowmanButton, &snowmanSphere, &hatMain, &hatBobble);
@@ -197,10 +196,7 @@ int main()
     // =============
     // SPECULAR BOX NEXT TO SNOWMAN
     // ==============
-    
     Material cubeMat = Material(glm::vec3(0.5f), glm::vec3(0.5f), glm::vec3(1.0f), 128.0f);
-
-    
     glm::vec3 boxPos = glm::vec3(- snowman.getTotalHeight(), 0.5*(snowman.getTotalHeight()), 0.0f);
     glm::vec3 boxScale = glm::vec3(snowman.getBodyHeight(), snowman.getTotalHeight(), snowman.getBodyHeight());
     mm = glm::translate(glm::mat4(1.0f), boxPos);
@@ -208,11 +204,7 @@ int main()
     Model box = Model(defaultShader, cubeMat, mm, c, containerTex, containerSpecTex);
     
     //=====================================
-    //  Set shader values which do NOT change
-    //  Materials and other values never change during runtime
-    //=====================================
-    
-    // Spotlight values
+    //  Set shader values for lights, these do NOT change during runtime
     defaultShader.use();
     defaultShader.setVec3("spotLight.ambient", lamppost.light.getMaterial().getAmbient());
     defaultShader.setVec3("spotLight.diffuse", lamppost.light.getMaterial().getDiffuse());
@@ -260,9 +252,10 @@ int main()
         defaultShader.setMat4("view", view);
         defaultShader.setVec3("viewPos", camera.Position);
         
+        // Set general and spotlight booleans in the shader, based on their value in this class.
+        defaultShader.setBool("generalLightOn", (generalLightOn) ? true : false);   // set general light  on or off in shader
+        defaultShader.setBool("spotlightOn", (spotlightOn) ? true : false); //set spotlight on or off in shader
         
-        defaultShader.setBool("generalLightOn", (generalLightOn) ? true : false);   // set general light bool on or off in shader
-        defaultShader.setBool("spotlightOn", (spotlightOn) ? true : false); //set spotlight bool on or off in shader
         if (spotlightOn)// if spotlight on, update position and direction in shader
         {
             defaultShader.setVec3("spotLight.position", lamppost.light.getPosition() * 0.3f);
@@ -277,17 +270,15 @@ int main()
         
         //=========
         // RENDER
-        //=========
         
-        //render floor and background
+        // render floor
         floor.render();
         
-        // Calculate Time offset for background texture
+        // Calculate Time offset for background texture and render background
         float t = (glfwGetTime())*0.1;
         background.render(glm::vec2(t-glm::floor(t), 0.0f));
         
         // Render light post + rotation animation
-        
         if (lightAnimate)
             lamppost.rotateLight();
         lamppost.draw();
@@ -296,8 +287,8 @@ int main()
         box.render();
     
         // Render snowman + any animations
-        
-        if (snowman.singleAnimEnded || snowmanReset) // If animation has ended (or position reset), change animation booleans to false
+        // If animation has ended (or position reset), change animation booleans to false and reset snowman
+        if (snowman.singleAnimEnded || snowmanReset)
         {
             snowman.resetPosition();
             animationPlaying = false;
