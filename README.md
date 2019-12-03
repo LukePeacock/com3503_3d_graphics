@@ -3,6 +3,8 @@ This folder contains all files necessary to compile and execute the COM3503 3D G
 
 Scene graph code and model, mesh, material code was heavily based on code from the Lab class tutorials. However, almost all of it needed updating to work within C++. This primarily involved adding pointer and references rather than copying objects. Several functions needed changing to use pointers and/or references in order to function and also to preserve the hierarchy of the scene graphs. I feel it is worth mentioning that a large portion of development time involved editing the code to work in C++. There are many differences betwen Java and C++ which altered the way the code behaved. You will see lots of new functions that seem unrelated to the assignment in several files, these were necessary to be able to run the code in C++. I believe this should be taken into consideration.
 
+
+I have made the assumption that you will be running the program on a device running OSX Catalina 10.15.1. Due to Xcode's configuration, it is possible the compiled version may not run on any devices running OSX versions below 10.15.1. 
 # Instructions 
 In order to run the program, open the Terminal on your mac and navigate to the `executable` folder:
 
@@ -35,7 +37,7 @@ In order to be able to move the camera the `Q` key must be pressed. This will ca
 - `J`: Begin animation to roll the snowman's head around its body
 - `U`: Begin animation to slide snowman left and right, rock  left and right, and roll its head around its body
 
-
+Please note: I have assumed that each animation is to play only once, if you wish to see an animation again simply press the corresponding button once the animation has ended. If the animation fails to play the second time, please press `R` to reset the snowman.
 
 ## Troubleshooting Tips
  In the event that the program does not run, you may be missing one or more of the following libraries in your system:
