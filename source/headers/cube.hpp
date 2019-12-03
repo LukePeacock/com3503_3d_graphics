@@ -12,7 +12,6 @@
 #ifndef cube_hpp
 #define cube_hpp
 
-#include <stdio.h>
 
 class Cube {
 

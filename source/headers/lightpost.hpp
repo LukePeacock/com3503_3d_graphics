@@ -11,7 +11,6 @@
 #ifndef lightpost_hpp
 #define lightpost_hpp
 
-#include <stdio.h>
 #include <nameNode.hpp>
 #include <model.hpp>
 #include <light.hpp>

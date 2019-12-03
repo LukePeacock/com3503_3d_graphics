@@ -13,7 +13,6 @@
 #ifndef modelNode_hpp
 #define modelNode_hpp
 
-#include <stdio.h>
 #include <model.hpp>
 #include <sgNode.hpp>
 

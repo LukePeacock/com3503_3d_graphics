@@ -13,7 +13,6 @@
 #ifndef nameNode_hpp
 #define nameNode_hpp
 
-#include <stdio.h>
 #include <sgNode.hpp>
 
 class NameNode: public SGNode {

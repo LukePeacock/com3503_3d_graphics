@@ -13,7 +13,6 @@
 #ifndef transformNode_hpp
 #define transformNode_hpp
 
-#include <stdio.h>
 #include <sgNode.hpp>
 #include <glm/glm.hpp>
 

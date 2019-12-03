@@ -251,26 +251,6 @@ dependencies: \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/type_ptr.inl \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/model.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/light.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/string_cast.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/../glm.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/../gtc/type_precision.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../ext/scalar_int_sized.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../ext/scalar_uint_sized.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../detail/type_vec2.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../detail/type_mat2x2.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../detail/type_mat2x3.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../detail/type_mat2x4.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../detail/type_mat3x2.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../detail/type_mat3x4.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../detail/type_mat4x2.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/../detail/type_mat4x3.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtc/type_precision.inl \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/../gtc/quaternion.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/../gtx/dual_quaternion.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/../gtc/constants.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/dual_quaternion.inl \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/../geometric.hpp \
-  /users/luke/documents/github/com3503_3d_graphics/source/headers/glm/gtx/string_cast.inl \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/nameNode.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/sgNode.hpp \
   /users/luke/documents/github/com3503_3d_graphics/source/headers/transformNode.hpp \

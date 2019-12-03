@@ -15,7 +15,6 @@
 #define light_hpp
 #include <material.hpp>
 #include <shader.h>
-#include <stdio.h>
 class Light{
 
 private:

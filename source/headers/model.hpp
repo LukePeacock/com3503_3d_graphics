@@ -13,7 +13,6 @@
 #ifndef model_hpp
 #define model_hpp
 
-#include <stdio.h>
 #include <glm/glm.hpp>
 #include <mesh.hpp>
 #include <material.hpp>

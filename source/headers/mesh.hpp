@@ -13,8 +13,7 @@
 #ifndef mesh_hpp
 #define mesh_hpp
 
-#include <stdio.h>
-#include <vector>
+
 class Mesh{
     
 public:

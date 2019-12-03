@@ -11,8 +11,6 @@
 #ifndef twoTriangles_hpp
 #define twoTriangles_hpp
 
-#include <stdio.h>
-
 class TwoTriangles {
 public:
     float vertices[32] = {   // position, colour, tex coords

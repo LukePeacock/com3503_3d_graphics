@@ -11,7 +11,6 @@
 #ifndef snowman_hpp
 #define snowman_hpp
 
-#include <stdio.h>
 #include <nameNode.hpp>
 #include <model.hpp>
 #include <transformNode.hpp>

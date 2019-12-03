@@ -13,7 +13,7 @@
 #ifndef material_hpp
 #define material_hpp
 
-#include <stdio.h>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 class Material{

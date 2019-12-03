@@ -13,7 +13,6 @@
 #ifndef sgNode_hpp
 #define sgNode_hpp
 
-#include <stdio.h>
 #include <glm/glm.hpp>
 #include <vector>
 

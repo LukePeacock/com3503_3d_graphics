@@ -25,7 +25,6 @@
 #include <material.hpp>
 #include <model.hpp>
 #include <light.hpp>
-#include <glm/gtx/string_cast.hpp>
 #include <nameNode.hpp>
 #include <transformNode.hpp>
 #include <modelNode.hpp>
