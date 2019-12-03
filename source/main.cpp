@@ -415,7 +415,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             animationPlaying = true;
             snowmanMoveDir = true;
             startTime = glfwGetTime();
-            std::cout << "sliding forward" << std::endl;
         }
         if (key == GLFW_KEY_T && action == GLFW_PRESS)  // Slide left and right using T
         {
@@ -423,7 +422,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             animationPlaying = true;
             snowmanMoveDir = false;
             startTime = glfwGetTime();
-            std::cout << "sliding sideway" << std::endl;
+
         }
         if (key == GLFW_KEY_H && action == GLFW_PRESS)  // Rock forward and backwards using G
         {
@@ -431,7 +430,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             animationPlaying = true;
             snowmanMoveDir = true;
             startTime = glfwGetTime();
-            std::cout << "Rock forward" << std::endl;
         }
         if (key == GLFW_KEY_Y && action == GLFW_PRESS)  // Rocl left and right using T
         {
@@ -439,21 +437,18 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             animationPlaying = true;
             snowmanMoveDir = false;
             startTime = glfwGetTime();
-            std::cout << "Rock sideway" << std::endl;
         }
         if (key == GLFW_KEY_J && action == GLFW_PRESS)  // Roll head around body with J
         {
             snowmanRollHead = true;
             animationPlaying = true;
             startTime = glfwGetTime();
-            std::cout << "Roll" << std::endl;
         }
         if (key == GLFW_KEY_U && action == GLFW_PRESS)  // Roll head around body with J
         {
             snowmanChaos = true;
             animationPlaying = true;
             startTime = glfwGetTime();
-            std::cout << "CHAOS!!!!!" << std::endl;
         }
     }
 }

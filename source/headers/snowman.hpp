@@ -229,7 +229,6 @@ public:
      *
      */
     void slideMove(bool dir){
-        std::cout << "Slide Snowman" << std::endl;
         float elapsedTime = glfwGetTime()-startTime;
         float distance = -glm::sin(glm::radians(elapsedTime*50));
     
@@ -269,7 +268,7 @@ public:
         float elapsedTime = glfwGetTime() - startTime;
         float distance = - glm::sin(glm::radians(elapsedTime*50)) /2;
     
-        std::cout << distance << std::endl;
+       
         // Exit function if animation has been played
         if (rockReturn && abs(distance) <= 0.01f){ // When animation is on final rock, and distance less than 0.02; stop the animation and exit function
             
